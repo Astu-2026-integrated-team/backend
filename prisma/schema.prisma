@@ -9,8 +9,8 @@ datasource db {
 
 model Vehicle {
   vehicleId          String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid @map("vehicleId")
-  plateNumber        String               @map("plateNumber")
-  label              String
+  plateNumber        String               @unique @map("plateNumber")
+  label              String               @unique
   tankCapacityLiters Decimal              @db.Decimal(10, 2) @map("tankCapacityLiters")
   assignedDriver     String?              @map("assignedDriver")
   status             String

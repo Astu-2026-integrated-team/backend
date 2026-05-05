@@ -11,6 +11,7 @@
     "start": "tsx src/index.ts",
     "prisma:generate": "prisma generate",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
     "ai:check": "tsx tools/ai/check-env.ts"
   },
   "dependencies": {
@@ -23,8 +24,12 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": ">=20.0.0",
+    "@types/supertest": "^7.2.0",
+    "@vitest/coverage-v8": "^4.1.5",
     "prisma": "^6.19.3",
+    "supertest": "^7.2.2",
     "tsx": ">=4.0.0",
-    "typescript": ">=5.0.0"
+    "typescript": ">=5.0.0",
+    "vitest": "^4.1.5"
   }
 }

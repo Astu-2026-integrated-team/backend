@@ -44,15 +44,33 @@ telemetryRouter.post('/telemetry', async (request, response) => {
     await prisma.$transaction(async (tx) => {
       let resolvedVehicleId = payload.vehicleId;
 
-      if (!uuidLikeSchema.safeParse(payload.vehicleId).success) {
-        const matchedVehicle = await tx.vehicle.findFirst({
-          where: {
-            OR: [{ plateNumber: payload.vehicleId }, { label: payload.vehicleId }],
-          },
-          select: {
-            vehicleId: true,
-          },
+      if (uuidLikeSchema.safeParse(payload.vehicleId).success) {
+        const existingVehicle = await tx.vehicle.findUnique({
+          where: { vehicleId: payload.vehicleId },
+          select: { vehicleId: true },
         });
+
+        if (!existingVehicle) {
+          response.status(400).json({
+            accepted: false,
+            error: 'Unknown vehicleId. No vehicle with this UUID exists.',
+          });
+          return;
+        }
+      } else {
+        const matchedByPlate = await tx.vehicle.findUnique({
+          where: { plateNumber: payload.vehicleId },
+          select: { vehicleId: true },
+        });
+
+        const matchedByLabel = matchedByPlate
+          ? null
+          : await tx.vehicle.findUnique({
+              where: { label: payload.vehicleId },
+              select: { vehicleId: true },
+            });
+
+        const matchedVehicle = matchedByPlate ?? matchedByLabel;
 
         if (!matchedVehicle) {
           response.status(400).json({
