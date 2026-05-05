@@ -1,18 +1,18 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
 
 // Prisma instance is swapped per test via this variable.
 let mockPrismaInstance: Record<string, unknown> | null = null;
 
-// vi.mock is hoisted to the top by vitest, so the mock is active before any import below.
-vi.mock('../lib/prisma', () => ({
+jest.mock('../lib/prisma', () => ({
   get prisma() {
     return mockPrismaInstance;
   },
 }));
 
-import { telemetryRouter } from './telemetry';
+// Import the router after the mock is in place.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { telemetryRouter } = require('../routes/telemetry') as typeof import('../routes/telemetry');
 
 const app = express();
 app.use(express.json());
@@ -31,19 +31,19 @@ const VALID_PAYLOAD = {
   source: 'gps',
 };
 
-function makeTxMock(vehicleFindUnique: ReturnType<typeof vi.fn>) {
+function makeTxMock(vehicleFindUnique: jest.Mock) {
   return {
     vehicle: { findUnique: vehicleFindUnique },
-    telemetryRaw: { create: vi.fn().mockResolvedValue({}) },
-    telemetryNormalized: { create: vi.fn().mockResolvedValue({}) },
-    vehicleLatestState: { upsert: vi.fn().mockResolvedValue({}) },
+    telemetryRaw: { create: jest.fn().mockResolvedValue({}) },
+    telemetryNormalized: { create: jest.fn().mockResolvedValue({}) },
+    vehicleLatestState: { upsert: jest.fn().mockResolvedValue({}) },
   };
 }
 
 describe('POST /api/telemetry', () => {
   beforeEach(() => {
     mockPrismaInstance = {
-      $transaction: vi.fn(),
+      $transaction: jest.fn(),
     };
   });
 
@@ -71,8 +71,8 @@ describe('POST /api/telemetry', () => {
   });
 
   it('returns 400 when UUID vehicleId does not exist in the database', async () => {
-    const txMock = makeTxMock(vi.fn().mockResolvedValue(null));
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockImplementation(
+    const txMock = makeTxMock(jest.fn().mockResolvedValue(null));
+    (mockPrismaInstance!.$transaction as jest.Mock).mockImplementation(
       async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock),
     );
 
@@ -83,8 +83,8 @@ describe('POST /api/telemetry', () => {
   });
 
   it('returns 400 when non-UUID vehicleId is not found by plateNumber or label', async () => {
-    const txMock = makeTxMock(vi.fn().mockResolvedValue(null));
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockImplementation(
+    const txMock = makeTxMock(jest.fn().mockResolvedValue(null));
+    (mockPrismaInstance!.$transaction as jest.Mock).mockImplementation(
       async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock),
     );
 
@@ -97,8 +97,8 @@ describe('POST /api/telemetry', () => {
   });
 
   it('returns 200 when vehicleId is a valid UUID that exists', async () => {
-    const txMock = makeTxMock(vi.fn().mockResolvedValue({ vehicleId: VALID_UUID }));
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockImplementation(
+    const txMock = makeTxMock(jest.fn().mockResolvedValue({ vehicleId: VALID_UUID }));
+    (mockPrismaInstance!.$transaction as jest.Mock).mockImplementation(
       async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock),
     );
 
@@ -108,9 +108,8 @@ describe('POST /api/telemetry', () => {
   });
 
   it('resolves vehicleId by plateNumber', async () => {
-    // First findUnique call (plateNumber) returns a match; label lookup is skipped.
-    const txMock = makeTxMock(vi.fn().mockResolvedValue({ vehicleId: VALID_UUID }));
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockImplementation(
+    const txMock = makeTxMock(jest.fn().mockResolvedValue({ vehicleId: VALID_UUID }));
+    (mockPrismaInstance!.$transaction as jest.Mock).mockImplementation(
       async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock),
     );
 
@@ -129,12 +128,12 @@ describe('POST /api/telemetry', () => {
 
   it('resolves vehicleId by label when plateNumber does not match', async () => {
     const txMock = makeTxMock(
-      vi
+      jest
         .fn()
         .mockResolvedValueOnce(null) // plateNumber miss
         .mockResolvedValueOnce({ vehicleId: VALID_UUID }), // label hit
     );
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockImplementation(
+    (mockPrismaInstance!.$transaction as jest.Mock).mockImplementation(
       async (fn: (tx: typeof txMock) => Promise<void>) => fn(txMock),
     );
 
@@ -147,9 +146,7 @@ describe('POST /api/telemetry', () => {
   });
 
   it('returns 500 when the database transaction throws unexpectedly', async () => {
-    (mockPrismaInstance!.$transaction as ReturnType<typeof vi.fn>).mockRejectedValue(
-      new Error('DB error'),
-    );
+    (mockPrismaInstance!.$transaction as jest.Mock).mockRejectedValue(new Error('DB error'));
 
     const res = await request(app).post('/api/telemetry').send(VALID_PAYLOAD);
     expect(res.status).toBe(500);

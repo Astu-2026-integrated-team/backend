@@ -1,29 +1,27 @@
 HOST ?= 0.0.0.0
 PORT ?= 8000
-UV_RUN ?= uv run
 
 .PHONY: bootstrap dev render-build render-start lint test check ai-node ai-python
 
 bootstrap:
-	uv sync --all-groups
 	npm ci
+	npm run prisma:generate
 
 dev:
-	$(UV_RUN) uvicorn analytics.main:app --reload --host $(HOST) --port $(PORT)
+	npm run dev
 
 render-build:
-	uv sync --all-groups --frozen
 	npm ci
+	npm run prisma:generate
 
 render-start:
-	$(UV_RUN) uvicorn analytics.main:app --host $(HOST) --port $(PORT)
+	npm start
 
 lint:
-	uv run ruff check .
 	npm run lint
 
 test:
-	uv run pytest
+	npm test
 
 check: lint test
 

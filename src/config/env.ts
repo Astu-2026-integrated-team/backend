@@ -19,7 +19,7 @@ export const env = {
   appName: parsedEnv.APP_NAME,
   appEnv: parsedEnv.APP_ENV,
   host: parsedEnv.APP_HOST ?? parsedEnv.HOST ?? '0.0.0.0',
-  port: parsedEnv.APP_PORT ?? parsedEnv.PORT ?? 3000,
+  port: parsedEnv.APP_PORT ?? parsedEnv.PORT ?? 8000,
   supabaseDbUrl: parsedEnv.SUPABASE_DB_URL,
   prismaConfigured: Boolean(parsedEnv.SUPABASE_DB_URL),
 } as const;
