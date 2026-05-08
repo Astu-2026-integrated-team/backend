@@ -15,17 +15,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY package.json package-lock.json ./
 COPY prisma ./prisma
+COPY pyproject.toml uv.lock ./
 
 RUN npm ci && npm run prisma:generate
 
-# Install Python runtime dependencies into a virtualenv to avoid PEP 668 issues.
-RUN python3 -m venv "$VIRTUAL_ENV"
-RUN pip install --no-cache-dir \
-    "fastapi==0.136.1" \
-    "psycopg[binary]==3.3.4" \
-    "psycopg-pool==3.3.1" \
-    "pydantic-settings==2.14.0" \
-    "uvicorn[standard]==0.46.0"
+# Install Python runtime dependencies from the project's lockfile into a
+# virtualenv to avoid PEP 668 issues and prevent dependency drift.
+RUN python3 -m venv "$VIRTUAL_ENV" \
+  && pip install --no-cache-dir uv \
+  && uv sync --frozen --no-dev --no-install-project
 
 COPY src ./src
 COPY analytics ./analytics
