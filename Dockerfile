@@ -21,11 +21,11 @@ RUN npm ci && npm run prisma:generate
 # Install Python runtime dependencies into a virtualenv to avoid PEP 668 issues.
 RUN python3 -m venv "$VIRTUAL_ENV"
 RUN pip install --no-cache-dir \
-    "fastapi>=0.115.0" \
-    "psycopg[binary]>=3.2.0" \
-    "psycopg-pool>=3.2.0" \
-    "pydantic-settings>=2.6.0" \
-    "uvicorn[standard]>=0.30.0"
+    "fastapi==0.136.1" \
+    "psycopg[binary]==3.3.4" \
+    "psycopg-pool==3.3.1" \
+    "pydantic-settings==2.14.0" \
+    "uvicorn[standard]==0.46.0"
 
 COPY src ./src
 COPY analytics ./analytics

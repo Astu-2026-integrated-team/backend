@@ -6,6 +6,7 @@ set -euo pipefail
 
 export PORT=${PORT:-8000}
 PYTHON_PORT=${PYTHON_PORT:-8001}
+SHUTDOWN_HANDLED=0
 
 start_python() {
   echo "Starting Python FastAPI on port ${PYTHON_PORT}"
@@ -20,6 +21,10 @@ start_node() {
 }
 
 term_handler() {
+  if [ "${SHUTDOWN_HANDLED}" -eq 1 ]; then
+    return
+  fi
+  SHUTDOWN_HANDLED=1
   echo "Shutting down..."
   if [ -n "${NODE_PID-}" ]; then
     kill -TERM "${NODE_PID}" 2>/dev/null || true
@@ -27,16 +32,18 @@ term_handler() {
   if [ -n "${PY_PID-}" ]; then
     kill -TERM "${PY_PID}" 2>/dev/null || true
   fi
-  wait
+  wait || true
 }
 
-trap term_handler TERM INT
+trap 'term_handler; exit 143' TERM INT
 
 start_python
 start_node
 
 # Wait for any process to exit and then terminate the other
+set +e
 wait -n
 EXIT_STATUS=$?
+set -e
 term_handler
 exit ${EXIT_STATUS}

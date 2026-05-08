@@ -13,14 +13,17 @@ from analytics.db import (
 
 app = FastAPI(title=settings.app_name)
 logger = logging.getLogger(__name__)
+db_startup_check_passed = True
 
 
 @app.on_event("startup")
 def startup_checks() -> None:
+    global db_startup_check_passed
     init_connection_pool()
     try:
         check_database_connection()
     except PsycopgError:
+        db_startup_check_passed = False
         logger.exception("Startup database connection check failed")
 
 
@@ -31,9 +34,11 @@ def shutdown_cleanup() -> None:
 
 @app.get("/health")
 def health() -> dict[str, str]:
+    database_status = "reachable" if db_startup_check_passed else "unreachable"
     return {
-        "status": "ok",
+        "status": "ok" if db_startup_check_passed else "degraded",
         "environment": settings.app_env,
+        "database": database_status,
     }
 
 
