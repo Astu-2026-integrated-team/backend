@@ -10,7 +10,7 @@ SHUTDOWN_HANDLED=0
 
 start_python() {
   echo "Starting Python FastAPI on port ${PYTHON_PORT}"
-  python3 -m uvicorn analytics.main:app --host 0.0.0.0 --port "${PYTHON_PORT}" &
+  "$VIRTUAL_ENV/bin/uvicorn" analytics.main:app --host 0.0.0.0 --port "${PYTHON_PORT}" &
   PY_PID=$!
 }
 
