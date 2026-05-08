@@ -22,8 +22,8 @@ RUN npm ci && npm run prisma:generate
 # Install Python runtime dependencies from the project's lockfile into a
 # virtualenv to avoid PEP 668 issues and prevent dependency drift.
 RUN python3 -m venv "$VIRTUAL_ENV" \
-  && pip install --no-cache-dir uv \
-  && UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV" uv sync --frozen --no-dev --no-install-project
+  && "$VIRTUAL_ENV/bin/pip" install --no-cache-dir uv \
+  && UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV" "$VIRTUAL_ENV/bin/uv" sync --frozen --no-dev --no-install-project
 
 COPY src ./src
 COPY analytics ./analytics
