@@ -4,7 +4,7 @@ set -euo pipefail
 # Start both the Python FastAPI app and the Node app, and ensure child processes
 # are terminated when the container receives SIGTERM/SIGINT.
 
-PORT=${PORT:-8000}
+export PORT=${PORT:-8000}
 PYTHON_PORT=${PYTHON_PORT:-8001}
 
 start_python() {
