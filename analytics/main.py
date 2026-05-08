@@ -18,7 +18,10 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 def startup_checks() -> None:
     init_connection_pool()
-    check_database_connection()
+    try:
+        check_database_connection()
+    except PsycopgError:
+        logger.exception("Startup database connection check failed")
 
 
 @app.on_event("shutdown")
