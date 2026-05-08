@@ -23,7 +23,7 @@ RUN npm ci && npm run prisma:generate
 # virtualenv to avoid PEP 668 issues and prevent dependency drift.
 RUN python3 -m venv "$VIRTUAL_ENV" \
   && pip install --no-cache-dir uv \
-  && uv sync --frozen --no-dev --no-install-project
+  && UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV" uv sync --frozen --no-dev --no-install-project
 
 COPY src ./src
 COPY analytics ./analytics
