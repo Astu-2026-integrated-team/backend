@@ -48,11 +48,14 @@ make check
 
 ```bash
 make bootstrap     # install Python and Node dependencies
-make dev           # run the FastAPI app with reload
+make dev           # run the Node app in watch mode
 make render-build  # install production deploy dependencies for Render
 make render-start  # run the app with Render-compatible host and port binding
-make lint          # run ruff and TypeScript checks
-make test          # run Python tests
+make lint          # run Python Ruff and Node TypeScript checks
+make test          # run Python and Node tests
+make check         # run lint + tests across both runtimes
+make check-python  # run Python lint + tests only
+make check-node    # run Node type-check + tests only
 make ai-node       # show the Node AI helper entrypoint usage
 make ai-python     # print current AI runtime config from .env
 ```
@@ -99,10 +102,18 @@ tests/             backend tests
 
 ## API Endpoints
 
+FastAPI endpoints:
+
 - `GET /health`
 - `GET /telemetry/sample?limit=10` when `APP_ENV=development`
 
+Express endpoints:
+
+- `GET /health`
+
 `/telemetry/sample` runs a direct `SELECT` against `telemetry_normalized` and returns a small result set for connectivity verification. The route is only registered in development to avoid exposing raw telemetry data in non-development environments.
+
+Checked-in OpenAPI contracts live under `openapi/` and are validated in CI against both runtime route definitions.
 
 ## AI Development
 
@@ -111,6 +122,7 @@ Both Python and Node use the same `.env` file.
 - Use Python when AI logic needs direct access to backend code or data models.
 - Use Node when you want to move quickly with JS-first AI SDKs or agent tooling.
 - Keep provider secrets in `.env`, not in source files.
+- Use `uv run uvicorn analytics.main:app --reload` when you want to run the FastAPI app directly during local backend work.
 
 See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) and [docs/AI_DEVELOPMENT.md](docs/AI_DEVELOPMENT.md).
 

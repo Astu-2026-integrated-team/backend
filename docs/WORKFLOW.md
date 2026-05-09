@@ -52,11 +52,15 @@ This repo now has a minimal CI workflow.
 
 Current CI runs:
 
+- repo sanity and deploy-readiness checks
 - Python lint with Ruff
 - Python tests with Pytest
-- TypeScript check for Node AI tooling
+- Node TypeScript checks and Jest tests
+- checked-in OpenAPI contract validation for FastAPI and Express
+- smoke checks for documented endpoints
+- Postgres-backed integration checks for database-sensitive paths
 
-Keep CI fast. Add heavier integration checks only when they catch real failures.
+Keep CI fast by keeping the default path deterministic and using a small seeded Postgres service for integration coverage.
 
 ## CD Status
 
