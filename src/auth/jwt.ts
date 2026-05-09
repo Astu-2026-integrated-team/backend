@@ -1,9 +1,16 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors, VerifyCallback } from 'jsonwebtoken';
 import { env } from '../config/env';
 import { AuthError } from './errors';
 
-// Supabase uses the JWT Secret directly for HS256
-const secretKey = env.supabaseJwtSecret || '';
+function getSupabaseJwtSecret(): string {
+  if (!env.supabaseJwtSecret) {
+    throw AuthError.serviceUnavailable(
+      'User authentication is not configured on this service.'
+    );
+  }
+
+  return env.supabaseJwtSecret;
+}
 
 /**
  * Extracts a Bearer token from the Authorization header.
@@ -31,22 +38,24 @@ export function extractBearerToken(authHeader: string | undefined): string | nul
  * @throws {AuthError} If the token is invalid, expired, or has wrong audience.
  */
 export async function verifyUserToken(token: string): Promise<{ subject: string; email: string | null }> {
-  if (!secretKey) {
-    throw new Error('Server configuration error: SUPABASE_JWT_SECRET is required to verify tokens.');
-  }
   try {
+    const secretKey = getSupabaseJwtSecret();
     const payload = await new Promise<JwtPayload>((resolve, reject) => {
       jwt.verify(
-        token, 
-        secretKey, 
-        { 
+        token,
+        secretKey,
+        {
           audience: 'authenticated',
-          algorithms: ['HS256']
-        }, 
-        (err, decoded) => {
+          algorithms: ['HS256'],
+        },
+        ((err: VerifyErrors | null, decoded: object | string | undefined) => {
           if (err) return reject(err);
+          if (!decoded || typeof decoded === 'string') {
+            return reject(AuthError.unauthorized('Invalid or expired token.'));
+          }
+
           resolve(decoded as JwtPayload);
-        }
+        }) as VerifyCallback
       );
     });
 
@@ -62,7 +71,6 @@ export async function verifyUserToken(token: string): Promise<{ subject: string;
     if (error instanceof AuthError) {
       throw error;
     }
-    
     // Default error mapping
     throw AuthError.unauthorized('Invalid or expired token.');
   }

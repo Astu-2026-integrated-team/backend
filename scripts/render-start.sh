@@ -58,6 +58,14 @@ wait -n
 EXIT_STATUS=$?
 set -e
 
+if [ -n "${NODE_PID-}" ] && ! kill -0 "${NODE_PID}" 2>/dev/null; then
+  echo "Node app exited with status ${EXIT_STATUS}"
+elif [ -n "${PY_PID-}" ] && ! kill -0 "${PY_PID}" 2>/dev/null; then
+  echo "Python app exited with status ${EXIT_STATUS}"
+else
+  echo "A child process exited with status ${EXIT_STATUS}"
+fi
+
 term_handler
 
 exit ${EXIT_STATUS}

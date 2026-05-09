@@ -15,6 +15,7 @@
     "ai:check": "tsx tools/ai/check-env.ts"
   },
   "dependencies": {
+    "@jest/globals": "^30.4.1",
     "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -54,6 +55,9 @@
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!(jose)/)"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
   }
 }

@@ -3,6 +3,10 @@ import { describe, expect, it, jest } from '@jest/globals';
 jest.mock('dotenv', () => ({ config: jest.fn() }));
 
 delete process.env.SUPABASE_DB_URL;
+delete process.env.SUPABASE_URL;
+delete process.env.SUPABASE_ANON_KEY;
+delete process.env.SUPABASE_JWT_SECRET;
+delete process.env.AUTH_DEVICE_TOKEN_PEPPER;
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { env } = require('../config/env') as typeof import('../config/env');
@@ -14,6 +18,7 @@ describe('env config', () => {
     expect(env).toHaveProperty('host');
     expect(env).toHaveProperty('port');
     expect(env).toHaveProperty('prismaConfigured');
+    expect(env).toHaveProperty('authConfigured');
   });
 
   it('defaults port to 8000 when neither APP_PORT nor PORT is set', () => {
@@ -30,5 +35,9 @@ describe('env config', () => {
 
   it('sets prismaConfigured to false when SUPABASE_DB_URL is absent', () => {
     expect(env.prismaConfigured).toBe(false);
+  });
+
+  it('sets authConfigured to false when auth env vars are absent', () => {
+    expect(env.authConfigured).toBe(false);
   });
 });

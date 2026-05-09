@@ -1,4 +1,4 @@
-export type AuthErrorCode = 'UNAUTHORIZED' | 'FORBIDDEN';
+export type AuthErrorCode = 'UNAUTHORIZED' | 'FORBIDDEN' | 'SERVICE_UNAVAILABLE';
 
 export class AuthError extends Error {
   public code: AuthErrorCode;
@@ -8,7 +8,8 @@ export class AuthError extends Error {
     super(message);
     this.name = 'AuthError';
     this.code = code;
-    this.statusCode = code === 'UNAUTHORIZED' ? 401 : 403;
+    this.statusCode =
+      code === 'UNAUTHORIZED' ? 401 : code === 'FORBIDDEN' ? 403 : 503;
   }
 
   static unauthorized(message = 'Missing or invalid authentication token.') {
@@ -17,5 +18,9 @@ export class AuthError extends Error {
 
   static forbidden(message = 'You do not have access to this resource.') {
     return new AuthError('FORBIDDEN', message);
+  }
+
+  static serviceUnavailable(message = 'Service is temporarily unavailable.') {
+    return new AuthError('SERVICE_UNAVAILABLE', message);
   }
 }
