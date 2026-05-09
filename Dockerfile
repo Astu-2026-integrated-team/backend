@@ -5,7 +5,7 @@ WORKDIR /opt/render/project/src
 ENV VIRTUAL_ENV=/opt/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Install Python and build tools so we can run the FastAPI app side-by-side
+# Install Python + build tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
@@ -13,18 +13,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
   && rm -rf /var/lib/apt/lists/*
 
+# Copy dependency files first for layer caching
 COPY package.json package-lock.json ./
 COPY prisma ./prisma
 COPY pyproject.toml uv.lock ./
 
+# Install Node dependencies
 RUN npm ci && npm run prisma:generate
 
-# Install Python runtime dependencies from the project's lockfile into a
-# virtualenv to avoid PEP 668 issues and prevent dependency drift.
+# Create virtual environment and install Python dependencies
 RUN python3 -m venv "$VIRTUAL_ENV" \
-  && pip install --no-cache-dir uv \
-  && uv sync --frozen --no-dev --no-install-project
+  && pip install --no-cache-dir --upgrade pip uv \
+  && uv sync --frozen --no-dev
 
+# Copy application files
 COPY src ./src
 COPY analytics ./analytics
 COPY tools ./tools
@@ -34,7 +36,7 @@ ENV APP_ENV=production \
     HOST=0.0.0.0 \
     PORT=10000
 
-# Ensure the render start script is executable and use it as the container CMD
+# Make start script executable
 RUN chmod +x scripts/render-start.sh
 
 CMD ["./scripts/render-start.sh"]

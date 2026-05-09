@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "FastAPI backend bootstrap for the Fuel-Aware Smart Inventory System"
 readme = "README.md"
 requires-python = ">=3.11"
+
 dependencies = [
     "fastapi>=0.115.0",
     "psycopg[binary]>=3.2.0",
@@ -18,6 +19,7 @@ dev = [
     "pytest>=8.3.0",
     "ruff>=0.12.0",
 ]
+
 ai = [
     "openai>=1.40.0",
 ]
