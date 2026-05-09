@@ -52,6 +52,9 @@
           "tsconfig": "tsconfig.test.json"
         }
       ]
-    }
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(jose)/)"
+    ]
   }
 }

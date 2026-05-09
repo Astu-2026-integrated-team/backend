@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 jest.mock('dotenv', () => ({ config: jest.fn() }));
 
-const loadJwtModule = async () => import('../auth/jwt.js');
+const loadJwtModule = async () => import('../auth/jwt');
 
 describe('JWT Utilities', () => {
   beforeEach(() => {
@@ -52,7 +52,7 @@ describe('JWT Utilities', () => {
       const verifyUserToken = await loadVerifyUserToken();
       const token = createValidToken(process.env.SUPABASE_JWT_SECRET);
       const result = await verifyUserToken(token);
-      
+
       expect(result).toEqual({
         subject: 'user-123',
         email: 'test@example.com',
@@ -112,7 +112,7 @@ describe('JWT Utilities', () => {
       );
 
       const result = await verifyUserToken(token);
-      
+
       expect(result).toEqual({
         subject: 'user-456',
         email: null,
