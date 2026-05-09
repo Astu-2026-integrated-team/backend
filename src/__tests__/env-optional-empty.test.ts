@@ -36,7 +36,7 @@ describe('env config optional blank values', () => {
     expect(env.authConfigured).toBe(false);
   });
 
-  it('keeps prismaConfigured false when only SUPABASE_PRISMA_URL is set', async () => {
+  it('returns false when only SUPABASE_PRISMA_URL is set', async () => {
     process.env.SUPABASE_PRISMA_URL = 'postgresql://postgres:password@db.example.co:5432/postgres';
 
     const { env } = await loadEnvModule();

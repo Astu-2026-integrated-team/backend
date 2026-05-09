@@ -4,12 +4,12 @@ import { z } from 'zod';
 dotenv.config();
 
 const optionalUrl = z.preprocess(
-  (value) => (value === '' ? undefined : value),
+  (value) => (value === '' || value == null ? undefined : value),
   z.string().url().optional()
 );
 
 const optionalNonEmptyString = z.preprocess(
-  (value) => (value === '' ? undefined : value),
+  (value) => (value === '' || value == null ? undefined : value),
   z.string().min(1).optional()
 );
 
