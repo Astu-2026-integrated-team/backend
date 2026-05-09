@@ -3,6 +3,16 @@ import { z } from 'zod';
 
 dotenv.config();
 
+const optionalUrl = z.preprocess(
+  (value) => (value === '' ? undefined : value),
+  z.string().url().optional()
+);
+
+const optionalNonEmptyString = z.preprocess(
+  (value) => (value === '' ? undefined : value),
+  z.string().min(1).optional()
+);
+
 const envSchema = z.object({
   APP_NAME: z.string().default('Fuel-Aware Backend'),
   APP_ENV: z.string().default('development'),
@@ -10,13 +20,13 @@ const envSchema = z.object({
   HOST: z.string().optional(),
   APP_PORT: z.coerce.number().int().positive().optional(),
   PORT: z.coerce.number().int().positive().optional(),
-  SUPABASE_DB_URL: z.string().url().optional(),
-  SUPABASE_PRISMA_URL: z.string().url().optional(),
-  SUPABASE_DIRECT_URL: z.string().url().optional(),
-  SUPABASE_URL: z.string().url().optional(),
-  SUPABASE_ANON_KEY: z.string().min(1).optional(),
-  SUPABASE_JWT_SECRET: z.string().min(1).optional(),
-  AUTH_DEVICE_TOKEN_PEPPER: z.string().min(1).optional(),
+  SUPABASE_DB_URL: optionalUrl,
+  SUPABASE_PRISMA_URL: optionalUrl,
+  SUPABASE_DIRECT_URL: optionalUrl,
+  SUPABASE_URL: optionalUrl,
+  SUPABASE_ANON_KEY: optionalNonEmptyString,
+  SUPABASE_JWT_SECRET: optionalNonEmptyString,
+  AUTH_DEVICE_TOKEN_PEPPER: optionalNonEmptyString,
 });
 
 const parsedEnv = envSchema.parse(process.env);
@@ -29,9 +39,7 @@ export const env = {
   supabaseDbUrl: parsedEnv.SUPABASE_DB_URL,
   supabasePrismaUrl: parsedEnv.SUPABASE_PRISMA_URL ?? parsedEnv.SUPABASE_DB_URL,
   supabaseDirectUrl: parsedEnv.SUPABASE_DIRECT_URL,
-  prismaConfigured: Boolean(
-    parsedEnv.SUPABASE_PRISMA_URL ?? parsedEnv.SUPABASE_DB_URL
-  ),
+  prismaConfigured: Boolean(parsedEnv.SUPABASE_DB_URL),
   authConfigured: Boolean(
     parsedEnv.SUPABASE_URL &&
       parsedEnv.SUPABASE_ANON_KEY &&

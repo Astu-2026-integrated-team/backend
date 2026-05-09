@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 jest.mock('dotenv', () => ({ config: jest.fn() }));
 
-const loadJwtModule = async () => import('../auth/jwt');
+const loadJwtModule = async () => import('../auth/jwt.js');
 
 describe('JWT Utilities', () => {
   beforeEach(() => {
