@@ -7,6 +7,10 @@ jest.mock('dotenv', () => ({ config: jest.fn() }));
 
 // Ensure no DB URL is configured so tests run without a real database
 delete process.env.SUPABASE_DB_URL;
+delete process.env.SUPABASE_URL;
+delete process.env.SUPABASE_ANON_KEY;
+delete process.env.SUPABASE_JWT_SECRET;
+delete process.env.AUTH_DEVICE_TOKEN_PEPPER;
 
 // Import app after clearing env to get the unconfigured state
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -30,6 +34,7 @@ describe('Express App', () => {
       expect(response.body).toHaveProperty('appName');
       expect(response.body).toHaveProperty('environment');
       expect(response.body).toHaveProperty('prismaConfigured');
+      expect(response.body).toHaveProperty('authConfigured');
       expect(response.body).toHaveProperty('clientReady');
     });
 
@@ -41,6 +46,11 @@ describe('Express App', () => {
     it('reports clientReady false when no database is configured', async () => {
       const response = await request(app).get('/health');
       expect(response.body.clientReady).toBe(false);
+    });
+
+    it('reports authConfigured false when auth secrets are not configured', async () => {
+      const response = await request(app).get('/health');
+      expect(response.body.authConfigured).toBe(false);
     });
   });
 

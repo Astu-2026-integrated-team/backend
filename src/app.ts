@@ -28,6 +28,7 @@ app.get('/health', async (_request, response) => {
     appName: env.appName,
     environment: env.appEnv,
     prismaConfigured: env.prismaConfigured,
+    authConfigured: env.authConfigured,
     clientReady,
   });
 });
