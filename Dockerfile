@@ -24,7 +24,7 @@ RUN npm ci && npm run prisma:generate
 # Create virtual environment and install Python dependencies
 RUN python3 -m venv "$VIRTUAL_ENV" \
   && pip install --no-cache-dir --upgrade pip uv \
-  && uv sync --frozen --no-dev
+  && uv sync --frozen --no-dev --active
 
 # Copy application files
 COPY src ./src
