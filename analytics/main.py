@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Query
 from psycopg import Error as PsycopgError
@@ -11,12 +12,10 @@ from analytics.db import (
     init_connection_pool,
 )
 
-app = FastAPI(title=settings.app_name)
 logger = logging.getLogger(__name__)
 db_startup_check_passed = True
 
 
-@app.on_event("startup")
 def startup_checks() -> None:
     global db_startup_check_passed
     init_connection_pool()
@@ -27,12 +26,42 @@ def startup_checks() -> None:
         logger.exception("Startup database connection check failed")
 
 
-@app.on_event("shutdown")
 def shutdown_cleanup() -> None:
     close_connection_pool()
 
 
-@app.get("/health")
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    startup_checks()
+    try:
+        yield
+    finally:
+        shutdown_cleanup()
+
+
+app = FastAPI(
+    title=settings.app_name,
+    version="0.1.0",
+    summary="Fuel-Aware backend APIs",
+    description=(
+        "Operational endpoints for the Fuel-Aware backend across health and telemetry"
+        " verification flows."
+    ),
+    lifespan=lifespan,
+)
+
+
+@app.get(
+    "/health",
+    summary="Check FastAPI backend health",
+    description="Returns the FastAPI runtime state and startup database reachability.",
+    tags=["System"],
+    responses={
+        200: {
+            "description": "FastAPI runtime health payload.",
+        }
+    },
+)
 def health() -> dict[str, str]:
     database_status = "reachable" if db_startup_check_passed else "unreachable"
     return {
@@ -43,7 +72,23 @@ def health() -> dict[str, str]:
 
 
 if settings.app_env.lower() == "development":
-    @app.get("/telemetry/sample")
+    @app.get(
+        "/telemetry/sample",
+        summary="Fetch a telemetry sample",
+        description=(
+            "Returns a limited sample from the telemetry table for development-time"
+            " connectivity and payload verification."
+        ),
+        tags=["Telemetry"],
+        responses={
+            200: {
+                "description": "A telemetry sample payload.",
+            },
+            500: {
+                "description": "The database query failed.",
+            },
+        },
+    )
     def telemetry_sample(limit: int = Query(default=10, ge=1, le=100)) -> dict[str, object]:
         try:
             rows = fetch_telemetry_sample(limit)
