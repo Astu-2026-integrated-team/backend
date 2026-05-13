@@ -12,6 +12,11 @@
     "types": ["node"],
     "noEmit": true
   },
+<<<<<<< HEAD
   "include": ["tools/**/*.ts", "src/**/*.ts"],
   "exclude": []
+=======
+  "include": ["tools/**/*.ts", "scripts/**/*.ts", "src/**/*.ts"],
+  "exclude": ["src/**/__tests__/**"]
+>>>>>>> 3e4cd9b (feat: add Express OpenAPI contract validation)
 }

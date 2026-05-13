@@ -1,0 +1,56 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Fuel-Aware Express Backend",
+    "version": "0.1.0",
+    "description": "Checked-in contract for Express endpoints exposed by the backend repository."
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Check Express backend health",
+        "description": "Returns the Express runtime status and whether the Prisma database probe can complete.",
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "Express runtime health payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "appName",
+                    "environment",
+                    "prismaConfigured",
+                    "clientReady"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "appName": {
+                      "type": "string"
+                    },
+                    "environment": {
+                      "type": "string"
+                    },
+                    "prismaConfigured": {
+                      "type": "boolean"
+                    },
+                    "clientReady": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
