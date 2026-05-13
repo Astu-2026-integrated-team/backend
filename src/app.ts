@@ -1,7 +1,6 @@
 import express from 'express';
 
-import { env } from './config/env';
-import { prisma } from './lib/prisma';
+import { registerExpressRoutes } from './contracts/express-routes';
 import { errorHandler } from './middleware/error-handler';
 import { notFoundHandler } from './middleware/not-found';
 import { apiRouter } from './routes/index';
@@ -12,6 +11,7 @@ app.disable('x-powered-by');
 app.use(express.json());
 
 app.use('/api', apiRouter);
+<<<<<<< HEAD
 
 app.get('/health', async (_request, response) => {
   let clientReady = false;
@@ -32,6 +32,9 @@ app.get('/health', async (_request, response) => {
     clientReady,
   });
 });
+=======
+registerExpressRoutes(app);
+>>>>>>> 3e4cd9b (feat: add Express OpenAPI contract validation)
 
 app.use(notFoundHandler);
 app.use(errorHandler);

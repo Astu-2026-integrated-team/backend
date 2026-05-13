@@ -11,7 +11,12 @@
     "start": "tsx src/index.ts",
     "prisma:generate": "prisma generate",
     "lint": "tsc --noEmit",
+    "lint:node": "tsc --noEmit",
     "test": "jest",
+    "test:node": "jest --runInBand",
+    "check:node": "npm run lint:node && npm run test:node",
+    "openapi:validate:express": "tsx scripts/validate-express-openapi.ts",
+    "boot:check:node": "tsx scripts/check-node-app.ts",
     "ai:check": "tsx tools/ai/check-env.ts"
   },
   "dependencies": {
