@@ -6,9 +6,28 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  python:
+  repo_sanity:
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check deployment and repo readiness
+        run: python3 scripts/check-deployment-readiness.py
+
+  python_quality:
+    runs-on: ubuntu-latest
+    needs: repo_sanity
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,6 +39,8 @@ jobs:
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
 
       - name: Install Python dependencies
         run: uv sync --all-groups
@@ -29,11 +50,19 @@ jobs:
 
       - name: Test Python
         env:
-          SUPABASE_DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
+          APP_ENV: development
+          SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
         run: uv run pytest
 
-  node:
+      - name: Boot-check FastAPI app
+        env:
+          APP_ENV: development
+          SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+        run: uv run python scripts/check-fastapi-app.py
+
+  node_quality:
     runs-on: ubuntu-latest
+    needs: repo_sanity
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,8 +76,166 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
+      - name: Generate Prisma client
+        run: npm run prisma:generate
+
       - name: TypeScript check
-        run: npm run lint
+        run: npm run lint:node
 
       - name: Test Node
-        run: npm run test
+        run: npm run test:node
+
+      - name: Boot-check Node app
+        run: npm run boot:check:node
+
+  openapi_contract:
+    runs-on: ubuntu-latest
+    needs: [python_quality, node_quality]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install Python dependencies
+        run: uv sync --all-groups
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Validate FastAPI OpenAPI contract
+        env:
+          APP_ENV: development
+          SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+        run: uv run python scripts/validate-fastapi-openapi.py
+
+      - name: Validate Express OpenAPI contract
+        run: npm run openapi:validate:express
+
+  endpoint_smoke:
+    runs-on: ubuntu-latest
+    needs: openapi_contract
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install Python dependencies
+        run: uv sync --all-groups
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Smoke-test FastAPI docs and health
+        env:
+          APP_ENV: development
+          SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+        run: uv run pytest tests/test_health.py tests/test_openapi.py
+
+      - name: Smoke-test Express routes
+        run: npm run test -- src/__tests__/app.test.ts src/__tests__/app-prisma.test.ts --runInBand
+
+  endpoint_integration_db:
+    runs-on: ubuntu-latest
+    needs: endpoint_smoke
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      APP_ENV: development
+      CI_POSTGRES_INTEGRATION: "1"
+      SUPABASE_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
+      SUPABASE_URL: http://127.0.0.1:54321
+      SUPABASE_ANON_KEY: dummy-anon-key
+      SUPABASE_JWT_SECRET: dummy-jwt-secret-that-must-be-at-least-32-chars-long
+      AUTH_DEVICE_TOKEN_PEPPER: dummy-pepper
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install Python dependencies
+        run: uv sync --all-groups
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npm run prisma:generate
+
+      - name: Seed CI database
+        run: uv run python scripts/bootstrap-ci-db.py
+
+      - name: Run FastAPI integration checks
+        run: uv run pytest tests/test_telemetry_integration.py
+
+      - name: Run Express integration checks
+        run: npm run test -- src/__tests__/app-postgres.test.ts --runInBand
+
+  deployment_readiness:
+    runs-on: ubuntu-latest
+    needs: endpoint_integration_db
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check deployment readiness
+        run: python3 scripts/check-deployment-readiness.py
+
+      - name: Build Docker image
+        run: docker build -t fuel-aware-backend-ci .

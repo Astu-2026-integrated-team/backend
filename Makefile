@@ -1,9 +1,10 @@
 HOST ?= 0.0.0.0
 PORT ?= 8000
 
-.PHONY: bootstrap dev render-build render-start lint test check ai-node ai-python
+.PHONY: bootstrap dev render-build render-start lint lint-python lint-node test test-python test-node check check-python check-node ai-node ai-python
 
 bootstrap:
+	uv sync --all-groups
 	npm ci
 	npm run prisma:generate
 
@@ -18,12 +19,30 @@ render-start:
 	npm start
 
 lint:
-	npm run lint
+	$(MAKE) lint-python
+	$(MAKE) lint-node
+
+lint-python:
+	uv run ruff check .
+
+lint-node:
+	npm run lint:node
 
 test:
-	npm test
+	$(MAKE) test-python
+	$(MAKE) test-node
 
-check: lint test
+test-python:
+	uv run pytest
+
+test-node:
+	npm run test:node
+
+check-python: lint-python test-python
+
+check-node: lint-node test-node
+
+check: check-python check-node
 
 ai-node:
 	npm run ai:check
