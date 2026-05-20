@@ -1,0 +1,62 @@
+src/middleware/auth-middleware.ts(16,25): error TS2339: Property 'admin' does not exist on type 'string | JwtPayload'.
+  Property 'admin' does not exist on type 'string'.
+src/routes/alerts.ts(43,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ status: "acknowledged" | "resolved"; }>'.
+src/routes/alerts.ts(58,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ status: "acknowledged" | "resolved"; }>'.
+src/routes/auth.ts(23,75): error TS2339: Property 'errors' does not exist on type 'ZodError<{ username: string; password: string; }>'.
+src/routes/devices.ts(39,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ deviceId: string; vehicleId?: string; firmwareVersion?: string; }>'.
+src/routes/devices.ts(41,25): error TS2339: Property 'admin' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
+src/routes/devices.ts(64,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ vehicleId?: string; firmwareVersion?: string; }>'.
+src/routes/drivers.ts(41,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ fullName: string; licenseNumber: string; phoneNumber?: string; }>'.
+src/routes/drivers.ts(65,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ fullName?: string; licenseNumber?: string; phoneNumber?: string; status?: "active" | "inactive" | "suspended"; }>'.
+src/routes/drivers.ts(80,31): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/index.ts(2,10): error TS2614: Module '"./auth"' has no exported member 'authRouter'. Did you mean to use 'import authRouter from "./auth"' instead?
+src/routes/telemetry.ts(41,75): error TS2339: Property 'errors' does not exist on type 'ZodError<{ t: number; fuel_l: number; fuel_pct: number; engine: boolean; door: boolean; temp_c: number; accel_g: number; speed_kmh: number; rate_lhr: number; trip_sec: number; fuel_used: number; lat: number; ... 6 more ...; alert?: string; }>'.
+src/routes/telemetry.ts(45,46): error TS2339: Property 'deviceId' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
+src/routes/vehicles.ts(55,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ vehicleId: string; plateNumber: string; label: string; tankCapacityLiters: number; make?: string; model?: string; year?: number; color?: string; assignedDriverId?: string; assignedDeviceId?: string; }>'.
+src/routes/vehicles.ts(79,119): error TS2339: Property 'errors' does not exist on type 'ZodError<{ plateNumber?: string; label?: string; tankCapacityLiters?: number; make?: string; model?: string; year?: number; color?: string; assignedDriverId?: string; assignedDeviceId?: string; status?: "active" | "inactive" | "maintenance"; }>'.
+src/routes/vehicles.ts(94,31): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(95,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(96,7): error TS2322: Type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(110,31): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(111,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(124,7): error TS2322: Type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(125,31): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/routes/vehicles.ts(126,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
+  Type 'ParsedQs' is not assignable to type 'string'.
+src/server.ts(25,21): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
+src/services/alert-service.ts(21,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/alert-service.ts(30,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/alert-service.ts(41,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/auth-service.ts(15,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/auth-service.ts(22,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/auth-service.ts(31,21): error TS2769: No overload matches this call.
+  Overload 1 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: null, options?: SignOptions & { algorithm: "none"; }): string', gave the following error.
+    Argument of type 'string' is not assignable to parameter of type 'null'.
+  Overload 2 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: Buffer<ArrayBufferLike> | Secret | PrivateKeyInput | JsonWebKeyInput, options?: SignOptions): string', gave the following error.
+    Type 'string' is not assignable to type 'number | StringValue'.
+  Overload 3 of 5, '(payload: string | object | Buffer<ArrayBufferLike>, secretOrPrivateKey: Buffer<ArrayBufferLike> | Secret | PrivateKeyInput | JsonWebKeyInput, callback: SignCallback): void', gave the following error.
+    Object literal may only specify known properties, and 'expiresIn' does not exist in type 'SignCallback'.
+src/services/device-service.ts(14,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/device-service.ts(26,11): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/device-service.ts(43,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/driver-service.ts(15,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/driver-service.ts(29,11): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/driver-service.ts(41,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/stale-check-job.ts(12,30): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/services/telemetry-service.ts(93,17): error TS2339: Property 'currentAlertLevel' does not exist on type '{ vehicleId: any; lastSeenAt: any; fuelLiters: any; fuelPercent: any; engineOn: any; doorOpen: any; tempCelsius: any; speedKmh: any; accelG: any; fuelRateLhr: any; latitude: any; longitude: any; locationName: any; geofenceOk: any; parkingMode: any; overspeedFlag: any; deviceStatus: string; }'.
+src/services/telemetry-service.ts(94,17): error TS2339: Property 'activeTripId' does not exist on type '{ vehicleId: any; lastSeenAt: any; fuelLiters: any; fuelPercent: any; engineOn: any; doorOpen: any; tempCelsius: any; speedKmh: any; accelG: any; fuelRateLhr: any; latitude: any; longitude: any; locationName: any; geofenceOk: any; parkingMode: any; overspeedFlag: any; deviceStatus: string; }'.
+src/services/trip-service.ts(83,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/services/trip-service.ts(83,28): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/services/vehicle-service.ts(50,11): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/vehicle-service.ts(72,9): error TS2339: Property 'code' does not exist on type 'Error'.
+src/services/vehicle-service.ts(86,9): error TS2339: Property 'code' does not exist on type 'Error'.
