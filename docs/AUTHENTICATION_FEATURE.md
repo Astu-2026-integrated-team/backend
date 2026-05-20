@@ -7,7 +7,7 @@ This document defines how authentication and authorization should work for the F
 It is designed to support:
 
 - Supabase as the identity provider and shared database
-- Node.js as the main backend runtime
+- TypeScript as the main backend runtime
 - Python as the AI runtime without duplicating auth rules
 - Docker and Render deployment
 - easy-to-apply middleware or wrapper patterns for new endpoints
@@ -201,7 +201,7 @@ Use one of these:
 - direct database access through server-side secrets
 - a dedicated internal token checked by the backend
 
-Do not use the Supabase service-role key in client code, mobile apps, or browser JavaScript.
+Do not use the Supabase service-role key in client code, mobile apps, or browser TypeScript.
 
 ## Supabase Verification Strategy
 
@@ -464,7 +464,7 @@ Title:
 
 Suggested acceptance criteria:
 
-- add reusable auth middleware for Node.js
+- add reusable auth middleware for TypeScript
 - define `admin`, `driver`, and `viewer` roles
 - add device-token auth for telemetry ingestion
 - document Render environment variables for auth

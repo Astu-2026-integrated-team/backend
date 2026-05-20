@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(telemetry): add telemetry ingestion, trip service, and WebSocket server
-**Base Branch:** feat/drivers-endpoint
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Implements the real-time telemetry pipeline: telemetry ingestion service with normalization, trip state machine, WebSocket server for live vehicle state broadcast, and the POST /api/telemetry endpoint.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
