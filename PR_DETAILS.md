@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** db(schema): add database schemas, seed data, and Supabase client
-**Base Branch:** chore/config-env-thresholds
+**Title:** feat(auth): add auth service, login route, and JWT middleware
+**Base Branch:** db/schema-and-client
 
 ## Summary
 
-Adds the core SQL schema for vehicles, telemetry, trips, alerts, and auth tables. Includes admin seed migration and the Supabase client wrapper.
+Implements the auth service for JWT token handling, the POST /api/auth/login endpoint, and both JWT and device authentication middleware.
