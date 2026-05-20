@@ -1,15 +1,16 @@
-import jwt, { JwtPayload, VerifyErrors, VerifyCallback } from 'jsonwebtoken';
+import jwt, { JwtPayload, SignOptions, VerifyErrors, VerifyCallback } from 'jsonwebtoken';
 import { env } from '../config/env';
 import { AuthError } from './errors';
+import { AppRole, isAppRole } from './types';
 
-function getSupabaseJwtSecret(): string {
-  if (!env.supabaseJwtSecret) {
+function getJwtSecret(): string {
+  if (!env.jwtSecret) {
     throw AuthError.serviceUnavailable(
       'User authentication is not configured on this service.'
     );
   }
 
-  return env.supabaseJwtSecret;
+  return env.jwtSecret;
 }
 
 /**
@@ -31,21 +32,22 @@ export function extractBearerToken(authHeader: string | undefined): string | nul
 }
 
 /**
- * Verifies a Supabase user JWT.
- * Validates the signature using HS256, checks expiration, and ensures the audience is 'authenticated'.
+ * Verifies an application JWT.
+ * Validates the signature using HS256 and checks expiration.
  * @param token The JWT string to verify.
- * @returns The subject (user ID) and optionally the email from the token.
+ * @returns The subject plus optional identity claims from the token.
  * @throws {AuthError} If the token is invalid, expired, or has wrong audience.
  */
-export async function verifyUserToken(token: string): Promise<{ subject: string; email: string | null }> {
+export async function verifyUserToken(
+  token: string,
+): Promise<{ subject: string; email: string | null; role: AppRole | null; username: string | null }> {
   try {
-    const secretKey = getSupabaseJwtSecret();
+    const secretKey = getJwtSecret();
     const payload = await new Promise<JwtPayload>((resolve, reject) => {
       jwt.verify(
         token,
         secretKey,
         {
-          audience: 'authenticated',
           algorithms: ['HS256'],
         },
         ((err: VerifyErrors | null, decoded: object | string | undefined) => {
@@ -66,6 +68,8 @@ export async function verifyUserToken(token: string): Promise<{ subject: string;
     return {
       subject: payload.sub,
       email: typeof payload.email === 'string' ? payload.email : null,
+      role: typeof payload.role === 'string' && isAppRole(payload.role) ? payload.role : null,
+      username: typeof payload.username === 'string' ? payload.username : null,
     };
   } catch (error) {
     if (error instanceof AuthError) {
@@ -74,4 +78,23 @@ export async function verifyUserToken(token: string): Promise<{ subject: string;
     // Default error mapping
     throw AuthError.unauthorized('Invalid or expired token.');
   }
+}
+
+export function signAdminToken(payload: { subject: string; username: string; role?: AppRole }) {
+  const secretKey = getJwtSecret();
+  const role = payload.role ?? 'admin';
+  const options: SignOptions = {
+    algorithm: 'HS256',
+    expiresIn: env.jwtExpiresIn as SignOptions['expiresIn'],
+    subject: payload.subject,
+  };
+
+  return jwt.sign(
+    {
+      username: payload.username,
+      role,
+    },
+    secretKey,
+    options,
+  );
 }

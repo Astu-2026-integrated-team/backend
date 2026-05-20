@@ -38,6 +38,36 @@ make check
 - `OPENAI_MODEL`: default model name
 - `AI_RUNTIME`: team hint for where a feature should run first
 
+## Node API — Admin login seed
+
+After migrations, the default admin row is created by `supabase/migrations/20260520120000_seed_default_admin.sql` (and `supabase/seed.sql` on `supabase db reset`).
+
+| Field | Value |
+|-------|-------|
+| Username | `admin` |
+| Password | `yourpass` (spec example; change before production) |
+
+Required in `.env` for login:
+
+- `SUPABASE_DB_URL`
+- `JWT_SECRET`
+
+Apply migrations locally:
+
+```bash
+supabase db reset   # migrations + seed
+# or
+supabase migration up
+```
+
+Test login:
+
+```bash
+curl -s -X POST http://localhost:8000/api/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"admin","password":"yourpass"}'
+```
+
 ## Development Conventions
 
 - Put HTTP and database code in `analytics/`

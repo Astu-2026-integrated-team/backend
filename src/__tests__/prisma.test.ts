@@ -1,5 +1,3 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
-
 describe('prisma client', () => {
   beforeEach(() => {
     jest.resetModules();

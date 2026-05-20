@@ -1,11 +1,10 @@
-import { describe, expect, it, jest } from '@jest/globals';
-
 jest.mock('dotenv', () => ({ config: jest.fn() }));
 
 delete process.env.SUPABASE_DB_URL;
 delete process.env.SUPABASE_URL;
 delete process.env.SUPABASE_ANON_KEY;
 delete process.env.SUPABASE_JWT_SECRET;
+delete process.env.JWT_SECRET;
 delete process.env.AUTH_DEVICE_TOKEN_PEPPER;
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports

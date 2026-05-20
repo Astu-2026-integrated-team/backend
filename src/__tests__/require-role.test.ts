@@ -1,4 +1,3 @@
-import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
 import { requireRole } from '../middleware/require-role';
 import { AuthError } from '../auth/errors';
@@ -21,7 +20,7 @@ describe('requireRole middleware', () => {
       },
     };
     mockResponse = {};
-    nextFunction = jest.fn<any>();
+    nextFunction = jest.fn();
     jest.resetAllMocks();
   });
 

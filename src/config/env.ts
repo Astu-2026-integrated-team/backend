@@ -26,6 +26,8 @@ const envSchema = z.object({
   SUPABASE_URL: optionalUrl,
   SUPABASE_ANON_KEY: optionalNonEmptyString,
   SUPABASE_JWT_SECRET: optionalNonEmptyString,
+  JWT_SECRET: optionalNonEmptyString,
+  JWT_EXPIRES_IN: optionalNonEmptyString,
   AUTH_DEVICE_TOKEN_PEPPER: optionalNonEmptyString,
 });
 
@@ -40,14 +42,11 @@ export const env = {
   supabasePrismaUrl: parsedEnv.SUPABASE_PRISMA_URL ?? parsedEnv.SUPABASE_DB_URL,
   supabaseDirectUrl: parsedEnv.SUPABASE_DIRECT_URL,
   prismaConfigured: Boolean(parsedEnv.SUPABASE_DB_URL),
-  authConfigured: Boolean(
-    parsedEnv.SUPABASE_URL &&
-      parsedEnv.SUPABASE_ANON_KEY &&
-      parsedEnv.SUPABASE_JWT_SECRET &&
-      parsedEnv.AUTH_DEVICE_TOKEN_PEPPER
-  ),
+  authConfigured: Boolean(parsedEnv.JWT_SECRET),
   supabaseUrl: parsedEnv.SUPABASE_URL,
   supabaseAnonKey: parsedEnv.SUPABASE_ANON_KEY,
   supabaseJwtSecret: parsedEnv.SUPABASE_JWT_SECRET,
+  jwtSecret: parsedEnv.JWT_SECRET,
+  jwtExpiresIn: parsedEnv.JWT_EXPIRES_IN ?? '24h',
   authDeviceTokenPepper: parsedEnv.AUTH_DEVICE_TOKEN_PEPPER,
 } as const;

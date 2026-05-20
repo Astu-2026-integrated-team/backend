@@ -18,18 +18,17 @@ export const requireUser = async (req: Request, res: Response, next: NextFunctio
       throw AuthError.unauthorized('Missing Bearer token in Authorization header.');
     }
 
-    const { subject, email } = await verifyUserToken(token);
+    const { subject, email, role, username } = await verifyUserToken(token);
 
     // Populate the Express Request with the verified AuthContext
     req.auth = {
       subject,
       email,
       tokenType: 'user',
-      profileResolved: false,
-      // We set role to 'viewer' as a safe default. The role-resolution middleware 
-      // (implemented in a later step) will overwrite this with the real database role.
-      role: 'viewer',
+      profileResolved: role === 'admin',
+      role: role ?? 'viewer',
       vehicleIds: [],
+      ...(username ? { username } : {}),
     };
 
     next();

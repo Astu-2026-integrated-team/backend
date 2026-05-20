@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import type { NextFunction, Request, Response } from 'express';
 import { errorHandler } from '../middleware/error-handler';
 
@@ -10,10 +9,10 @@ describe('errorHandler', () => {
   beforeEach(() => {
     mockRequest = {};
     mockResponse = {
-      status: jest.fn<any>().mockReturnThis(),
-      json: jest.fn<any>(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
     };
-    nextFunction = jest.fn<any>();
+    nextFunction = jest.fn();
     jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 

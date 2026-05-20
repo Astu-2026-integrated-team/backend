@@ -1,4 +1,3 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import jwt from 'jsonwebtoken';
 
 jest.mock('dotenv', () => ({ config: jest.fn() }));
@@ -8,7 +7,7 @@ const loadJwtModule = async () => import('../auth/jwt.js');
 describe('JWT Utilities', () => {
   beforeEach(() => {
     jest.resetModules();
-    delete process.env.SUPABASE_JWT_SECRET;
+    delete process.env.JWT_SECRET;
   });
 
   describe('extractBearerToken', () => {
@@ -47,41 +46,28 @@ describe('JWT Utilities', () => {
       );
     };
 
-    it('successfully verifies a valid Supabase HS256 token', async () => {
-      process.env.SUPABASE_JWT_SECRET = 'test-jwt-secret';
+    it('successfully verifies a valid application HS256 token', async () => {
+      process.env.JWT_SECRET = 'test-jwt-secret';
       const verifyUserToken = await loadVerifyUserToken();
-      const token = createValidToken(process.env.SUPABASE_JWT_SECRET);
+      const token = createValidToken(process.env.JWT_SECRET);
       const result = await verifyUserToken(token);
 
       expect(result).toEqual({
         subject: 'user-123',
         email: 'test@example.com',
-      });
-    });
-
-    it('throws AuthError if token has wrong audience', async () => {
-      process.env.SUPABASE_JWT_SECRET = 'test-jwt-secret';
-      const verifyUserToken = await loadVerifyUserToken();
-      const token = jwt.sign(
-        { sub: 'user-123' },
-        process.env.SUPABASE_JWT_SECRET,
-        { algorithm: 'HS256', audience: 'wrong-audience', expiresIn: '1h' }
-      );
-
-      await expect(verifyUserToken(token)).rejects.toMatchObject({
-        code: 'UNAUTHORIZED',
-        message: 'Invalid or expired token.',
+        role: null,
+        username: null,
       });
     });
 
     it('throws AuthError if token is expired', async () => {
-      process.env.SUPABASE_JWT_SECRET = 'test-jwt-secret';
+      process.env.JWT_SECRET = 'test-jwt-secret';
       const verifyUserToken = await loadVerifyUserToken();
       // Create token that expired 1 hour ago
       const token = jwt.sign(
         { sub: 'user-123', exp: Math.floor(Date.now() / 1000) - 3600 },
-        process.env.SUPABASE_JWT_SECRET,
-        { algorithm: 'HS256', audience: 'authenticated' }
+        process.env.JWT_SECRET,
+        { algorithm: 'HS256' }
       );
 
       await expect(verifyUserToken(token)).rejects.toMatchObject({
@@ -91,24 +77,24 @@ describe('JWT Utilities', () => {
     });
 
     it('throws AuthError if subject claim is missing', async () => {
-      process.env.SUPABASE_JWT_SECRET = 'test-jwt-secret';
+      process.env.JWT_SECRET = 'test-jwt-secret';
       const verifyUserToken = await loadVerifyUserToken();
       const token = jwt.sign(
         { email: 'test@example.com' },
-        process.env.SUPABASE_JWT_SECRET,
-        { algorithm: 'HS256', audience: 'authenticated', expiresIn: '1h' }
+        process.env.JWT_SECRET,
+        { algorithm: 'HS256', expiresIn: '1h' }
       );
 
       await expect(verifyUserToken(token)).rejects.toThrow('Token is missing subject claim.');
     });
 
     it('handles missing email claim correctly', async () => {
-      process.env.SUPABASE_JWT_SECRET = 'test-jwt-secret';
+      process.env.JWT_SECRET = 'test-jwt-secret';
       const verifyUserToken = await loadVerifyUserToken();
       const token = jwt.sign(
         { sub: 'user-456' },
-        process.env.SUPABASE_JWT_SECRET,
-        { algorithm: 'HS256', audience: 'authenticated', expiresIn: '1h' }
+        process.env.JWT_SECRET,
+        { algorithm: 'HS256', expiresIn: '1h' }
       );
 
       const result = await verifyUserToken(token);
@@ -116,11 +102,13 @@ describe('JWT Utilities', () => {
       expect(result).toEqual({
         subject: 'user-456',
         email: null,
+        role: null,
+        username: null,
       });
     });
 
     it('throws service unavailable when JWT auth is not configured', async () => {
-      delete process.env.SUPABASE_JWT_SECRET;
+      delete process.env.JWT_SECRET;
       const verifyUserToken = await loadVerifyUserToken();
 
       await expect(verifyUserToken('token')).rejects.toMatchObject({

@@ -1,4 +1,3 @@
-import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
 import { resolveUserProfile } from '../middleware/resolve-profile';
 import { prisma } from '../lib/prisma';
@@ -32,7 +31,7 @@ describe('resolveUserProfile middleware', () => {
       },
     };
     mockResponse = {};
-    nextFunction = jest.fn<any>();
+    nextFunction = jest.fn();
     jest.resetAllMocks();
   });
 
