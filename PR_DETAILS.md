@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(drivers): add driver service and REST endpoints
-**Base Branch:** feat/devices-endpoint
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the driver service for driver profile management and the /api/drivers REST endpoints.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
