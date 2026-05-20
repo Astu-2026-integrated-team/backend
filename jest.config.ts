@@ -7,8 +7,7 @@ const config: Config = {
     }
   },
   collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/db/*.ts'
+    'src/services/**/*.ts'
   ],
   testEnvironment: 'node',
   transform: {

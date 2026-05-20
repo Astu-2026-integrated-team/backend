@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(vehicles): add vehicle service and REST endpoints
-**Base Branch:** feat/auth-endpoint
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the vehicle service with CRUD operations and business logic, plus the /api/vehicles REST endpoints.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
