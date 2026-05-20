@@ -1,25 +1,291 @@
 openapi: 3.0.0
 info:
-  title: FuelGuard AI Smart Inventory System API
-  version: 2.0.0
-  description: Backend Architecture & API Specification for the FuelGuard System
+  title: FuelGuard AI - Backend API
+  version: "2.0"
+  description: API specification for the FuelGuard AI Backend
 servers:
-  - url: /api
+  - url: http://localhost:8000
+    description: Local development server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    deviceToken:
+      type: apiKey
+      in: header
+      name: X-Device-Token
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    TelemetryPayload:
+      type: object
+      properties:
+        t:
+          type: integer
+        fuel_l:
+          type: number
+        fuel_pct:
+          type: integer
+        engine:
+          type: boolean
+        door:
+          type: boolean
+        temp_c:
+          type: number
+        accel_g:
+          type: number
+        speed_kmh:
+          type: number
+        rate_lhr:
+          type: number
+        trip_sec:
+          type: integer
+        fuel_used:
+          type: number
+        lat:
+          type: number
+        lon:
+          type: number
+        location:
+          type: string
+        geofence_ok:
+          type: boolean
+        low_fuel:
+          type: boolean
+        parking:
+          type: boolean
+        overspeed:
+          type: boolean
+        alert:
+          type: string
+          nullable: true
+    VehicleCurrentState:
+      type: object
+      properties:
+        lastSeenAt:
+          type: string
+          format: date-time
+        fuelLiters:
+          type: number
+        fuelPercent:
+          type: integer
+        engineOn:
+          type: boolean
+        speedKmh:
+          type: number
+        latitude:
+          type: number
+        longitude:
+          type: number
+        locationName:
+          type: string
+        deviceStatus:
+          type: string
+        currentAlertLevel:
+          type: string
+    Vehicle:
+      type: object
+      properties:
+        vehicleId:
+          type: string
+        label:
+          type: string
+        plateNumber:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        status:
+          type: string
+        assignedDriver:
+          type: object
+          properties:
+            driverId:
+              type: string
+            fullName:
+              type: string
+        assignedDevice:
+          type: object
+          properties:
+            deviceId:
+              type: string
+            status:
+              type: string
+        currentState:
+          $ref: '#/components/schemas/VehicleCurrentState'
+    Device:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        vehicleId:
+          type: string
+        firmwareVersion:
+          type: string
+        lastSeenAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+    Driver:
+      type: object
+      properties:
+        driverId:
+          type: string
+        fullName:
+          type: string
+        licenseNumber:
+          type: string
+        phoneNumber:
+          type: string
+        status:
+          type: string
+    Alert:
+      type: object
+      properties:
+        alertId:
+          type: string
+        vehicleId:
+          type: string
+        driverId:
+          type: string
+          nullable: true
+        type:
+          type: string
+        severity:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        evidence:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        resolvedAt:
+          type: string
+          format: date-time
+          nullable: true
+    Trip:
+      type: object
+      properties:
+        tripId:
+          type: string
+        vehicleId:
+          type: string
+        driverId:
+          type: string
+          nullable: true
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+          nullable: true
+        startFuelLiters:
+          type: number
+        endFuelLiters:
+          type: number
+          nullable: true
+        fuelUsedLiters:
+          type: number
+          nullable: true
+        distanceKm:
+          type: number
+          nullable: true
+        avgSpeedKmh:
+          type: number
+          nullable: true
+        maxSpeedKmh:
+          type: number
+          nullable: true
+        startLat:
+          type: number
+        startLon:
+          type: number
+        endLat:
+          type: number
+          nullable: true
+        endLon:
+          type: number
+          nullable: true
+        status:
+          type: string
+    DriverViolation:
+      type: object
+      properties:
+        violationId:
+          type: string
+        driverId:
+          type: string
+        vehicleId:
+          type: string
+        alertId:
+          type: string
+        tripId:
+          type: string
+          nullable: true
+        type:
+          type: string
+        severity:
+          type: string
+        description:
+          type: string
+        occurredAt:
+          type: string
+          format: date-time
 paths:
-  /auth/login:
+  /api/auth/login:
     post:
       summary: Admin login
-      tags:
-        - Auth
+      tags: [Auth]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - username
-                - password
               properties:
                 username:
                   type: string
@@ -27,235 +293,422 @@ paths:
                   type: string
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  token:
-                    type: string
-                  admin:
-                    type: object
-                    properties:
-                      adminId:
-                        type: string
-                      username:
-                        type: string
-        '400':
-          description: INVALID_PAYLOAD
+          description: Login successful
         '401':
-          description: INVALID_CREDENTIALS
-  /telemetry:
+          $ref: '#/components/responses/Unauthorized'
+  /api/telemetry:
     post:
-      summary: Receive telemetry from ESP32 hardware
-      tags:
-        - Telemetry
+      summary: Hardware telemetry ingestion
+      tags: [Telemetry]
       security:
-        - DeviceToken: []
+        - deviceToken: []
+      parameters:
+        - in: header
+          name: X-Device-Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelemetryPayload'
+      responses:
+        '200':
+          description: Telemetry stored
+        '400':
+          description: Validation Error
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/vehicles:
+    get:
+      summary: List all vehicles
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: deviceStatus
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vehicles listed
+    post:
+      summary: Register a new vehicle
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              # Add specific hardware fields as per spec
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Validation Error
-        '401':
-          description: Unknown Device
-  /vehicles:
-    get:
-      summary: List all vehicles with current state
-      tags:
-        - Vehicles
-      responses:
-        '200':
-          description: OK
-    post:
-      summary: Register a new vehicle
-      tags:
-        - Vehicles
+              properties:
+                vehicleId:
+                  type: string
+                plateNumber:
+                  type: string
+                label:
+                  type: string
+                tankCapacityLiters:
+                  type: number
+                make:
+                  type: string
+                model:
+                  type: string
+                year:
+                  type: integer
+                color:
+                  type: string
+                assignedDriverId:
+                  type: string
+                assignedDeviceId:
+                  type: string
       responses:
         '201':
-          description: Created
+          description: Vehicle registered
         '409':
           description: Conflict
-  /vehicles/{vehicleId}:
+  /api/vehicles/{vehicleId}:
     get:
-      summary: Get single vehicle current state
-      tags:
-        - Vehicles
+      summary: Get vehicle state
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: vehicleId
-          in: path
+        - in: path
+          name: vehicleId
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: OK
+          description: Vehicle state
+        '404':
+          $ref: '#/components/responses/NotFound'
     patch:
       summary: Update vehicle metadata
-      tags:
-        - Vehicles
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: vehicleId
-          in: path
+        - in: path
+          name: vehicleId
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plateNumber:
+                  type: string
       responses:
         '200':
-          description: OK
-  /vehicles/{vehicleId}/history:
+          description: Vehicle updated
+  /api/vehicles/{vehicleId}/history:
     get:
       summary: Historical telemetry
-      tags:
-        - Vehicles
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: vehicleId
-          in: path
+        - in: path
+          name: vehicleId
           required: true
           schema:
             type: string
+        - in: query
+          name: from
+          schema:
+            type: string
+        - in: query
+          name: to
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
       responses:
         '200':
-          description: OK
-  /vehicles/{vehicleId}/trips:
+          description: History returned
+  /api/vehicles/{vehicleId}/trips:
     get:
-      summary: List trips for vehicle
-      tags:
-        - Vehicles
+      summary: List trips
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: vehicleId
-          in: path
+        - in: path
+          name: vehicleId
           required: true
           schema:
             type: string
+        - in: query
+          name: from
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
       responses:
         '200':
-          description: OK
-  /vehicles/{vehicleId}/alerts:
+          description: Trips returned
+  /api/vehicles/{vehicleId}/alerts:
     get:
       summary: List alerts for vehicle
-      tags:
-        - Vehicles
+      tags: [Vehicles]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: vehicleId
-          in: path
+        - in: path
+          name: vehicleId
           required: true
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: severity
           schema:
             type: string
       responses:
         '200':
-          description: OK
-  /devices:
+          description: Alerts returned
+  /api/devices:
     get:
-      summary: List all registered devices
-      tags:
-        - Devices
+      summary: List all devices
+      tags: [Devices]
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: OK
+          description: Devices listed
     post:
       summary: Register a new device
-      tags:
-        - Devices
+      tags: [Devices]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: string
+                vehicleId:
+                  type: string
+                firmwareVersion:
+                  type: string
       responses:
         '201':
-          description: Created
-  /devices/{deviceId}:
+          description: Device registered
+  /api/devices/{deviceId}:
+    get:
+      summary: Get device details
+      tags: [Devices]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: deviceId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device info
     patch:
       summary: Update device
-      tags:
-        - Devices
+      tags: [Devices]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: deviceId
-          in: path
+        - in: path
+          name: deviceId
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vehicleId:
+                  type: string
+                firmwareVersion:
+                  type: string
       responses:
         '200':
-          description: OK
-  /drivers:
+          description: Device updated
+  /api/drivers:
     get:
       summary: List all drivers
-      tags:
-        - Drivers
+      tags: [Drivers]
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: OK
+          description: Drivers listed
     post:
       summary: Register a new driver
-      tags:
-        - Drivers
+      tags: [Drivers]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                licenseNumber:
+                  type: string
+                phoneNumber:
+                  type: string
       responses:
         '201':
-          description: Created
-  /drivers/{driverId}:
+          description: Driver registered
+  /api/drivers/{driverId}:
+    get:
+      summary: Get driver details
+      tags: [Drivers]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: driverId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Driver details
     patch:
       summary: Update driver info
-      tags:
-        - Drivers
+      tags: [Drivers]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: driverId
-          in: path
+        - in: path
+          name: driverId
           required: true
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                phoneNumber:
+                  type: string
+                status:
+                  type: string
       responses:
         '200':
-          description: OK
-  /drivers/{driverId}/violations:
+          description: Driver updated
+  /api/drivers/{driverId}/violations:
     get:
       summary: Get violation history for a driver
-      tags:
-        - Drivers
+      tags: [Drivers]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: driverId
-          in: path
+        - in: path
+          name: driverId
           required: true
+          schema:
+            type: string
+        - in: query
+          name: from
           schema:
             type: string
       responses:
         '200':
-          description: OK
-  /alerts:
+          description: Violations returned
+  /api/alerts:
     get:
       summary: List all alerts
-      tags:
-        - Alerts
+      tags: [Alerts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
       responses:
         '200':
-          description: OK
-  /alerts/{alertId}:
-    patch:
-      summary: Acknowledge or resolve an alert
-      tags:
-        - Alerts
+          description: Alerts listed
+  /api/alerts/{alertId}:
+    get:
+      summary: Get alert details
+      tags: [Alerts]
+      security:
+        - bearerAuth: []
       parameters:
-        - name: alertId
-          in: path
+        - in: path
+          name: alertId
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: OK
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-    DeviceToken:
-      type: apiKey
-      in: header
-      name: X-Device-Token
+          description: Alert returned
+  /api/alerts/{alertId}/resolve:
+    patch:
+      summary: Acknowledge or resolve an alert
+      tags: [Alerts]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: alertId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [acknowledged, resolved]
+      responses:
+        '200':
+          description: Alert status updated

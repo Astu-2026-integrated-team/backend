@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(cron): add stale device background check job
-**Base Branch:** feat/alerts-endpoint
+**Title:** docs(api): add OpenAPI specification and Swagger UI
+**Base Branch:** feat/cron-stale-check
 
 ## Summary
 
-Adds a node-cron background job that periodically checks for stale/disconnected OBD devices and updates their status.
+Adds the complete OpenAPI 3.0 specification for all endpoints and wires up Swagger UI at /api/docs.
