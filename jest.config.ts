@@ -1,0 +1,19 @@
+import type { Config } from 'jest';
+
+const config: Config = {
+  coverageThreshold: {
+    global: {
+      branches: 95, functions: 95, lines: 95, statements: 95
+    }
+  },
+  collectCoverageFrom: [
+    'src/services/**/*.ts'
+  ],
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.ts$': 'ts-jest'
+  },
+  setupFiles: ['<rootDir>/jest.setup.ts']
+};
+
+export default config;

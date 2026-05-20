@@ -1,37 +1,34 @@
 import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
-import { env } from './config/env';
-import { prisma } from './lib/prisma';
-import { errorHandler } from './middleware/error-handler';
-import { notFoundHandler } from './middleware/not-found';
-import { apiRouter } from './routes/index';
+import authRoutes from './routes/auth';
+import telemetryRoutes from './routes/telemetry';
+import vehiclesRoutes from './routes/vehicles';
+import devicesRoutes from './routes/devices';
+import driversRoutes from './routes/drivers';
+import alertsRoutes from './routes/alerts';
 
-export const app = express();
+const app = express();
 
-app.disable('x-powered-by');
+app.use(cors());
 app.use(express.json());
 
-app.use('/api', apiRouter);
+app.use('/api/auth', authRoutes);
+app.use('/api/telemetry', telemetryRoutes);
+app.use('/api/vehicles', vehiclesRoutes);
+app.use('/api/devices', devicesRoutes);
+app.use('/api/drivers', driversRoutes);
+app.use('/api/alerts', alertsRoutes);
 
-app.get('/health', async (_request, response) => {
-  let clientReady = false;
-  if (prisma) {
-    try {
-      await prisma.$queryRaw`SELECT 1`;
-      clientReady = true;
-    } catch {
-      clientReady = false;
-    }
-  }
-  response.json({
-    status: 'ok',
-    appName: env.appName,
-    environment: env.appEnv,
-    prismaConfigured: env.prismaConfigured,
-    authConfigured: env.authConfigured,
-    clientReady,
-  });
-});
+// Swagger UI
+try {
+  const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'openapi.yaml'));
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+} catch (e) {
+  console.error(`Failed to load Swagger definition: ${e.message}`);
+}
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+export default app;
