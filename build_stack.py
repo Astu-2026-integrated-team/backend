@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Build the new PR stack with logical grouping."""
-import subprocess, os, sys
+import argparse
+import os
+import subprocess
+import sys
 
 BACKUP = "backup/all-changes"
 OLD_BRANCHES = [
@@ -19,13 +22,25 @@ OLD_BRANCHES = [
     "test-branch",
 ]
 
+parser = argparse.ArgumentParser(description="Build the new PR stack with logical grouping.")
+parser.add_argument("--dry-run", action="store_true", help="Print commands without executing them.")
+args = parser.parse_args()
+
+DRY_RUN = args.dry_run
+
 def run(cmd):
+    if DRY_RUN:
+        print(f"  DRY-RUN: {cmd}")
+        return subprocess.CompletedProcess(cmd, 0, "", "")
     r = subprocess.run(cmd, shell=True, text=True, capture_output=True)
     if r.returncode != 0:
         print(f"  WARN: {cmd}\n  {r.stderr.strip()}")
     return r
 
 def run_ok(cmd):
+    if DRY_RUN:
+        print(f"  DRY-RUN: {cmd}")
+        return subprocess.CompletedProcess(cmd, 0, "", "")
     r = subprocess.run(cmd, shell=True, text=True, capture_output=True)
     if r.returncode != 0:
         print(f"  FAIL: {cmd}\n  {r.stderr.strip()}")
@@ -474,18 +489,24 @@ for i, pr in enumerate(PRs):
 
     # Write custom files (intermediate app.ts / server.ts versions)
     for filepath, content in pr["write_files"].items():
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        with open(filepath, "w") as fh:
-            fh.write(content)
+        if DRY_RUN:
+            print(f"  DRY-RUN: write {filepath}")
+        else:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            with open(filepath, "w") as fh:
+                fh.write(content)
         run_ok(f"git add {filepath}")
 
     # Write PR_DETAILS.md
     base_label = base if base == "main" else f"#{i}"
-    with open("PR_DETAILS.md", "w") as fh:
-        fh.write(f"# PR Details\n\n")
-        fh.write(f"**Title:** {pr['title']}\n")
-        fh.write(f"**Base Branch:** {base}\n\n")
-        fh.write(f"## Summary\n\n{pr['summary']}\n")
+    if DRY_RUN:
+        print("  DRY-RUN: write PR_DETAILS.md")
+    else:
+        with open("PR_DETAILS.md", "w") as fh:
+            fh.write(f"# PR Details\n\n")
+            fh.write(f"**Title:** {pr['title']}\n")
+            fh.write(f"**Base Branch:** {base}\n\n")
+            fh.write(f"## Summary\n\n{pr['summary']}\n")
     run_ok("git add PR_DETAILS.md")
 
     # Stage everything and commit
