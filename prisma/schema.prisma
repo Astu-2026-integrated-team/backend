@@ -107,3 +107,14 @@ model AdminUser {
 
   @@map("admin_users")
 }
+
+model Driver {
+  driverId       String   @id @map("driverId")
+  fullName       String   @map("fullName")
+  licenseNumber  String   @unique @map("licenseNumber")
+  phoneNumber    String?  @map("phoneNumber")
+  status         String   @default("active")
+  createdAt      DateTime @default(now()) @map("createdAt") @db.Timestamptz(6)
+
+  @@map("drivers")
+}
