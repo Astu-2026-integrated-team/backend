@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** chore(config): add environment constants and threshold configuration
-**Base Branch:** chore/project-foundation
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds src/config/constants.ts with environment variable parsing and src/config/thresholds.ts with alert threshold rules used by the telemetry pipeline.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
