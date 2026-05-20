@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** chore: add CI pipeline, build config, and project foundation
-**Base Branch:** main
+**Title:** chore(config): add environment constants and threshold configuration
+**Base Branch:** chore/project-foundation
 
 ## Summary
 
-Sets up GitHub Actions CI, ESLint, Jest, TypeScript config, package dependencies, and the minimal Express app skeleton. Removes old Prisma-based tests and replaces the entry point.
+Adds src/config/constants.ts with environment variable parsing and src/config/thresholds.ts with alert threshold rules used by the telemetry pipeline.
