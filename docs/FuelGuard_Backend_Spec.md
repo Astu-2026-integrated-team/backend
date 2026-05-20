@@ -750,7 +750,7 @@ All error responses follow this structure:
 
 | Component | Technology | Notes |
 | :---- | :---- | :---- |
-| Runtime | Node.js \+ Express | REST API server |
+| Runtime | TypeScript \+ Express | REST API server |
 | WebSocket | ws npm package | WebSocket server on same port or separate port |
 | Database | Supabase (Postgres) | ORM: Prisma |
 | Auth | jsonwebtoken (JWT) | bcrypt for password hashing |
@@ -782,7 +782,7 @@ AI_RUNTIME=python
 
 ## **9.3 Recommended Folder Structure**
 
-| backend/   src/     routes/       auth.js       telemetry.js       vehicles.js       devices.js       drivers.js       alerts.js     services/       telemetryService.js    // ingestion pipeline       alertRuleEngine.js     // all 7 alert rules       tripService.js         // trip open/update/close       websocketService.js    // broadcast helpers       staleCheckJob.js       // background cron     middleware/       authMiddleware.js      // JWT check       deviceAuthMiddleware.js // device token check     db/       supabaseClient.js       schema.sql             // table definitions     websocket/       wsServer.js            // WebSocket server setup     config/       thresholds.js          // reads from .env     app.js     server.js   tests/   .env.example   package.json |
+| backend/   src/     routes/       auth.ts       telemetry.ts       vehicles.ts       devices.ts       drivers.ts       alerts.ts     services/       telemetryService.ts    // ingestion pipeline       alertRuleEngine.ts     // all 7 alert rules       tripService.ts         // trip open/update/close       websocketService.ts    // broadcast helpers       staleCheckJob.ts       // background cron     middleware/       authMiddleware.ts      // JWT check       deviceAuthMiddleware.ts // device token check     db/       supabaseClient.ts       schema.sql             // table definitions     websocket/       wsServer.ts            // WebSocket server setup     config/       thresholds.ts          // reads from .env     app.ts     server.ts   tests/   .env.example   package.json |
 | :---- |
 
 ## **9.4 P0 Build Order (What to build first)**
