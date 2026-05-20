@@ -1,0 +1,286 @@
+# Skill: pr-presentation
+# Scope: FuelGuard AI Backend (Node.js + Express + Supabase)
+# Used by: Antigravity AI coding agent
+# Reference doc: docs/FuelGuard_Backend_Spec.md
+# Toolchain: Graphite (gt) for stacked PRs
+
+---
+
+## PURPOSE
+
+Every PR Antigravity opens must be immediately reviewable — no guessing required.
+This skill defines the exact format for PR titles, descriptions, commit messages,
+stack metadata, complexity guidelines, and review readiness checks.
+A PR that fails these rules is NOT ready to open — fix it first.
+
+---
+
+## 1. PR TITLE FORMAT
+
+Pattern: {type}({scope}): {imperative summary under 72 chars}
+
+### Types
+  feat      → new functionality
+  fix       → bug fix
+  refactor  → code change with no behavior change
+  test      → adding or updating tests only
+  docs      → documentation only
+  chore     → build config, deps, env, tooling
+  db        → database schema or migration change
+
+### Scope (matches folder or domain)
+  auth, telemetry, vehicles, devices, drivers, alerts, trips,
+  websocket, db, config, middleware, rules, ci
+
+### Examples (good)
+  feat(telemetry): add normalized insert and vehicle state upsert
+  feat(rules): implement LOW_FUEL alert rule with dedup check
+  feat(trips): open trip on engine-on transition
+  feat(websocket): broadcast VEHICLE_UPDATE after telemetry ingestion
+  feat(auth): add JWT login endpoint for admin
+  db(schema): add driver_violations table
+  test(rules): unit tests for LOW_FUEL and OVERSPEED rules
+  docs(api): add Swagger spec for POST /api/telemetry
+  fix(trips): prevent duplicate trip open on rapid engine flicker
+  refactor(telemetry): extract resolveVehicleFromDevice to own function
+
+### Examples (bad — reject these)
+  ❌  "WIP telemetry stuff"
+  ❌  "Fix bug"
+  ❌  "Updates"
+  ❌  "feat: added the new thing for the fuel alert system endpoint"  (too vague, no scope)
+  ❌  "feat(telemetry): implement entire telemetry pipeline including trip detection, alert rules, websocket broadcast, and DB writes" (too large — decompose into PRs)
+
+---
+
+## 2. COMMIT MESSAGE FORMAT
+
+Pattern: {type}({scope}): {imperative summary}
+
+One commit per logical unit of work. Do not squash unrelated changes into one commit.
+
+### Single-line (for small, clear changes)
+  feat(db): create telemetry_raw and telemetry_normalized tables
+  feat(middleware): add deviceAuthMiddleware for X-Device-Token check
+  test(auth): add smoke test for POST /api/auth/login 401 case
+
+### Multi-line (when the why needs explanation)
+  fix(trips): guard against duplicate active trip on engine flicker
+
+  The hardware sometimes toggles engine ON/OFF within a single telemetry
+  window when the vehicle is idling. Without a guard, this created ghost
+  trips with 0-second duration. Added a 3-second minimum gap check before
+  opening a new trip when an active trip already exists.
+
+  Relates to: FuelGuard_Backend_Spec.md §6.1
+
+### Rules
+  - Imperative mood: "add", "fix", "implement", "remove" — NOT "added", "fixed"
+  - No period at the end of the summary line
+  - Body wrapped at 72 characters per line
+  - Reference spec section if the commit implements something from the spec
+
+---
+
+## 3. PR DESCRIPTION TEMPLATE
+
+Every PR must use this exact structure. No section may be omitted.
+Antigravity fills this in before opening any PR.
+
+```markdown
+## What this PR does
+<!-- One paragraph. What behavior or capability does this add/change/fix? -->
+<!-- Be specific: name the functions, tables, endpoints, or rules involved. -->
+
+## Why
+<!-- Which requirement from FuelGuard_Backend_Spec.md does this implement? -->
+<!-- Link the spec section: e.g. "Implements spec §5.2 steps 5–6" -->
+
+## Changes
+<!-- Bullet list of files changed and what changed in each -->
+- `src/services/telemetry-service.js` — added `insertTelemetryRaw()` and `insertTelemetryNormalized()`
+- `src/db/schema.sql` — added `telemetry_raw` and `telemetry_normalized` table definitions
+- `tests/unit/telemetry-service.test.js` — unit tests for mapping and insert functions
+
+## Stack position (Graphite)
+<!-- If this is part of a stack, state it explicitly -->
+- Base branch: `main`                          ← if this is stack base
+- Stacked on: `feat/telemetry-raw-insert`      ← if this depends on another PR
+- Next PR in stack: `feat/vehicle-state-upsert` ← if known
+
+## Test coverage
+<!-- What tests were added or updated? What do they verify? -->
+- Unit: `insertTelemetryRaw` stores correct rawPayload JSON
+- Unit: `mapRawToNormalized` maps all 18 hardware fields correctly
+- Smoke: POST /api/telemetry returns 200 with valid payload
+- Coverage: services/telemetry-service.js → 87% line coverage
+
+## API / Schema changes
+<!-- List any new or changed endpoints, DB tables, columns, or WS events -->
+<!-- If none: write "None" -->
+- New table: `telemetry_raw`
+- New table: `telemetry_normalized`
+- No endpoint changes in this PR
+
+## Swagger updated?
+<!-- YES → name the endpoint(s) updated in swagger.yaml -->
+<!-- NO  → explain why not (e.g. "no endpoint changes in this PR") -->
+YES — POST /api/telemetry request/response spec added to swagger.yaml
+
+## Documentation updated?
+<!-- YES → name the doc file(s) updated -->
+<!-- NO  → state "no doc changes needed" or flag if docs ARE needed but deferred -->
+No doc changes needed — spec §5.2 is the source of truth for this PR.
+
+## How to test manually
+<!-- Step-by-step, from a clean state -->
+1. Run `npm run db:migrate` to apply schema changes
+2. Start the server: `npm run dev`
+3. POST to `/api/telemetry` with the sample payload from spec §1.1 and header `X-Device-Id: ESP32-001`
+4. Verify 200 response with `accepted: true`
+5. Check Supabase → `telemetry_raw` table has new row
+6. Check Supabase → `telemetry_normalized` table has corresponding row
+
+## Checklist
+- [ ] All tests pass locally (`npm test`)
+- [ ] No new ESLint warnings
+- [ ] No hardcoded threshold values (all read from thresholds.js)
+- [ ] No console.log left in source (use logger or remove)
+- [ ] Swagger updated if any endpoint was added or changed
+- [ ] naming-conventions.skill rules followed
+- [ ] code-structure.skill rules followed
+- [ ] This PR does ONE thing — if it does more, split it
+```
+
+---
+
+## 4. PR COMPLEXITY RULES
+
+### Size limits (enforced before opening)
+  Files changed:   ≤ 8 files per PR
+  Lines added:     ≤ 400 lines (excluding test files and generated files)
+  Lines deleted:   no limit (deletion is always welcome)
+  Test files:      not counted toward the 400-line limit
+
+### If a PR would exceed these limits → STOP
+Antigravity must decompose into smaller PRs and propose the stack order.
+Example decomposition for "implement telemetry ingestion":
+
+  PR 1: feat(db): create telemetry_raw and telemetry_normalized schema
+  PR 2: feat(telemetry): add raw insert and field normalization             ← stacked on PR 1
+  PR 3: feat(telemetry): add vehicle state upsert and device status update  ← stacked on PR 2
+  PR 4: feat(trips): integrate trip detection into telemetry pipeline       ← stacked on PR 3
+  PR 5: feat(websocket): broadcast VEHICLE_UPDATE after telemetry           ← stacked on PR 4
+
+Each PR has one clear purpose, passes tests independently, and can be reviewed in isolation.
+
+### PR complexity self-check (run before opening)
+  1. Can I describe what this PR does in one sentence? If not → split it.
+  2. Does this PR touch more than 2 service domains? (e.g. alerts + trips + websocket) → split it.
+  3. Are there tests for every new function? If not → add tests before opening.
+  4. Does this PR include both schema changes AND application logic?
+     Consider splitting DB changes into their own PR (faster, safer rollback).
+
+---
+
+## 5. GRAPHITE / GT STACK CONVENTIONS
+
+### Naming the stack
+Use a shared prefix for all PRs in a stack:
+
+  feat/telemetry-01-schema
+  feat/telemetry-02-raw-insert
+  feat/telemetry-03-normalize
+  feat/telemetry-04-state-upsert
+  feat/telemetry-05-websocket-broadcast
+
+### gt commands reference
+  gt create -m "feat(telemetry): add raw insert"   # create new branch in stack
+  gt modify -m "updated commit message"             # amend top commit
+  gt sync                                           # rebase stack on main
+  gt submit                                         # open all PRs in stack on GitHub
+  gt log                                            # visualize the stack
+
+### Stack PR description addendum
+In the "Stack position" section of the description, always include:
+- Which PR in the stack this is (e.g. "2 of 5")
+- What the previous PR added (so reviewer has context without reading it)
+- What the next PR will add
+
+### Stack ordering rules
+  - DB schema changes always come first in any stack
+  - Middleware changes come before the routes that depend on them
+  - Service logic comes before the route that calls it
+  - Tests come in the same PR as the code they test (not a separate "test PR")
+  - Swagger updates come in the same PR as the endpoint they document
+
+---
+
+## 6. REVIEW READINESS CHECKLIST
+
+Antigravity runs this checklist before marking a PR ready for review.
+If ANY item is NO → fix before opening.
+
+### Code quality
+  [ ] No TODO or FIXME comments unless they reference a specific follow-up PR
+  [ ] No commented-out code blocks
+  [ ] No hardcoded credentials, secrets, or threshold numbers
+  [ ] No console.log in src/ (only in tests is acceptable)
+  [ ] All functions exported from a module are documented with a one-line JSDoc comment
+
+### Tests
+  [ ] New functions have unit tests
+  [ ] New endpoints have integration or smoke tests
+  [ ] npm test passes with exit code 0
+  [ ] Coverage for changed files is ≥ 80% line coverage
+
+### API & Docs
+  [ ] If an endpoint was added/changed: swagger.yaml is updated
+  [ ] If a DB table was added/changed: schema.sql reflects the change
+  [ ] If a threshold was added: it is in .env.example and thresholds.js
+
+### Naming & Structure
+  [ ] naming-conventions.skill rules followed throughout
+  [ ] code-structure.skill layer rules followed (no routes touching DB, etc.)
+  [ ] No new circular imports
+
+### PR hygiene
+  [ ] PR title matches the format in §1
+  [ ] All sections of the description template in §3 are filled in
+  [ ] PR does ONE thing (one-sentence description possible)
+  [ ] Stack position declared if stacked
+
+---
+
+## 7. LABELS (apply to every PR)
+
+Apply at least one label from each group:
+
+### Type label (one of):
+  type: feat | type: fix | type: refactor | type: test | type: docs | type: chore | type: db
+
+### Domain label (one or more):
+  domain: auth | domain: telemetry | domain: vehicles | domain: devices |
+  domain: drivers | domain: alerts | domain: trips | domain: websocket | domain: db
+
+### Size label (auto-applied based on §4 limits):
+  size: S   → ≤ 100 lines added
+  size: M   → 101–250 lines added
+  size: L   → 251–400 lines added
+  size: XL  → > 400 lines added → REQUIRES decomposition justification in description
+
+### Stack label (if applicable):
+  stacked   → this PR is part of a gt stack
+
+---
+
+## 8. WHAT NOT TO PUT IN A PR
+
+❌  Mixing unrelated bug fixes with new features (open two separate PRs)
+❌  Schema migrations + large application logic in one PR
+❌  Commented-out old implementation "just in case"
+❌  Partial implementations left as dead code (if it's not wired up, don't include it)
+❌  Test files that only assert `expect(true).toBe(true)` (placeholder tests)
+❌  PRs that depend on another open PR but don't declare the dependency in the description
+❌  Changes to .env.example without a corresponding thresholds.js update
+❌  swagger.yaml edits that don't match the actual implementation in that PR

@@ -100,6 +100,7 @@ tests/             backend tests
 ## API Endpoints
 
 - `GET /health`
+- `GET /api/docs` (Swagger API documentation)
 - `GET /telemetry/sample?limit=10` when `APP_ENV=development`
 
 `/telemetry/sample` runs a direct `SELECT` against `telemetry_normalized` and returns a small result set for connectivity verification. The route is only registered in development to avoid exposing raw telemetry data in non-development environments.

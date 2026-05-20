@@ -1,0 +1,187 @@
+---
+name: pr-decomposition
+description: "Use this skill whenever implementing any feature, endpoint, or change in the FuelGuard backend. Decomposes work into atomic, stackable PRs suitable for Graphite (gt) stacking. Triggers: any new feature, endpoint addition, schema change, refactor, or bug fix. Prevents oversized PRs. Enforces one logical concern per PR."
+---
+
+# PR Decomposition — FuelGuard Backend
+
+## Core Principle
+
+Every unit of work MUST be decomposed into the smallest independently-reviewable, independently-deployable change. No PR should do more than one logical thing.
+
+---
+
+## Atomicity Rules
+
+A PR is atomic when ALL of the following are true:
+
+1. It has exactly one purpose (add, change, or fix one thing)
+2. It can be reviewed without understanding other in-flight PRs
+3. It does not break tests when merged alone (or is explicitly a WIP stacked PR)
+4. It touches the minimum number of files needed for its purpose
+5. Its title fits in one sentence without "and"
+
+If a PR title contains "and", it MUST be split.
+
+---
+
+## Complexity Thresholds
+
+| Lines Changed | PR Status | Action Required |
+|---|---|---|
+| < 200 lines | ✅ Acceptable | Proceed |
+| 200–400 lines | ⚠️ Review | Justify in PR description or split |
+| 400–600 lines | 🔴 Large | MUST split unless it is purely generated code (e.g. migrations, swagger) |
+| > 600 lines | ❌ Blocked | Always split. No exceptions. |
+
+Generated/mechanical code (schema migrations, OpenAPI JSON, test fixtures) does not count toward the 600-line limit but must be in its own PR.
+
+---
+
+## Standard Decomposition Patterns
+
+### Pattern: New API Endpoint
+
+Split into this exact stack order:
+
+```
+PR 1: DB migration — new table or column only
+PR 2: DB query functions — repository layer only, no routes
+PR 3: Service logic — business rules, no HTTP layer
+PR 4: Route + controller — wires HTTP to service, minimal logic
+PR 5: Swagger/OpenAPI — documents the new endpoint
+PR 6: Tests — unit + integration + smoke tests for the feature
+```
+
+Each PR stacks on the previous. Do not combine any two layers.
+
+### Pattern: Alert Rule Addition
+
+```
+PR 1: Threshold config — add new env var + config/thresholds.js entry
+PR 2: Rule implementation — alertRuleEngine.js, rule function only
+PR 3: Rule tests — unit tests for the rule
+PR 4: Smoke test — end-to-end test that fires the alert
+PR 5: Docs update — update docs/FuelGuard_Backend_Spec.md alert table
+```
+
+### Pattern: Schema Change
+
+```
+PR 1: Migration file only — SQL ALTER or CREATE TABLE
+PR 2: Supabase client types update — TypeScript types or JSDoc
+PR 3: Repository layer update — query changes only
+PR 4: Service layer update — if logic changes
+PR 5: Docs — update schema section in FuelGuard_Backend_Spec.md
+```
+
+### Pattern: WebSocket Event Addition
+
+```
+PR 1: Event type constant — add to shared constants file
+PR 2: Broadcast function — websocketService.js
+PR 3: Trigger wiring — wire into telemetry pipeline or job
+PR 4: Frontend contract docs — document event shape in spec
+PR 5: Tests — test that event fires correctly
+```
+
+### Pattern: Bug Fix
+
+```
+PR 1: Failing test that reproduces the bug (test MUST fail on main)
+PR 2: Fix — minimal code change to make the test pass
+```
+
+Never fix a bug without a test first.
+
+---
+
+## Graphite (gt) Stack Commands
+
+When implementing a stacked feature, use this workflow:
+
+```bash
+# Start from main
+gt sync
+gt branch create feat/fuelguard-<feature>-db-migration
+
+# Do the work, commit
+git add . && git commit -m "feat(db): add telemetry_normalized table migration"
+
+# Stack next PR on top
+gt branch create feat/fuelguard-<feature>-repository
+
+# Continue stacking...
+gt branch create feat/fuelguard-<feature>-service
+gt branch create feat/fuelguard-<feature>-route
+gt branch create feat/fuelguard-<feature>-swagger
+gt branch create feat/fuelguard-<feature>-tests
+
+# Submit the whole stack for review
+gt submit --stack
+```
+
+---
+
+## Branch Naming Convention
+
+```
+feat/<scope>-<short-description>       # new functionality
+fix/<scope>-<short-description>        # bug fix
+chore/<scope>-<short-description>      # maintenance, deps, config
+docs/<scope>-<short-description>       # documentation only
+test/<scope>-<short-description>       # tests only
+refactor/<scope>-<short-description>   # no behaviour change
+```
+
+Scopes for FuelGuard: `db`, `telemetry`, `vehicles`, `devices`, `drivers`, `alerts`, `trips`, `ws`, `auth`, `config`, `docs`
+
+Examples:
+```
+feat/telemetry-ingestion-route
+feat/alerts-low-fuel-rule
+feat/ws-vehicle-update-broadcast
+fix/trips-engine-state-transition
+docs/fuelguard-spec-alert-types
+```
+
+---
+
+## Pre-Decomposition Checklist
+
+Before writing any code, answer these questions:
+
+- [ ] What tables does this touch? (each table change = own PR)
+- [ ] What services does this touch? (each service = own PR)
+- [ ] Does this add a new API endpoint? (use New Endpoint pattern above)
+- [ ] Does this change existing API behavior? (document breaking vs non-breaking)
+- [ ] Does this add a new alert rule? (use Alert Rule pattern above)
+- [ ] Does this change the WebSocket protocol? (document event shape change)
+- [ ] Does this require a migration? (migration = first PR in stack)
+
+---
+
+## Conflict with This Skill
+
+If Antigravity proposes a PR that violates these rules, it MUST stop and present options:
+
+```
+⚠️  PR DECOMPOSITION CONFLICT
+
+Proposed PR "feat/telemetry-full-pipeline" would:
+  - Change 3 DB tables
+  - Add 2 service functions
+  - Add 1 new route
+  - Add 8 tests
+
+This violates the atomicity rule (multiple logical concerns).
+
+OPTIONS:
+  A) Split into 6 PRs following the New Endpoint pattern
+  B) Scope to DB migration only, defer service/route to follow-up PRs
+  C) Proceed as single PR (requires explicit override: type OVERRIDE)
+
+Which option? (A/B/C or describe alternative):
+```
+
+Never proceed with a non-atomic PR without explicit user confirmation.

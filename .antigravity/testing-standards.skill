@@ -1,0 +1,413 @@
+---
+name: testing-standards
+description: "Use this skill when writing any test for the FuelGuard backend. Covers unit tests, integration tests, smoke tests, coverage thresholds, and test file naming. Triggers: any test file creation, any test modification, running the test suite, checking coverage. Every PR that adds or modifies logic MUST include corresponding tests."
+---
+
+# Testing Standards — FuelGuard Backend
+
+## Stack
+
+| Tool | Purpose |
+|---|---|
+| Jest | Test runner and assertions |
+| Supertest | HTTP integration tests |
+| jest-mock-extended | Service and DB mocking |
+| dotenv | Load test env vars |
+
+```bash
+npm install --save-dev jest supertest jest-mock-extended
+```
+
+---
+
+## Coverage Thresholds (enforced in CI)
+
+```json
+// jest.config.js
+module.exports = {
+  coverageThreshold: {
+    global: {
+      branches:   80,
+      functions:  85,
+      lines:      85,
+      statements: 85
+    },
+    // Critical paths have higher thresholds
+    "./src/services/alertRuleEngine.js": {
+      branches:   95,
+      functions:  100,
+      lines:      95,
+      statements: 95
+    },
+    "./src/services/tripService.js": {
+      branches:   90,
+      functions:  100,
+      lines:      90,
+      statements: 90
+    },
+    "./src/services/telemetryService.js": {
+      branches:   90,
+      functions:  100,
+      lines:      90,
+      statements: 90
+    }
+  }
+};
+```
+
+A PR that drops coverage below threshold MUST NOT be merged.
+
+---
+
+## Test File Structure
+
+```
+tests/
+  unit/
+    services/
+      alertRuleEngine.test.js
+      tripService.test.js
+      telemetryService.test.js
+      websocketService.test.js
+    validators/
+      telemetryValidator.test.js
+      vehicleValidator.test.js
+    db/
+      repositories/
+        vehicleRepository.test.js
+  integration/
+    routes/
+      auth.test.js
+      telemetry.test.js
+      vehicles.test.js
+      devices.test.js
+      drivers.test.js
+      alerts.test.js
+  smoke/
+    api.smoke.test.js
+    websocket.smoke.test.js
+  fixtures/
+    telemetryPayload.js     // shared test data
+    vehicles.js
+    drivers.js
+    alerts.js
+  setup/
+    testDb.js               // test DB setup/teardown
+    mockSupabase.js         // Supabase client mock
+```
+
+---
+
+## Unit Test Pattern
+
+Unit tests test ONE function in isolation. All dependencies are mocked.
+
+```javascript
+// tests/unit/services/alertRuleEngine.test.js
+const { checkLowFuelRule } = require('../../../src/services/alertRuleEngine');
+const alertRepository = require('../../../src/db/repositories/alertRepository');
+jest.mock('../../../src/db/repositories/alertRepository');
+
+describe('alertRuleEngine — LOW_FUEL rule', () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('trigger conditions', () => {
+    test('fires when fuelPercent < 15', async () => {
+      alertRepository.findOpenAlert.mockResolvedValue(null); // no existing alert
+      const telemetry = { vehicleId: 'V001', fuelPercent: 10, fuelLiters: 6.0, lowFuelFlag: false };
+      
+      const alert = await checkLowFuelRule(telemetry);
+      
+      expect(alert).not.toBeNull();
+      expect(alert.type).toBe('LOW_FUEL');
+      expect(alert.severity).toBe('warning');
+      expect(alert.evidence.fuelPercent).toBe(10);
+    });
+
+    test('fires when lowFuelFlag is true even if pct >= 15', async () => {
+      alertRepository.findOpenAlert.mockResolvedValue(null);
+      const telemetry = { vehicleId: 'V001', fuelPercent: 20, fuelLiters: 12.0, lowFuelFlag: true };
+      
+      const alert = await checkLowFuelRule(telemetry);
+      
+      expect(alert).not.toBeNull();
+      expect(alert.evidence.deviceFlag).toBe(true);
+    });
+
+    test('does NOT fire when fuel is sufficient and flag is false', async () => {
+      const telemetry = { vehicleId: 'V001', fuelPercent: 50, fuelLiters: 30.0, lowFuelFlag: false };
+      
+      const alert = await checkLowFuelRule(telemetry);
+      
+      expect(alert).toBeNull();
+    });
+  });
+
+  describe('deduplication', () => {
+    test('returns null when open LOW_FUEL alert already exists', async () => {
+      alertRepository.findOpenAlert.mockResolvedValue({ alertId: 'ALT-001', type: 'LOW_FUEL' });
+      const telemetry = { vehicleId: 'V001', fuelPercent: 5, fuelLiters: 3.0, lowFuelFlag: true };
+      
+      const alert = await checkLowFuelRule(telemetry);
+      
+      expect(alert).toBeNull();
+      expect(alertRepository.findOpenAlert).toHaveBeenCalledWith('V001', 'LOW_FUEL');
+    });
+  });
+
+  describe('evidence object', () => {
+    test('includes fuelLiters, fuelPercent, deviceFlag in evidence', async () => {
+      alertRepository.findOpenAlert.mockResolvedValue(null);
+      const telemetry = { vehicleId: 'V001', fuelPercent: 8, fuelLiters: 4.8, lowFuelFlag: true };
+      
+      const alert = await checkLowFuelRule(telemetry);
+      
+      expect(alert.evidence).toEqual({
+        fuelLiters: 4.8,
+        fuelPercent: 8,
+        deviceFlag: true
+      });
+    });
+  });
+});
+```
+
+---
+
+## Integration Test Pattern
+
+Integration tests test the full HTTP layer with a real (test) database or a mocked Supabase client.
+
+```javascript
+// tests/integration/routes/vehicles.test.js
+const request = require('supertest');
+const app = require('../../../src/app');
+const { getTestJWT } = require('../../setup/testAuth');
+const { seedVehicle, clearVehicles } = require('../../setup/testDb');
+
+describe('GET /api/vehicles', () => {
+
+  let token;
+
+  beforeAll(async () => {
+    token = await getTestJWT();
+    await seedVehicle({ vehicleId: 'V001', label: 'Truck Alpha', plateNumber: 'ET-4321' });
+  });
+
+  afterAll(async () => {
+    await clearVehicles();
+  });
+
+  test('200 — returns vehicle list', async () => {
+    const res = await request(app)
+      .get('/api/vehicles')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.vehicles).toBeInstanceOf(Array);
+    expect(res.body.count).toBeGreaterThan(0);
+  });
+
+  test('401 — returns MISSING_TOKEN without auth header', async () => {
+    const res = await request(app).get('/api/vehicles');
+
+    expect(res.status).toBe(401);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error.code).toBe('MISSING_TOKEN');
+  });
+
+  test('filters by status=active', async () => {
+    const res = await request(app)
+      .get('/api/vehicles?status=active')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    res.body.vehicles.forEach(v => expect(v.status).toBe('active'));
+  });
+});
+```
+
+---
+
+## Smoke Test Pattern
+
+Smoke tests verify the happy path of each endpoint against a running server. Run after deployment.
+
+```javascript
+// tests/smoke/api.smoke.test.js
+const request = require('supertest');
+
+const BASE_URL = process.env.SMOKE_BASE_URL || 'http://localhost:3000';
+const ADMIN_USER = process.env.SMOKE_ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.SMOKE_ADMIN_PASS || 'testpass';
+const DEVICE_TOKEN = process.env.SMOKE_DEVICE_TOKEN || 'test-device-token';
+
+describe('Smoke Tests — FuelGuard API', () => {
+
+  let jwtToken;
+
+  test('POST /api/auth/login — returns JWT', async () => {
+    const res = await request(BASE_URL)
+      .post('/api/auth/login')
+      .send({ username: ADMIN_USER, password: ADMIN_PASS });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.token).toBeTruthy();
+    jwtToken = res.body.token;
+  });
+
+  test('GET /api/vehicles — returns 200', async () => {
+    const res = await request(BASE_URL)
+      .get('/api/vehicles')
+      .set('Authorization', `Bearer ${jwtToken}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test('POST /api/telemetry — accepts valid hardware payload', async () => {
+    const payload = {
+      t: 1000, fuel_l: 40.0, fuel_pct: 66, engine: false,
+      door: false, temp_c: 22.0, accel_g: 0.0, speed_kmh: 0,
+      rate_lhr: 0.0, trip_sec: 0, fuel_used: 0.0,
+      lat: 9.0320, lon: 38.7469, location: 'Home',
+      geofence_ok: true, low_fuel: false, parking: true,
+      overspeed: false, alert: null
+    };
+
+    const res = await request(BASE_URL)
+      .post('/api/telemetry')
+      .set('X-Device-Token', DEVICE_TOKEN)
+      .set('X-Device-Id', 'ESP32-001')
+      .send(payload);
+
+    expect(res.status).toBe(200);
+    expect(res.body.accepted).toBe(true);
+    expect(res.body.telemetryId).toBeTruthy();
+  });
+
+  test('GET /api/docs — Swagger UI loads', async () => {
+    const res = await request(BASE_URL).get('/api/docs/');
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('swagger');
+  });
+});
+```
+
+---
+
+## Alert Rule Test Coverage Requirements
+
+Every alert rule MUST have tests covering:
+
+| Rule | Required Test Cases |
+|---|---|
+| LOW_FUEL | trigger at pct < 15, trigger via deviceFlag, no-trigger at safe level, dedup skip |
+| SUSPECTED_FUEL_DROP | trigger above threshold, no-trigger below threshold, engine-on skip, no-parking skip |
+| OVERSPEED | trigger above 80, trigger via deviceFlag, cooldown dedup, no-trigger below threshold |
+| DOOR_OPEN_PARKED | trigger conditions met, engine-on skip, parking-off skip, dedup skip |
+| GEOFENCE_VIOLATION | trigger on false, no-trigger on true, dedup skip |
+| REFILL_DETECTED | trigger above 5L increase, no-trigger below threshold, always creates (no dedup) |
+| DEVICE_STALE | 5-minute threshold, no duplicate alert |
+| DEVICE_OFFLINE | 15-minute threshold, no duplicate alert |
+
+---
+
+## Trip Detection Test Coverage Requirements
+
+| Test Case | Description |
+|---|---|
+| Trip start — engine OFF → ON | New trip created, activeTripId set |
+| Trip in progress | Distance accumulates, maxSpeed updates |
+| Trip end — engine ON → OFF | Trip closed, fuelUsed computed, activeTripId cleared |
+| Trip start on boot | Handles no previous state |
+| No trip on engine-off with no active trip | Does not crash |
+
+---
+
+## Test Data Fixtures
+
+```javascript
+// tests/fixtures/telemetryPayload.js
+const baseTelemetry = {
+  t: 4632,
+  fuel_l: 2.93,
+  fuel_pct: 4,
+  engine: true,
+  door: true,
+  temp_c: 22.0,
+  accel_g: -2.71,
+  speed_kmh: 5.9,
+  rate_lhr: 0.00,
+  trip_sec: 0,
+  fuel_used: 0.00,
+  lat: 9.0320,
+  lon: 38.7469,
+  location: 'Home',
+  geofence_ok: true,
+  low_fuel: true,
+  parking: false,
+  overspeed: false,
+  alert: 'Low fuel warning'
+};
+
+// Use spread to override specific fields in tests
+const engineOff = { ...baseTelemetry, engine: false, speed_kmh: 0 };
+const overspeedPayload = { ...baseTelemetry, speed_kmh: 95, overspeed: true };
+const parkingMode = { ...baseTelemetry, engine: false, parking: true, speed_kmh: 0 };
+
+module.exports = { baseTelemetry, engineOff, overspeedPayload, parkingMode };
+```
+
+---
+
+## Running Tests
+
+```bash
+# Unit tests
+npm run test:unit
+
+# Integration tests
+npm run test:integration
+
+# Smoke tests (requires running server)
+SMOKE_BASE_URL=http://localhost:3000 npm run test:smoke
+
+# All tests with coverage
+npm run test:coverage
+
+# Watch mode during development
+npm run test:watch
+```
+
+```json
+// package.json scripts
+{
+  "test": "jest",
+  "test:unit": "jest tests/unit --coverage",
+  "test:integration": "jest tests/integration --coverage",
+  "test:smoke": "jest tests/smoke --testTimeout=10000",
+  "test:coverage": "jest --coverage --coverageReporters=text-summary",
+  "test:watch": "jest --watch"
+}
+```
+
+---
+
+## PR Test Checklist
+
+Every PR that touches logic MUST include:
+
+- [ ] Unit tests for every new/modified service function
+- [ ] Unit tests for every new/modified validator
+- [ ] Integration tests for every new/modified route
+- [ ] Smoke test for every new endpoint
+- [ ] Coverage does not drop below thresholds
+- [ ] No test uses `console.log` in assertion (use `expect`)
+- [ ] No test has `.only` or `.skip` in committed code
+- [ ] Fixtures in `tests/fixtures/` not duplicated inline
