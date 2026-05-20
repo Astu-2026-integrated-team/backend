@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(cron): add stale device background check job
-**Base Branch:** feat/alerts-endpoint
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds a node-cron background job that periodically checks for stale/disconnected OBD devices and updates their status.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
