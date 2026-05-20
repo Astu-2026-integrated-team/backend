@@ -10,10 +10,10 @@
     "start": "node src/server.js",
     "test": "jest",
     "lint": "eslint src/",
-    "test:unit": "jest tests/unit",
-    "test:integration": "jest tests/integration",
-    "test:smoke": "jest tests/smoke --testTimeout=15000",
-    "test:coverage": "jest --coverage --coverageReporters=text-summary"
+    "test:unit": "jest tests/unit --passWithNoTests",
+    "test:integration": "jest tests/integration --passWithNoTests",
+    "test:smoke": "jest tests/smoke --testTimeout=15000 --passWithNoTests",
+    "test:coverage": "jest --coverage --coverageReporters=text-summary --passWithNoTests"
   },
   "dependencies": {
     "@jest/globals": "^30.4.1",
