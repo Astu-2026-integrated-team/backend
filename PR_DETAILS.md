@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** docs(api): add OpenAPI specification and Swagger UI
-**Base Branch:** feat/cron-stale-check
+**Title:** test: add unit tests for telemetry, trip, and alert services
+**Base Branch:** docs/openapi-swagger
 
 ## Summary
 
-Adds the complete OpenAPI 3.0 specification for all endpoints and wires up Swagger UI at /api/docs.
+Adds comprehensive unit tests covering the telemetry ingestion service, trip state machine, and alert rule engine with test fixtures.
