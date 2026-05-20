@@ -4,6 +4,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth';
 import vehiclesRoutes from './routes/vehicles';
 import devicesRoutes from './routes/devices';
+import driversRoutes from './routes/drivers';
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehiclesRoutes);
 app.use('/api/devices', devicesRoutes);
+app.use('/api/drivers', driversRoutes);
 
 export default app;
