@@ -29,6 +29,7 @@ export type AuthContext = {
   role: AppRole;
   profileResolved: boolean;
   email: string | null;
+  username?: string;
   vehicleIds: string[];
   tokenType: TokenType;
 };

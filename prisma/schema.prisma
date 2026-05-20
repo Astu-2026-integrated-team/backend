@@ -98,3 +98,12 @@ model DeviceCredential {
 
   @@map("device_credentials")
 }
+
+model AdminUser {
+  adminId      String    @id @map("adminId")
+  username     String    @unique
+  passwordHash String    @map("passwordHash")
+  lastLoginAt  DateTime? @map("lastLoginAt") @db.Timestamptz(6)
+
+  @@map("admin_users")
+}

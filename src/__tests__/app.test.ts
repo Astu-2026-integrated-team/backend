@@ -1,5 +1,3 @@
-import { describe, expect, it, jest } from '@jest/globals';
-
 import request from 'supertest';
 
 // Prevent dotenv from loading the local .env file which would override our deleted env var
@@ -10,6 +8,7 @@ delete process.env.SUPABASE_DB_URL;
 delete process.env.SUPABASE_URL;
 delete process.env.SUPABASE_ANON_KEY;
 delete process.env.SUPABASE_JWT_SECRET;
+delete process.env.JWT_SECRET;
 delete process.env.AUTH_DEVICE_TOKEN_PEPPER;
 
 // Import app after clearing env to get the unconfigured state

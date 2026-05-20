@@ -1,4 +1,3 @@
-import { describe, expect, it, jest, beforeEach } from '@jest/globals';
 import { Request, Response, NextFunction } from 'express';
 import { requireUser } from '../middleware/require-user';
 import { AuthError } from '../auth/errors';
@@ -20,7 +19,7 @@ describe('requireUser middleware', () => {
       headers: {},
     };
     mockResponse = {};
-    nextFunction = jest.fn<any>();
+    nextFunction = jest.fn();
     jest.resetAllMocks();
   });
 
@@ -60,6 +59,8 @@ describe('requireUser middleware', () => {
     mockVerifyUserToken.mockResolvedValue({
       subject: 'user-123',
       email: 'test@example.com',
+      role: null,
+      username: null,
     });
 
     await requireUser(

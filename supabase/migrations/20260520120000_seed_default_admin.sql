@@ -1,5 +1,6 @@
--- Dev/default admin (same row as migration 20260520120000_seed_default_admin).
--- Credentials: username `admin`, password `yourpass` (spec §5.1 example — change in production).
+-- Default admin for POST /api/auth/login (FuelGuard spec §5.1).
+-- Change the password hash before production; regenerate with:
+--   node -e "require('bcryptjs').hash('your-password', 10).then(console.log)"
 INSERT INTO public.admin_users ("adminId", username, "passwordHash")
 VALUES (
   'admin-001',

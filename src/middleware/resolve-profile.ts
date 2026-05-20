@@ -18,6 +18,12 @@ export const resolveUserProfile = async (req: Request, res: Response, next: Next
       throw AuthError.unauthorized('Authentication context is missing. Ensure requireUser runs first.');
     }
 
+    // Local admin JWTs are authoritative and do not map to user_profiles.
+    if (req.auth.role === 'admin' && req.auth.profileResolved) {
+      next();
+      return;
+    }
+
     // 2. Query the database directly for fresh security guarantees
     if (!prisma) {
       throw new Error('Database is not configured. Cannot resolve user profile.');

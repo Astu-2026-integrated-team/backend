@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./src/types"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "noEmit": true
   },
   "include": ["tools/**/*.ts", "src/**/*.ts"],
