@@ -7,7 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "start": "node src/server.js",
+    "start": "tsx src/server.ts",
     "test": "jest",
     "lint": "eslint src/",
     "test:unit": "jest tests/unit --passWithNoTests",
