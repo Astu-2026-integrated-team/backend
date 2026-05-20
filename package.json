@@ -16,7 +16,6 @@
     "test:coverage": "jest --coverage --coverageReporters=text-summary --passWithNoTests"
   },
   "dependencies": {
-    "@jest/globals": "^30.4.1",
     "@prisma/client": "^6.19.3",
     "@supabase/supabase-js": "^2.106.1",
     "bcryptjs": "^3.0.3",
@@ -33,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@jest/globals": "^29.7.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
