@@ -11,12 +11,23 @@ from analytics.config import settings
 _connection_pool: ConnectionPool | None = None
 
 
+def _clean_conninfo(url: str) -> str:
+    """Remove query parameters that psycopg does not understand (e.g. pgbouncer)."""
+    from urllib.parse import urlparse, urlencode, parse_qs, urlunparse
+
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query)
+    params.pop("pgbouncer", None)
+    clean_query = urlencode(params, doseq=True)
+    return urlunparse(parsed._replace(query=clean_query))
+
+
 def init_connection_pool() -> None:
     global _connection_pool
 
     if _connection_pool is None:
         _connection_pool = ConnectionPool(
-            conninfo=settings.supabase_db_url,
+            conninfo=_clean_conninfo(settings.supabase_db_url),
             kwargs={"row_factory": dict_row},
             open=False,
         )
