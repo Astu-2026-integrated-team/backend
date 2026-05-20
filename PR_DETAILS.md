@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(devices): add device service and REST endpoints
-**Base Branch:** feat/vehicles-endpoint
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the device service for OBD device management and the /api/devices REST endpoints.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
