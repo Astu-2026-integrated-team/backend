@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** chore: add CI pipeline, build config, and project foundation
-**Base Branch:** main
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Sets up GitHub Actions CI, ESLint, Jest, TypeScript config, package dependencies, and the minimal Express app skeleton. Removes old Prisma-based tests and replaces the entry point.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.

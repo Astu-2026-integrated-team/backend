@@ -1,118 +1,43 @@
-import { Router } from 'express';
-import bcrypt from 'bcryptjs';
-import { z } from 'zod';
-import { signAdminToken } from '../auth/jwt';
-import { prisma } from '../lib/prisma';
+import express from 'express';
+const router = express.Router();
+import { z  } from 'zod';
+import { loginAdmin  } from '../services/auth-service';
+import { ERROR_CODES  } from '../config/constants';
 
-const loginBodySchema = z
-  .object({
-    username: z.string().min(1),
-    password: z.string().min(1),
-  })
-  .strict();
+const STATUS_MAP = {
+  [ERROR_CODES.INVALID_CREDENTIALS]: 401,
+  [ERROR_CODES.INVALID_PAYLOAD]: 400
+};
 
-const authRouter = Router();
+const loginSchema = z.object({
+  username: z.string().min(1),
+  password: z.string().min(1)
+});
 
-function writeError(
-  response: import('express').Response,
-  status: number,
-  code: string,
-  message: string,
-) {
-  response.status(status).json({
-    success: false,
-    error: {
-      code,
-      message,
-    },
-  });
-}
-
-async function loadAdminUser(username: string) {
-  if (!prisma) {
-    throw new Error('Database is not configured.');
-  }
-
-  const adminUser = await prisma.adminUser.findUnique({
-    where: { username },
-  });
-
-  if (!adminUser) {
-    const error = new Error('Username or password is incorrect');
-    error.name = 'InvalidCredentialsError';
-    throw error;
-  }
-
-  return adminUser;
-}
-
-async function verifyPassword(password: string, passwordHash: string) {
-  const matches = await bcrypt.compare(password, passwordHash);
-
-  if (!matches) {
-    const error = new Error('Username or password is incorrect');
-    error.name = 'InvalidCredentialsError';
-    throw error;
-  }
-}
-
-function buildSuccessPayload(
-  adminUser: Awaited<ReturnType<typeof loadAdminUser>>,
-) {
-  return {
-    success: true,
-    token: signAdminToken({
-      subject: adminUser.adminId,
-      username: adminUser.username,
-      role: 'admin',
-    }),
-    admin: {
-      adminId: adminUser.adminId,
-      username: adminUser.username,
-    },
-  };
-}
-
-async function updateLastLogin(adminId: string) {
-  if (!prisma) {
-    throw new Error('Database is not configured.');
-  }
-
-  await prisma.adminUser.update({
-    where: { adminId },
-    data: {
-      lastLoginAt: new Date(),
-    },
-  });
-}
-
-authRouter.post('/login', async (req, res) => {
-  const parsedBody = loginBodySchema.safeParse(req.body);
-  if (!parsedBody.success) {
-    writeError(res, 400, 'INVALID_PAYLOAD', 'Invalid login request body.');
-    return;
-  }
-
+router.post('/login', async (req, res) => {
   try {
-    const adminUser = await loadAdminUser(parsedBody.data.username);
-    await verifyPassword(parsedBody.data.password, adminUser.passwordHash);
-    await updateLastLogin(adminUser.adminId);
-
-    res.json(buildSuccessPayload(adminUser));
-  } catch (error) {
-    if (error instanceof Error && error.name === 'InvalidCredentialsError') {
-      writeError(res, 401, 'INVALID_CREDENTIALS', 'Username or password is incorrect');
-      return;
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        success: false,
+        error: { code: ERROR_CODES.INVALID_PAYLOAD, message: (parsed as any).error.errors[0].message }
+      });
     }
 
-    if (error instanceof Error && error.message === 'Database is not configured.') {
-      writeError(res, 503, 'SERVICE_UNAVAILABLE', 'Authentication database is not configured.');
-      return;
-    }
-
-    console.error('Login request failed', error);
-    writeError(res, 500, 'INTERNAL_ERROR', 'An unexpected error occurred.');
+    const result = await loginAdmin(parsed.data.username, parsed.data.password);
+    return res.status(200).json({
+      success: true,
+      token: result.token,
+      expiresIn: '24h',
+      admin: result.admin
+    });
+  } catch (err) {
+    const status = STATUS_MAP[(err as any).code] || 500;
+    return res.status(status).json({
+      success: false,
+      error: { code: (err as any).code || ERROR_CODES.INTERNAL_ERROR, message: err.message }
+    });
   }
 });
 
-export { authRouter };
+export default router;
