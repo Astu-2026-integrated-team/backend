@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** db(schema): add database schemas, seed data, and Supabase client
-**Base Branch:** chore/config-env-thresholds
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the core SQL schema for vehicles, telemetry, trips, alerts, and auth tables. Includes admin seed migration and the Supabase client wrapper.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
