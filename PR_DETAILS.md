@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(drivers): add driver service and REST endpoints
-**Base Branch:** feat/devices-endpoint
+**Title:** feat(telemetry): add telemetry ingestion, trip service, and WebSocket server
+**Base Branch:** feat/drivers-endpoint
 
 ## Summary
 
-Adds the driver service for driver profile management and the /api/drivers REST endpoints.
+Implements the real-time telemetry pipeline: telemetry ingestion service with normalization, trip state machine, WebSocket server for live vehicle state broadcast, and the POST /api/telemetry endpoint.
