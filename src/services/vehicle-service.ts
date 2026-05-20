@@ -5,7 +5,7 @@ async function listVehicles({ status, deviceStatus }) {
   let query = supabase.from('vehicles').select(`
     *,
     assignedDriver:drivers(driverId, fullName),
-    assignedDevice:devices(deviceId, status)
+    assignedDevice:devices!fk_vehicles_device(deviceId, status)
   `);
 
   if (status && status !== 'all') {
@@ -64,7 +64,7 @@ async function getVehicle(vehicleId) {
   const { data: vehicle, error } = await supabase.from('vehicles').select(`
     *,
     assignedDriver:drivers(driverId, fullName, licenseNumber),
-    assignedDevice:devices(deviceId, firmwareVersion, status, lastSeenAt)
+    assignedDevice:devices!fk_vehicles_device(deviceId, firmwareVersion, status, lastSeenAt)
   `).eq('vehicleId', vehicleId).single();
 
   if (error || !vehicle) {

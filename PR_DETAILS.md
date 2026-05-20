@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** docs(api): add OpenAPI specification and Swagger UI
-**Base Branch:** feat/cron-stale-check
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the complete OpenAPI 3.0 specification for all endpoints and wires up Swagger UI at /api/docs.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
