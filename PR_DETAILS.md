@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(alerts): add alert rule engine, alert service, and REST endpoints
-**Base Branch:** feat/telemetry-and-websocket
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Adds the alert rule engine with 7 threshold evaluations, the alert persistence service, and the /api/alerts REST endpoints.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.

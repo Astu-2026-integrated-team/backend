@@ -1,0 +1,29 @@
+site_name: FuelGuard AI — Backend Docs
+theme:
+  name: material
+  palette:
+    primary: indigo
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Local Setup: getting-started/local-setup.md
+      - Environment Variables: getting-started/environment-variables.md
+  - API Reference:
+      - Overview: api/overview.md
+      - Auth: api/auth.md
+      - Telemetry: api/telemetry.md
+      - Vehicles: api/vehicles.md
+      - Devices: api/devices.md
+      - Drivers: api/drivers.md
+      - Alerts: api/alerts.md
+  - WebSocket Events: websocket/events.md
+  - Database Schema: database/schema.md
+  - Alert Rules: alerts/rules.md
+  - Deployment:
+      - Docker: deployment/docker.md
+      - Supabase Setup: deployment/supabase.md
+      - GitHub Pages: deployment/github-pages.md
+  - Contributing: contributing.md
+plugins:
+  - search

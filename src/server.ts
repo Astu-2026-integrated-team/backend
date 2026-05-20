@@ -4,6 +4,7 @@ import app from './app';
 import { initWsServer  } from './websocket/ws-server';
 import { sendAllVehiclesState  } from './services/websocket-service';
 import { listVehicles  } from './services/vehicle-service';
+import { startStaleCheckJob  } from './services/stale-check-job';
 
 const port = Number(process.env.APP_PORT || 8000);
 const host = process.env.APP_HOST || '0.0.0.0';
@@ -23,6 +24,9 @@ initWsServer(server, async (ws) => {
 
 server.listen(port, host, () => {
   console.warn(`Server running on http://${host}:${port}`);
+
+  // Start background job
+  startStaleCheckJob();
 });
 
 export default server;
