@@ -1,0 +1,261 @@
+openapi: 3.0.0
+info:
+  title: FuelGuard AI Smart Inventory System API
+  version: 2.0.0
+  description: Backend Architecture & API Specification for the FuelGuard System
+servers:
+  - url: /api
+paths:
+  /auth/login:
+    post:
+      summary: Admin login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  admin:
+                    type: object
+                    properties:
+                      adminId:
+                        type: string
+                      username:
+                        type: string
+        '400':
+          description: INVALID_PAYLOAD
+        '401':
+          description: INVALID_CREDENTIALS
+  /telemetry:
+    post:
+      summary: Receive telemetry from ESP32 hardware
+      tags:
+        - Telemetry
+      security:
+        - DeviceToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              # Add specific hardware fields as per spec
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Validation Error
+        '401':
+          description: Unknown Device
+  /vehicles:
+    get:
+      summary: List all vehicles with current state
+      tags:
+        - Vehicles
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Register a new vehicle
+      tags:
+        - Vehicles
+      responses:
+        '201':
+          description: Created
+        '409':
+          description: Conflict
+  /vehicles/{vehicleId}:
+    get:
+      summary: Get single vehicle current state
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+    patch:
+      summary: Update vehicle metadata
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /vehicles/{vehicleId}/history:
+    get:
+      summary: Historical telemetry
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /vehicles/{vehicleId}/trips:
+    get:
+      summary: List trips for vehicle
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /vehicles/{vehicleId}/alerts:
+    get:
+      summary: List alerts for vehicle
+      tags:
+        - Vehicles
+      parameters:
+        - name: vehicleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /devices:
+    get:
+      summary: List all registered devices
+      tags:
+        - Devices
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Register a new device
+      tags:
+        - Devices
+      responses:
+        '201':
+          description: Created
+  /devices/{deviceId}:
+    patch:
+      summary: Update device
+      tags:
+        - Devices
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /drivers:
+    get:
+      summary: List all drivers
+      tags:
+        - Drivers
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Register a new driver
+      tags:
+        - Drivers
+      responses:
+        '201':
+          description: Created
+  /drivers/{driverId}:
+    patch:
+      summary: Update driver info
+      tags:
+        - Drivers
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /drivers/{driverId}/violations:
+    get:
+      summary: Get violation history for a driver
+      tags:
+        - Drivers
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /alerts:
+    get:
+      summary: List all alerts
+      tags:
+        - Alerts
+      responses:
+        '200':
+          description: OK
+  /alerts/{alertId}:
+    patch:
+      summary: Acknowledge or resolve an alert
+      tags:
+        - Alerts
+      parameters:
+        - name: alertId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    DeviceToken:
+      type: apiKey
+      in: header
+      name: X-Device-Token

@@ -1,0 +1,342 @@
+---
+name: api-design
+description: "Use this skill when designing, implementing, or documenting any REST API endpoint or WebSocket event in the FuelGuard backend. Covers request/response contracts, HTTP status codes, validation, Swagger/OpenAPI 3.0 writing, and alignment with FuelGuard_Backend_Spec.md. Triggers: adding any route, modifying any controller, writing any OpenAPI YAML/JSON, or updating API documentation."
+---
+
+# API Design — FuelGuard Backend
+
+## Spec Authority
+
+All endpoints are defined in `docs/FuelGuard_Backend_Spec.md`. Before designing any endpoint:
+1. Read the relevant section in the spec
+2. Implement exactly what the spec says
+3. If the spec is ambiguous or wrong, update the spec first (own PR), then implement
+
+---
+
+## Express Route Structure
+
+Every route file follows this exact pattern:
+
+```javascript
+// src/routes/vehicles.js
+const express = require('express');
+const router = express.Router();
+const { authMiddleware } = require('../middleware/authMiddleware');
+const vehicleService = require('../services/vehicleService');
+const { validateVehicleCreate } = require('../validators/vehicleValidator');
+
+/**
+ * GET /api/vehicles
+ * List all vehicles with current state
+ * Auth: JWT required
+ */
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const { status = 'all', deviceStatus = 'all' } = req.query;
+    const vehicles = await vehicleService.listVehicles({ status, deviceStatus });
+    return res.status(200).json({
+      success: true,
+      count: vehicles.length,
+      vehicles
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: err.message }
+    });
+  }
+});
+
+module.exports = router;
+```
+
+Rules:
+- Route files contain ONLY routing logic. Zero business logic.
+- All business logic lives in `src/services/`
+- All validation lives in `src/validators/`
+- All DB queries live in `src/db/repositories/`
+
+---
+
+## Response Shape Rules
+
+### Success Response
+
+```javascript
+// Single resource
+{ "success": true, "vehicle": { ...fields } }
+
+// Collection
+{ "success": true, "count": N, "vehicles": [...] }
+
+// Created
+{ "success": true, "vehicleId": "V001", "message": "Vehicle registered successfully" }
+
+// Updated
+{ "success": true, "vehicleId": "V001", "message": "Vehicle updated" }
+
+// Accepted (telemetry)
+{ "accepted": true, "telemetryId": "uuid", "vehicleId": "V001", "message": "telemetry stored" }
+```
+
+### Error Response (ALL errors use this shape)
+
+```javascript
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE_CONSTANT",
+    "message": "Human readable description"
+  }
+}
+```
+
+Never return a bare string as an error. Never use `error: "some string"`. Always use the `{ code, message }` object.
+
+---
+
+## HTTP Status Code Reference
+
+| Scenario | Status | Error Code |
+|---|---|---|
+| Success, data returned | 200 | — |
+| Created successfully | 201 | — |
+| Invalid request body | 400 | `INVALID_PAYLOAD` |
+| Business rule violation | 400 | `VALIDATION_ERROR` |
+| Wrong credentials | 401 | `INVALID_CREDENTIALS` |
+| No auth header | 401 | `MISSING_TOKEN` |
+| Expired/invalid JWT | 401 | `INVALID_TOKEN` |
+| Unknown device ID | 401 | `UNKNOWN_DEVICE` |
+| Valid token, wrong role | 403 | `FORBIDDEN` |
+| Resource not found | 404 | `NOT_FOUND` |
+| Duplicate vehicle ID | 409 | `DUPLICATE_VEHICLE_ID` |
+| Duplicate device ID | 409 | `DUPLICATE_DEVICE_ID` |
+| Duplicate license number | 409 | `DUPLICATE_LICENSE` |
+| Server error | 500 | `INTERNAL_ERROR` |
+
+---
+
+## Validation with Zod
+
+Every POST/PATCH body MUST be validated with a Zod schema before touching the service layer.
+
+```javascript
+// src/validators/vehicleValidator.js
+const { z } = require('zod');
+
+const vehicleCreateSchema = z.object({
+  vehicleId:          z.string().min(1).max(20),
+  plateNumber:        z.string().min(1).max(20),
+  label:              z.string().min(1).max(100),
+  tankCapacityLiters: z.number().positive(),
+  make:               z.string().optional(),
+  model:              z.string().optional(),
+  year:               z.number().int().min(1900).max(2100).optional(),
+  color:              z.string().optional(),
+  assignedDriverId:   z.string().optional(),
+  assignedDeviceId:   z.string().optional(),
+});
+
+// Telemetry payload schema — mirrors hardware contract exactly
+const telemetrySchema = z.object({
+  t:           z.number().int().nonnegative(),
+  fuel_l:      z.number(),
+  fuel_pct:    z.number().int().min(0).max(100),
+  engine:      z.boolean(),
+  door:        z.boolean(),
+  temp_c:      z.number(),
+  accel_g:     z.number(),
+  speed_kmh:   z.number().nonnegative(),
+  rate_lhr:    z.number().nonnegative(),
+  trip_sec:    z.number().int().nonnegative(),
+  fuel_used:   z.number().nonnegative(),
+  lat:         z.number().min(-90).max(90),
+  lon:         z.number().min(-180).max(180),
+  location:    z.string(),
+  geofence_ok: z.boolean(),
+  low_fuel:    z.boolean(),
+  parking:     z.boolean(),
+  overspeed:   z.boolean(),
+  alert:       z.string().nullable(),
+});
+
+function validateTelemetry(body) {
+  const result = telemetrySchema.safeParse(body);
+  if (!result.success) {
+    const firstError = result.error.errors[0];
+    throw {
+      statusCode: 400,
+      code: 'INVALID_PAYLOAD',
+      message: `${firstError.path.join('.')}: ${firstError.message}`
+    };
+  }
+  return result.data;
+}
+
+module.exports = { vehicleCreateSchema, telemetrySchema, validateTelemetry };
+```
+
+---
+
+## Swagger / OpenAPI 3.0 Requirements
+
+Every endpoint MUST have a Swagger doc block. Location: `src/docs/openapi.yaml`
+
+### Required Swagger Fields Per Endpoint
+
+```yaml
+/api/vehicles:
+  get:
+    summary: List all vehicles with current state
+    description: Returns all registered vehicles joined with their latest telemetry state. Used for the fleet overview page.
+    tags: [Vehicles]
+    security:
+      - bearerAuth: []
+    parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum: [active, inactive, maintenance, all]
+          default: all
+      - name: deviceStatus
+        in: query
+        schema:
+          type: string
+          enum: [online, stale, offline, all]
+          default: all
+    responses:
+      '200':
+        description: List of vehicles with current state
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleListResponse'
+            example:
+              success: true
+              count: 2
+              vehicles:
+                - vehicleId: "V001"
+                  label: "Truck Alpha"
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '500':
+        $ref: '#/components/responses/InternalError'
+```
+
+### Swagger Component Schemas (define once, reference everywhere)
+
+Define these in `components/schemas`:
+- `Vehicle` — full vehicle object
+- `VehicleCurrentState` — live telemetry state object
+- `TelemetryPayload` — hardware input payload
+- `Alert` — alert object
+- `Trip` — trip object
+- `Driver` — driver object
+- `Device` — device object
+- `DriverViolation` — violation record
+- `ErrorResponse` — standard error shape `{ success, error: { code, message } }`
+- `VehicleListResponse`, `VehicleDetailResponse`, etc.
+
+### Swagger Setup
+
+```javascript
+// src/app.js
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDoc = YAML.load('./src/docs/openapi.yaml');
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+```
+
+Swagger UI accessible at: `http://localhost:3000/api/docs`
+
+---
+
+## Pagination Pattern
+
+All list endpoints that return collections support pagination:
+
+```javascript
+// Standard query params
+const limit = parseInt(req.query.limit) || 50;   // max 200
+const offset = parseInt(req.query.offset) || 0;
+
+// Standard response shape
+{
+  success: true,
+  total: 1440,      // total records matching filter
+  count: 50,        // records in this response
+  offset: 0,
+  records: [...]
+}
+```
+
+---
+
+## Query Parameter Defaults
+
+| Endpoint | Parameter | Default |
+|---|---|---|
+| GET /api/vehicles | status | all |
+| GET /api/vehicles | deviceStatus | all |
+| GET /api/vehicles/:id/history | from | 24 hours ago |
+| GET /api/vehicles/:id/history | to | now |
+| GET /api/vehicles/:id/history | limit | 200 |
+| GET /api/vehicles/:id/trips | from | 7 days ago |
+| GET /api/vehicles/:id/trips | status | all |
+| GET /api/vehicles/:id/trips | limit | 50 |
+| GET /api/vehicles/:id/alerts | status | open |
+| GET /api/vehicles/:id/alerts | severity | all |
+| GET /api/drivers/:id/violations | from | 30 days ago |
+| GET /api/alerts | status | open |
+
+---
+
+## Middleware Application Rules
+
+```javascript
+// Auth levels — applied at route registration level
+router.get('/',         authMiddleware, handler);          // JWT required
+router.post('/login',                  handler);           // No auth (login)
+router.post('/telemetry', deviceAuthMiddleware, handler);  // Device token only
+```
+
+Never apply both `authMiddleware` and `deviceAuthMiddleware` to the same route.
+
+---
+
+## WebSocket Event Design Rules
+
+All WebSocket messages use the envelope:
+```javascript
+{
+  type:      string,   // SCREAMING_SNAKE_CASE constant
+  payload:   object,   // event-specific data
+  timestamp: string    // ISO 8601 UTC, always server-added
+}
+```
+
+Rules:
+1. `type` strings are SCREAMING_SNAKE_CASE
+2. `timestamp` is always added by the server, never by hardware
+3. `payload` is always an object, never a primitive
+4. Every event type must be documented in `docs/FuelGuard_Backend_Spec.md` Section 4
+5. Existing event types cannot be renamed without a breaking change discussion
+
+---
+
+## New Endpoint PR Checklist
+
+- [ ] Route added to `src/routes/<resource>.js`
+- [ ] Route registered in `src/app.js`
+- [ ] Zod validator created in `src/validators/`
+- [ ] Service function created in `src/services/`
+- [ ] Repository function created in `src/db/repositories/`
+- [ ] Swagger YAML block added for the endpoint
+- [ ] All response shapes match `docs/FuelGuard_Backend_Spec.md`
+- [ ] All error codes are from Section 8 of the spec
+- [ ] Unit tests written for service layer
+- [ ] Integration test written for the route
+- [ ] Smoke test written for happy path
