@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(alerts): add alert rule engine, alert service, and REST endpoints
-**Base Branch:** feat/telemetry-and-websocket
+**Title:** feat(cron): add stale device background check job
+**Base Branch:** feat/alerts-endpoint
 
 ## Summary
 
-Adds the alert rule engine with 7 threshold evaluations, the alert persistence service, and the /api/alerts REST endpoints.
+Adds a node-cron background job that periodically checks for stale/disconnected OBD devices and updates their status.
