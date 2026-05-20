@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(telemetry): add telemetry ingestion, trip service, and WebSocket server
-**Base Branch:** feat/drivers-endpoint
+**Title:** feat(alerts): add alert rule engine, alert service, and REST endpoints
+**Base Branch:** feat/telemetry-and-websocket
 
 ## Summary
 
-Implements the real-time telemetry pipeline: telemetry ingestion service with normalization, trip state machine, WebSocket server for live vehicle state broadcast, and the POST /api/telemetry endpoint.
+Adds the alert rule engine with 7 threshold evaluations, the alert persistence service, and the /api/alerts REST endpoints.
