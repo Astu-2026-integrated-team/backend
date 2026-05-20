@@ -4,7 +4,7 @@
 
 - Python `3.11+`
 - `uv`
-- Node.js `20`
+- TypeScript `20`
 - npm
 
 ## Bootstrap

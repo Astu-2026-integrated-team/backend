@@ -1,8 +1,8 @@
 # PR Details
 
-**Title:** feat(auth): add auth service, login route, and JWT middleware
-**Base Branch:** db/schema-and-client
+**Title:** docs: add project documentation, MkDocs config, and skill files
+**Base Branch:** test/unit-tests
 
 ## Summary
 
-Implements the auth service for JWT token handling, the POST /api/auth/login endpoint, and both JWT and device authentication middleware.
+Adds comprehensive project documentation including authentication feature docs, development guide, backend spec, getting-started guides, MkDocs configuration, and Antigravity skill definitions.
