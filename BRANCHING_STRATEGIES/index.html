@@ -1,0 +1,1269 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../AUTHENTICATION_FEATURE/">
+      
+      
+        <link rel="next" href="../DEVELOPMENT/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Branching Strategies - FuelGuard AI — Backend Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#backend-branching-strategies" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-header__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FuelGuard AI — Backend Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Branching Strategies
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-nav__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FuelGuard AI — Backend Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/local-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI_DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AUTHENTICATION_FEATURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Strategies
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branching-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branching Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Branching Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branching-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branching Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-split-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Split Work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commit-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commit Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Commit Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commit-size-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commit Size Guidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-request-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull Request Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pr-size-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Size Rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-and-merge-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review and Merge Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stacked-pr-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stacked PR Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daily-backend-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Daily Backend Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of Done
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FuelGuard_Backend_Spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../REPO_SETUP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repo Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WORKFLOW/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branching-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branching Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Branching Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branching-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branching Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-split-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Split Work
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commit-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commit Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Commit Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commit-size-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Commit Size Guidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pull-request-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull Request Method
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pr-size-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PR Size Rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#review-and-merge-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Review and Merge Rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stacked-pr-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stacked PR Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daily-backend-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Daily Backend Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#definition-of-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition of Done
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="backend-branching-strategies">Backend Branching Strategies</h1>
+<h2 id="purpose">Purpose</h2>
+<p>This guide defines the Git workflow for the backend repository so changes stay small, reviewable, and safe to merge.</p>
+<p>It builds on the project-wide workflow in <code>docs/WORKFLOW.md</code>, but narrows the rules for backend delivery.</p>
+<h2 id="core-rules">Core Rules</h2>
+<ul>
+<li>branch from <code>main</code></li>
+<li>keep branches short-lived</li>
+<li>ship one logical change per branch</li>
+<li>open a PR early and keep it small</li>
+<li>do not push directly to <code>main</code></li>
+<li>update docs in the same PR when API, schema, env vars, or workflow change</li>
+</ul>
+<h2 id="branching-method">Branching Method</h2>
+<p>Use a short-lived branch per task or per reviewable slice.</p>
+<p>Preferred branch names:</p>
+<pre><code class="language-text">feat/&lt;area&gt;-&lt;short-name&gt;
+fix/&lt;area&gt;-&lt;short-name&gt;
+docs/&lt;topic&gt;
+chore/&lt;topic&gt;
+refactor/&lt;topic&gt;
+test/&lt;topic&gt;
+</code></pre>
+<p>Backend examples:</p>
+<ul>
+<li><code>feat/auth-login-endpoint</code></li>
+<li><code>feat/telemetry-ingestion-validator</code></li>
+<li><code>fix/db-connection-timeout</code></li>
+<li><code>docs/auth-flow</code></li>
+<li><code>refactor/telemetry-service-split</code></li>
+<li><code>test/health-endpoint</code></li>
+</ul>
+<h3 id="branching-strategy">Branching Strategy</h3>
+<p>Use <code>main</code> as the stable integration branch.</p>
+<p>Recommended flow:</p>
+<ol>
+<li>update local <code>main</code></li>
+<li>create a focused branch</li>
+<li>commit in small logical steps</li>
+<li>open a PR before the branch grows too large</li>
+<li>merge after review and passing checks</li>
+<li>delete the branch after merge</li>
+</ol>
+<h3 id="when-to-split-work">When to Split Work</h3>
+<p>Create a new branch instead of extending the current one when:</p>
+<ul>
+<li>the next change affects a different concern</li>
+<li>the PR is likely to go above 300 changed lines</li>
+<li>the PR is likely to touch more than 10 files</li>
+<li>the work depends on another change and should be stacked</li>
+</ul>
+<p>Good split:</p>
+<ul>
+<li>PR 1: add request schema</li>
+<li>PR 2: add endpoint using the schema</li>
+<li>PR 3: add docs and follow-up validation cases</li>
+</ul>
+<p>Bad split:</p>
+<ul>
+<li>one branch changes auth, telemetry, Docker, tests, and docs together</li>
+</ul>
+<h2 id="commit-method">Commit Method</h2>
+<p>Use conventional commits.</p>
+<p>Format:</p>
+<pre><code class="language-text">type: short imperative summary
+</code></pre>
+<p>Allowed types:</p>
+<ul>
+<li><code>feat</code></li>
+<li><code>fix</code></li>
+<li><code>docs</code></li>
+<li><code>chore</code></li>
+<li><code>refactor</code></li>
+<li><code>test</code></li>
+</ul>
+<p>Good examples:</p>
+<pre><code class="language-text">feat: add telemetry ingestion endpoint
+fix: handle missing supabase connection string
+docs: define backend branching rules
+refactor: split auth service from route handler
+test: add request validation coverage
+chore: add backend ci step for pytest
+</code></pre>
+<p>Commit rules:</p>
+<ul>
+<li>one logical change per commit</li>
+<li>keep commit messages specific</li>
+<li>write why through the summary, not vague words</li>
+<li>avoid <code>update</code>, <code>changes</code>, <code>misc</code>, <code>work</code>, <code>final</code></li>
+<li>squash or clean up noisy commits before merge if the history is hard to review</li>
+</ul>
+<h3 id="commit-size-guidance">Commit Size Guidance</h3>
+<p>Prefer:</p>
+<ul>
+<li>one commit for one testable change</li>
+<li>separate docs commits only when they would distract from the code review</li>
+</ul>
+<p>Avoid:</p>
+<ul>
+<li>mixing refactor and feature logic in the same commit</li>
+<li>mixing formatting-only changes with behavior changes</li>
+</ul>
+<h2 id="pull-request-method">Pull Request Method</h2>
+<p>Every PR should represent one reviewable backend slice.</p>
+<p>Required PR sections:</p>
+<ul>
+<li>Summary</li>
+<li>Why</li>
+<li>Scope</li>
+<li>Test steps</li>
+<li>Risks</li>
+<li>Follow-up work</li>
+</ul>
+<p>If API behavior changes, also include:</p>
+<ul>
+<li>request example</li>
+<li>response example</li>
+<li>migration or compatibility note if relevant</li>
+</ul>
+<p>If configuration changes, also include:</p>
+<ul>
+<li>new or changed environment variables</li>
+<li>deploy impact</li>
+</ul>
+<h2 id="pr-size-rule">PR Size Rule</h2>
+<p>Target:</p>
+<ul>
+<li>under 300 changed lines</li>
+<li>10 changed files or fewer</li>
+</ul>
+<p>These are review targets, not absolute blockers. If a PR exceeds them, split it unless there is a clear reason not to.</p>
+<p>Large PRs are acceptable only when:</p>
+<ul>
+<li>generated files are excluded from meaningful review</li>
+<li>a contract change and its direct implementation must land together</li>
+<li>the team agrees the split would create more risk than value</li>
+</ul>
+<h2 id="review-and-merge-rules">Review and Merge Rules</h2>
+<p>Before requesting review:</p>
+<ul>
+<li>run the relevant checks locally</li>
+<li>remove dead code and debug output</li>
+<li>update docs if behavior or workflow changed</li>
+<li>make sure the branch is rebased or merged cleanly with current <code>main</code></li>
+</ul>
+<p>Before merge:</p>
+<ul>
+<li>CI passes</li>
+<li>at least one approval is present</li>
+<li>critical review comments are resolved</li>
+<li>the PR description explains validation clearly</li>
+</ul>
+<h2 id="stacked-pr-guidance">Stacked PR Guidance</h2>
+<p>Use stacked PRs when backend work has clear dependencies.</p>
+<p>Example:</p>
+<ol>
+<li><code>feat/telemetry-schema</code></li>
+<li><code>feat/telemetry-ingestion-endpoint</code></li>
+<li><code>feat/telemetry-alert-rule</code></li>
+</ol>
+<p>Rules for stacked PRs:</p>
+<ul>
+<li>each PR must be understandable on its own</li>
+<li>each PR must state its parent PR</li>
+<li>each PR must still stay small</li>
+<li>do not hide unrelated work in later stack layers</li>
+</ul>
+<h2 id="daily-backend-workflow">Daily Backend Workflow</h2>
+<p>Typical command flow:</p>
+<pre><code class="language-bash">git checkout main
+git pull origin main
+git checkout -b feat/&lt;topic&gt;
+git status
+make check
+git add &lt;files&gt;
+git commit -m &quot;feat: &lt;summary&gt;&quot;
+git push -u origin feat/&lt;topic&gt;
+</code></pre>
+<p>Before opening the PR, verify:</p>
+<pre><code class="language-bash">make lint
+make test
+make check
+</code></pre>
+<h2 id="anti-patterns">Anti-Patterns</h2>
+<p>Avoid:</p>
+<ul>
+<li>long-running branches that drift far from <code>main</code></li>
+<li>one PR that mixes feature work, refactor, docs cleanup, and tooling cleanup</li>
+<li>force-pushing over teammates without coordination</li>
+<li>merging broken tests because "the next PR will fix it"</li>
+<li>changing contracts without updating docs</li>
+</ul>
+<h2 id="definition-of-done">Definition of Done</h2>
+<p>A backend branch is ready to merge when:</p>
+<ul>
+<li>the branch contains one logical change</li>
+<li>commits are understandable</li>
+<li>the PR is within reviewable size or intentionally justified</li>
+<li>tests and checks relevant to the change pass</li>
+<li>docs are updated where needed</li>
+<li>reviewers can validate the change quickly</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

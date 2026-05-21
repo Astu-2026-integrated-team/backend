@@ -1,0 +1,3324 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../DEVELOPMENT/">
+      
+      
+        <link rel="next" href="../REPO_SETUP/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Backend Spec - FuelGuard AI — Backend Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-hardware-input-contract-wokwi-esp32" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-header__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FuelGuard AI — Backend Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Backend Spec
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-nav__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FuelGuard AI — Backend Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/local-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI_DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AUTHENTICATION_FEATURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BRANCHING_STRATEGIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend Spec
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-raw-hardware-payload-exact-fields-from-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Raw Hardware Payload (exact fields from device)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-hardware-field-reference-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Hardware Field Reference Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-backend-added-fields-added-on-receipt-not-from-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Backend-Added Fields (added on receipt, not from device)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../REPO_SETUP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repo Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WORKFLOW/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#11-raw-hardware-payload-exact-fields-from-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Raw Hardware Payload (exact fields from device)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-hardware-field-reference-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Hardware Field Reference Table
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-backend-added-fields-added-on-receipt-not-from-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Backend-Added Fields (added on receipt, not from device)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p><strong>FuelGuard AI</strong></p>
+<p><strong>Smart Inventory System</strong></p>
+<p>Backend Architecture &amp; API Specification</p>
+<p><em>Version 2.0 — Implementation Ready</em></p>
+<p>Adama Science and Technology University</p>
+<p>ECE + CSE + SE Integrated Project</p>
+<h1 id="1-hardware-input-contract-wokwi-esp32"><strong>1. Hardware Input Contract (Wokwi / ESP32)</strong></h1>
+<p>The ESP32 (FuelGuard AI v3.3) emits a JSON payload over HTTP POST every \~6–7 seconds. This is the exact contract the backend must parse. No assumptions are made beyond this output.</p>
+<h2 id="11-raw-hardware-payload-exact-fields-from-device"><strong>1.1 Raw Hardware Payload (exact fields from device)</strong></h2>
+<p>| {   "t":          4632,          // uptime in milliseconds since boot   "fuel_l":     2.93,          // fuel level in liters (float)   "fuel_pct":   4,             // fuel level as percentage (integer 0-100)   "engine":     true,          // engine ON/OFF (boolean)   "door":       true,          // door open/closed (boolean)   "temp_c":     22.0,          // temperature in Celsius (float)   "accel_g":    -2.71,         // acceleration in G-force (float, mid=0G)   "speed_kmh":  5.9,           // speed in km/h (float)   "rate_lhr":   0.00,          // fuel consumption rate in L/hr (float)   "trip_sec":   0,             // seconds elapsed in current trip (integer)   "fuel_used":  0.00,          // liters used in current trip (float)   "lat":        9.0320,        // GPS latitude (float)   "lon":        38.7469,       // GPS longitude (float)   "location":   "Home",        // named geofence location (string)   "geofence_ok":true,          // whether vehicle is inside geofence (boolean)   "low_fuel":   true,          // hardware-side low fuel flag (boolean)   "parking":    false,         // parking mode active (boolean)   "overspeed":  false,         // overspeed flag &gt;80 km/h (boolean)   "alert":      "Low fuel warning" // device-side alert string (string|null) } |
+| :---- |</p>
+<h2 id="12-hardware-field-reference-table"><strong>1.2 Hardware Field Reference Table</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Unit / Values</th>
+<th style="text-align: left;">Required</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">t</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">milliseconds</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Device uptime, NOT wall-clock time</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuel_l</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">liters</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Primary fuel measurement</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuel_pct</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">0–100</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Tank percentage</td>
+</tr>
+<tr>
+<td style="text-align: left;">engine</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Engine state</td>
+</tr>
+<tr>
+<td style="text-align: left;">door</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Door open \= true</td>
+</tr>
+<tr>
+<td style="text-align: left;">temp_c</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">°C</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Ambient/engine temperature</td>
+</tr>
+<tr>
+<td style="text-align: left;">accel_g</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">G-force</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Mid-pot \= 0G \= 40 km/h reference</td>
+</tr>
+<tr>
+<td style="text-align: left;">speed_kmh</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">km/h</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Current speed</td>
+</tr>
+<tr>
+<td style="text-align: left;">rate_lhr</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">L/hr</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Real-time consumption rate</td>
+</tr>
+<tr>
+<td style="text-align: left;">trip_sec</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Seconds in current trip</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuel_used</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">liters</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Fuel used in current trip</td>
+</tr>
+<tr>
+<td style="text-align: left;">lat</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">decimal degrees</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">GPS latitude</td>
+</tr>
+<tr>
+<td style="text-align: left;">lon</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">decimal degrees</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">GPS longitude</td>
+</tr>
+<tr>
+<td style="text-align: left;">location</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">named place</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Named geofence or empty string</td>
+</tr>
+<tr>
+<td style="text-align: left;">geofence_ok</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Inside defined geofence \= true</td>
+</tr>
+<tr>
+<td style="text-align: left;">low_fuel</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Device-side low fuel detection</td>
+</tr>
+<tr>
+<td style="text-align: left;">parking</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Parking mode \= theft-arm mode</td>
+</tr>
+<tr>
+<td style="text-align: left;">overspeed</td>
+<td style="text-align: left;">boolean</td>
+<td style="text-align: left;">true/false</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">&gt;80 km/h threshold</td>
+</tr>
+<tr>
+<td style="text-align: left;">alert</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">null</td>
+<td style="text-align: left;">text</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-backend-added-fields-added-on-receipt-not-from-device"><strong>1.3 Backend-Added Fields (added on receipt, not from device)</strong></h2>
+<p>The backend enriches the raw payload with the following fields before storing:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">deviceId</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">HTTP header / URL param</td>
+<td style="text-align: left;">e.g. ESP32-001, identifies which device sent this</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">devices table lookup</td>
+<td style="text-align: left;">Looked up from deviceId, e.g. V001</td>
+</tr>
+<tr>
+<td style="text-align: left;">receivedAt</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">Server clock (UTC)</td>
+<td style="text-align: left;">Exact server-side receipt timestamp</td>
+</tr>
+<tr>
+<td style="text-align: left;">schemaVersion</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Backend constant</td>
+<td style="text-align: left;">e.g. '1.0', tracks payload version</td>
+</tr>
+<tr>
+<td style="text-align: left;">source</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">Backend constant</td>
+<td style="text-align: left;">'hardware' or 'simulator'</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-real-time-system-architecture"><strong>2. Real-Time System Architecture</strong></h1>
+<h2 id="21-communication-model"><strong>2.1 Communication Model</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Channel</th>
+<th style="text-align: left;">Protocol</th>
+<th style="text-align: left;">Direction</th>
+<th style="text-align: left;">Used For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Hardware → Backend</td>
+<td style="text-align: left;">HTTP POST (REST)</td>
+<td style="text-align: left;">One-way push</td>
+<td style="text-align: left;">Telemetry ingestion from ESP32</td>
+</tr>
+<tr>
+<td style="text-align: left;">Backend → All Clients</td>
+<td style="text-align: left;">WebSocket (ws://)</td>
+<td style="text-align: left;">Server push</td>
+<td style="text-align: left;">Live vehicle state, new alerts, all vehicles update</td>
+</tr>
+<tr>
+<td style="text-align: left;">Frontend → Backend</td>
+<td style="text-align: left;">REST (HTTP GET)</td>
+<td style="text-align: left;">Request/response</td>
+<td style="text-align: left;">Historical data, trips, alerts list, vehicle list</td>
+</tr>
+<tr>
+<td style="text-align: left;">Frontend ↔ Backend</td>
+<td style="text-align: left;">WebSocket</td>
+<td style="text-align: left;">Bidirectional</td>
+<td style="text-align: left;">Initial subscribe, receive live state</td>
+</tr>
+<tr>
+<td style="text-align: left;">Backend → Backend</td>
+<td style="text-align: left;">Internal function call</td>
+<td style="text-align: left;">In-process</td>
+<td style="text-align: left;">Rule engine, trip detection, alert generation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="22-websocket-architecture-how-live-data-reaches-frontend"><strong>2.2 WebSocket Architecture — How Live Data Reaches Frontend</strong></h2>
+<p>The backend maintains a single WebSocket server. When a new telemetry packet arrives from hardware via POST /api/telemetry, the backend:</p>
+<ul>
+<li>Validates and stores the packet (raw + normalized)  </li>
+<li>Upserts vehicle_latest_state table row  </li>
+<li>Runs alert rule engine  </li>
+<li>Broadcasts updated vehicle state to ALL connected WebSocket clients  </li>
+<li>Broadcasts any newly generated alert to ALL connected WebSocket clients</li>
+</ul>
+<p><strong>WebSocket Connection Lifecycle:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">1. Client opens:  ws://backend/ws 2. Backend sends: { type: 'CONNECTED', payload: { connectedVehicles: ['V001','V002'] } } 3. Backend sends: { type: 'ALL_VEHICLES_STATE', payload: [ ...latest state of all vehicles ] } 4. Hardware sends POST /api/telemetry  →  backend processes  →  backend broadcasts:        { type: 'VEHICLE_UPDATE', payload: { vehicleId, ...latest state } } 5. If alert fires:        { type: 'ALERT_FIRED', payload: { alertId, vehicleId, type, severity, message, ... } } 6. Client disconnects: backend removes from active connections map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Server-Side WebSocket State Management:</strong></p>
+<p>The backend maintains an in-memory Map of connected WebSocket clients:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">const clients \= new Map(); // key: ws object // value: { connectedAt, clientId } // On new telemetry received: function broadcastToAll(message) {   clients.forEach((meta, ws) \=&gt; {     if (ws.readyState \=== WebSocket.OPEN) {       ws.send(JSON.stringify(message));     }   }); }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-database-schema"><strong>3. Database Schema</strong></h1>
+<p>Technology: Supabase (managed Postgres). All timestamps are ISO 8601 UTC. All fuel in liters, distances in kilometers, speed in km/h.</p>
+<h2 id="31-table-vehicles"><strong>3.1 Table: vehicles</strong></h2>
+<p>Static metadata for each registered vehicle.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">e.g. V001, V002</td>
+</tr>
+<tr>
+<td style="text-align: left;">plateNumber</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, UNIQUE</td>
+<td style="text-align: left;">e.g. ET-4321-AA</td>
+</tr>
+<tr>
+<td style="text-align: left;">label</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Human-readable name e.g. 'Truck Alpha'</td>
+</tr>
+<tr>
+<td style="text-align: left;">tankCapacityLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Used to compute fuel percentage</td>
+</tr>
+<tr>
+<td style="text-align: left;">make</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Vehicle make e.g. Toyota</td>
+</tr>
+<tr>
+<td style="text-align: left;">model</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Vehicle model e.g. Land Cruiser</td>
+</tr>
+<tr>
+<td style="text-align: left;">year</td>
+<td style="text-align: left;">INTEGER</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Manufacturing year</td>
+</tr>
+<tr>
+<td style="text-align: left;">color</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Vehicle color</td>
+</tr>
+<tr>
+<td style="text-align: left;">assignedDriverId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → drivers.driverId, NULLABLE</td>
+<td style="text-align: left;">Currently assigned driver</td>
+</tr>
+<tr>
+<td style="text-align: left;">assignedDeviceId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → devices.deviceId, NULLABLE</td>
+<td style="text-align: left;">Currently linked ESP32 device</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'active'</td>
+<td style="text-align: left;">active</td>
+</tr>
+<tr>
+<td style="text-align: left;">createdAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">Registration timestamp</td>
+</tr>
+<tr>
+<td style="text-align: left;">updatedAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">Last metadata update</td>
+</tr>
+</tbody>
+</table>
+<h2 id="32-table-devices"><strong>3.2 Table: devices</strong></h2>
+<p>Hardware devices (ESP32 units). A device links to a vehicle. One device per vehicle at a time, but can be reassigned.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">deviceId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">e.g. ESP32-001</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → vehicles.vehicleId, NULLABLE</td>
+<td style="text-align: left;">Currently assigned vehicle, null if unassigned</td>
+</tr>
+<tr>
+<td style="text-align: left;">firmwareVersion</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">e.g. v3.3</td>
+</tr>
+<tr>
+<td style="text-align: left;">lastSeenAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Timestamp of last received telemetry</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'offline'</td>
+<td style="text-align: left;">online</td>
+</tr>
+<tr>
+<td style="text-align: left;">registeredAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">When device was registered by admin</td>
+</tr>
+<tr>
+<td style="text-align: left;">registeredBy</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Admin user ID who registered this device</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-table-drivers"><strong>3.3 Table: drivers</strong></h2>
+<p>Driver records. Admin creates these. Each driver can be assigned to a vehicle.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">driverId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">e.g. DRV-001, UUID</td>
+</tr>
+<tr>
+<td style="text-align: left;">fullName</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Driver full name</td>
+</tr>
+<tr>
+<td style="text-align: left;">licenseNumber</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, UNIQUE</td>
+<td style="text-align: left;">Driver license number</td>
+</tr>
+<tr>
+<td style="text-align: left;">phoneNumber</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Contact phone</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'active'</td>
+<td style="text-align: left;">active</td>
+</tr>
+<tr>
+<td style="text-align: left;">createdAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">When driver was registered</td>
+</tr>
+</tbody>
+</table>
+<h2 id="34-table-telemetry_raw"><strong>3.4 Table: telemetry_raw</strong></h2>
+<p>Preserves the exact received payload. Never mutated after insert. Used for debugging and audit.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">telemetryId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">UUID generated by backend</td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → devices</td>
+<td style="text-align: left;">Sending device</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;">Derived from deviceId lookup</td>
+</tr>
+<tr>
+<td style="text-align: left;">receivedAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Server-side receipt time (UTC)</td>
+</tr>
+<tr>
+<td style="text-align: left;">rawPayload</td>
+<td style="text-align: left;">JSONB</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Full raw JSON exactly as received from device</td>
+</tr>
+<tr>
+<td style="text-align: left;">source</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">hardware</td>
+</tr>
+</tbody>
+</table>
+<h2 id="35-table-telemetry_normalized"><strong>3.5 Table: telemetry_normalized</strong></h2>
+<p>Cleaned, typed, structured records. All downstream logic (charts, trips, rule engine) reads from here.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">telemetryId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY, FK → telemetry_raw</td>
+<td style="text-align: left;">Same ID as raw record</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → devices</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">receivedAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Server receipt time</td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceUptimeMs</td>
+<td style="text-align: left;">INTEGER</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From hardware 't' field</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From fuel_l</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelPercent</td>
+<td style="text-align: left;">INTEGER</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From fuel_pct</td>
+</tr>
+<tr>
+<td style="text-align: left;">engineOn</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From engine</td>
+</tr>
+<tr>
+<td style="text-align: left;">doorOpen</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From door</td>
+</tr>
+<tr>
+<td style="text-align: left;">tempCelsius</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From temp_c</td>
+</tr>
+<tr>
+<td style="text-align: left;">accelG</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From accel_g</td>
+</tr>
+<tr>
+<td style="text-align: left;">speedKmh</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From speed_kmh</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelRateLhr</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From rate_lhr</td>
+</tr>
+<tr>
+<td style="text-align: left;">tripSeconds</td>
+<td style="text-align: left;">INTEGER</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From trip_sec</td>
+</tr>
+<tr>
+<td style="text-align: left;">tripFuelUsed</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From fuel_used</td>
+</tr>
+<tr>
+<td style="text-align: left;">latitude</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From lat</td>
+</tr>
+<tr>
+<td style="text-align: left;">longitude</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From lon</td>
+</tr>
+<tr>
+<td style="text-align: left;">locationName</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">From location</td>
+</tr>
+<tr>
+<td style="text-align: left;">geofenceOk</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From geofence_ok</td>
+</tr>
+<tr>
+<td style="text-align: left;">lowFuelFlag</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From low_fuel (device-side)</td>
+</tr>
+<tr>
+<td style="text-align: left;">parkingMode</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From parking</td>
+</tr>
+<tr>
+<td style="text-align: left;">overspeedFlag</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">From overspeed</td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceAlertText</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">From alert field, null if no alert</td>
+</tr>
+</tbody>
+</table>
+<h2 id="36-table-vehicle_latest_state"><strong>3.6 Table: vehicle_latest_state</strong></h2>
+<p>Single row per vehicle. Upserted on every telemetry event. Enables instant dashboard reads and WebSocket broadcasts without querying large telemetry tables.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">lastSeenAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">When last telemetry was received</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest fuel level</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelPercent</td>
+<td style="text-align: left;">INTEGER</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest fuel percentage</td>
+</tr>
+<tr>
+<td style="text-align: left;">engineOn</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest engine state</td>
+</tr>
+<tr>
+<td style="text-align: left;">doorOpen</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest door state</td>
+</tr>
+<tr>
+<td style="text-align: left;">tempCelsius</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest temperature</td>
+</tr>
+<tr>
+<td style="text-align: left;">speedKmh</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest speed</td>
+</tr>
+<tr>
+<td style="text-align: left;">accelG</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest acceleration</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelRateLhr</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest consumption rate</td>
+</tr>
+<tr>
+<td style="text-align: left;">latitude</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest GPS latitude</td>
+</tr>
+<tr>
+<td style="text-align: left;">longitude</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest GPS longitude</td>
+</tr>
+<tr>
+<td style="text-align: left;">locationName</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Latest named location</td>
+</tr>
+<tr>
+<td style="text-align: left;">geofenceOk</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest geofence status</td>
+</tr>
+<tr>
+<td style="text-align: left;">parkingMode</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest parking mode flag</td>
+</tr>
+<tr>
+<td style="text-align: left;">overspeedFlag</td>
+<td style="text-align: left;">BOOLEAN</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Latest overspeed flag</td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceStatus</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">online</td>
+</tr>
+<tr>
+<td style="text-align: left;">currentAlertLevel</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'none'</td>
+<td style="text-align: left;">none</td>
+</tr>
+<tr>
+<td style="text-align: left;">activeTripId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → trips, NULLABLE</td>
+<td style="text-align: left;">Current open trip, null if not moving</td>
+</tr>
+</tbody>
+</table>
+<h2 id="37-table-alerts"><strong>3.7 Table: alerts</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">alertId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">UUID</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">driverId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → drivers, NULLABLE</td>
+<td style="text-align: left;">Driver at time of alert</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">See alert types section</td>
+</tr>
+<tr>
+<td style="text-align: left;">severity</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">info</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'open'</td>
+<td style="text-align: left;">open</td>
+</tr>
+<tr>
+<td style="text-align: left;">message</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Human-readable description</td>
+</tr>
+<tr>
+<td style="text-align: left;">evidence</td>
+<td style="text-align: left;">JSONB</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Raw numeric values that triggered rule</td>
+</tr>
+<tr>
+<td style="text-align: left;">createdAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">When alert was generated</td>
+</tr>
+<tr>
+<td style="text-align: left;">resolvedAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">When resolved/acknowledged</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alert Types:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Severity</th>
+<th style="text-align: left;">Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">SUSPECTED_FUEL_DROP</td>
+<td style="text-align: left;">critical</td>
+<td style="text-align: left;">Fuel drops &gt; threshold while engine OFF and parking mode ON</td>
+</tr>
+<tr>
+<td style="text-align: left;">LOW_FUEL</td>
+<td style="text-align: left;">warning</td>
+<td style="text-align: left;">fuel_pct \&lt; 15% OR low_fuel flag from device is true</td>
+</tr>
+<tr>
+<td style="text-align: left;">OVERSPEED</td>
+<td style="text-align: left;">warning</td>
+<td style="text-align: left;">speed_kmh &gt; 80 OR overspeed flag from device is true</td>
+</tr>
+<tr>
+<td style="text-align: left;">DEVICE_STALE</td>
+<td style="text-align: left;">info</td>
+<td style="text-align: left;">No telemetry received for &gt; 5 minutes</td>
+</tr>
+<tr>
+<td style="text-align: left;">DEVICE_OFFLINE</td>
+<td style="text-align: left;">critical</td>
+<td style="text-align: left;">No telemetry received for &gt; 15 minutes</td>
+</tr>
+<tr>
+<td style="text-align: left;">DOOR_OPEN_PARKED</td>
+<td style="text-align: left;">warning</td>
+<td style="text-align: left;">Door open while engine OFF and parking mode ON</td>
+</tr>
+<tr>
+<td style="text-align: left;">REFILL_DETECTED</td>
+<td style="text-align: left;">info</td>
+<td style="text-align: left;">Fuel increases by &gt; 5L in one telemetry interval</td>
+</tr>
+<tr>
+<td style="text-align: left;">GEOFENCE_VIOLATION</td>
+<td style="text-align: left;">warning</td>
+<td style="text-align: left;">geofence_ok \= false</td>
+</tr>
+<tr>
+<td style="text-align: left;">DRIVER_VIOLATION</td>
+<td style="text-align: left;">warning</td>
+<td style="text-align: left;">Any alert linked to a driver creates a violation record</td>
+</tr>
+</tbody>
+</table>
+<h2 id="38-table-trips"><strong>3.8 Table: trips</strong></h2>
+<p>Derived from telemetry. A trip starts when engine turns ON and ends when engine turns OFF. Computed by the backend, not sent from hardware.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">tripId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">UUID</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">driverId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → drivers, NULLABLE</td>
+<td style="text-align: left;">Driver assigned at trip start time</td>
+</tr>
+<tr>
+<td style="text-align: left;">startTime</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">When engine turned ON (from telemetry)</td>
+</tr>
+<tr>
+<td style="text-align: left;">endTime</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">When engine turned OFF, null if trip still open</td>
+</tr>
+<tr>
+<td style="text-align: left;">startFuelLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Fuel level at trip start</td>
+</tr>
+<tr>
+<td style="text-align: left;">endFuelLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Fuel level at trip end</td>
+</tr>
+<tr>
+<td style="text-align: left;">fuelUsedLiters</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">startFuel - endFuel, computed on trip close</td>
+</tr>
+<tr>
+<td style="text-align: left;">distanceKm</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Haversine sum of GPS points during trip</td>
+</tr>
+<tr>
+<td style="text-align: left;">avgSpeedKmh</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Average of speedKmh readings</td>
+</tr>
+<tr>
+<td style="text-align: left;">maxSpeedKmh</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Max speed recorded during trip</td>
+</tr>
+<tr>
+<td style="text-align: left;">startLat</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">GPS at trip start</td>
+</tr>
+<tr>
+<td style="text-align: left;">startLon</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">GPS at trip start</td>
+</tr>
+<tr>
+<td style="text-align: left;">endLat</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">GPS at trip end</td>
+</tr>
+<tr>
+<td style="text-align: left;">endLon</td>
+<td style="text-align: left;">FLOAT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">GPS at trip end</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'active'</td>
+<td style="text-align: left;">active</td>
+</tr>
+</tbody>
+</table>
+<h2 id="39-table-driver_violations"><strong>3.9 Table: driver_violations</strong></h2>
+<p>Every alert that involves a driver behavior (overspeed, fuel drop, door open parked) creates a violation record. This gives a full violation history per driver.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">violationId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">UUID</td>
+</tr>
+<tr>
+<td style="text-align: left;">driverId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → drivers</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicleId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;">Vehicle at time of violation</td>
+</tr>
+<tr>
+<td style="text-align: left;">alertId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, FK → alerts</td>
+<td style="text-align: left;">The alert that caused this violation</td>
+</tr>
+<tr>
+<td style="text-align: left;">tripId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">FK → trips, NULLABLE</td>
+<td style="text-align: left;">Trip during which violation occurred</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">OVERSPEED</td>
+</tr>
+<tr>
+<td style="text-align: left;">severity</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">info</td>
+</tr>
+<tr>
+<td style="text-align: left;">description</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Human-readable e.g. 'Drove at 95 km/h on trip TRP-001'</td>
+</tr>
+<tr>
+<td style="text-align: left;">occurredAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Timestamp of the event</td>
+</tr>
+</tbody>
+</table>
+<h2 id="310-table-user_profiles"><strong>3.10 Table: user_profiles</strong></h2>
+<p>Manages user identity and application roles for human users. Links with Supabase auth via the <code>id</code> field.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">UUID</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">Matches auth.users.id from Supabase</td>
+</tr>
+<tr>
+<td style="text-align: left;">email</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, UNIQUE</td>
+<td style="text-align: left;">User email address</td>
+</tr>
+<tr>
+<td style="text-align: left;">full_name</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">User's full name</td>
+</tr>
+<tr>
+<td style="text-align: left;">role</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'viewer'</td>
+<td style="text-align: left;">admin | driver | viewer</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'active'</td>
+<td style="text-align: left;">active | disabled</td>
+</tr>
+<tr>
+<td style="text-align: left;">created_at</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">When profile was created</td>
+</tr>
+</tbody>
+</table>
+<h2 id="311-table-user_vehicle_access"><strong>3.11 Table: user_vehicle_access</strong></h2>
+<p>Defines which vehicles a non-admin user (driver or viewer) has access to.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">id</td>
+<td style="text-align: left;">UUID</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">Unique ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">user_id</td>
+<td style="text-align: left;">UUID</td>
+<td style="text-align: left;">NOT NULL, FK → user_profiles</td>
+<td style="text-align: left;">The user granted access</td>
+</tr>
+<tr>
+<td style="text-align: left;">vehicle_id</td>
+<td style="text-align: left;">UUID</td>
+<td style="text-align: left;">NOT NULL, FK → vehicles</td>
+<td style="text-align: left;">The vehicle they can access</td>
+</tr>
+<tr>
+<td style="text-align: left;">access_level</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">owner | assigned_driver | viewer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="312-table-device_credentials"><strong>3.12 Table: device_credentials</strong></h2>
+<p>Manages secure hardware ingestion tokens separate from human auth.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">device_id</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">Device identifier e.g. ESP32-001</td>
+</tr>
+<tr>
+<td style="text-align: left;">token_hash</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">Hashed value of the hardware bearer token</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, DEFAULT 'active'</td>
+<td style="text-align: left;">active | revoked</td>
+</tr>
+<tr>
+<td style="text-align: left;">last_rotated_at</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NOT NULL, DEFAULT NOW()</td>
+<td style="text-align: left;">Last token rotation timestamp</td>
+</tr>
+</tbody>
+</table>
+<h2 id="313-table-admin_users"><strong>3.13 Table: admin_users</strong></h2>
+<p>Hardcoded admin. No registration endpoint. Seeded at deploy time. Password is bcrypt-hashed.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Constraints</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">adminId</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">PRIMARY KEY</td>
+<td style="text-align: left;">UUID or hardcoded 'admin-001'</td>
+</tr>
+<tr>
+<td style="text-align: left;">username</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL, UNIQUE</td>
+<td style="text-align: left;">e.g. 'admin'</td>
+</tr>
+<tr>
+<td style="text-align: left;">passwordHash</td>
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: left;">NOT NULL</td>
+<td style="text-align: left;">bcrypt hash of password</td>
+</tr>
+<tr>
+<td style="text-align: left;">lastLoginAt</td>
+<td style="text-align: left;">TIMESTAMPTZ</td>
+<td style="text-align: left;">NULLABLE</td>
+<td style="text-align: left;">Last successful login</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-websocket-events-specification"><strong>4. WebSocket Events Specification</strong></h1>
+<p>All WebSocket messages use JSON with this envelope:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type":      string,   // event type constant   "payload":   object,   // event-specific data   "timestamp": string    // ISO 8601 UTC, added by server }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="41-server-client-events-backend-broadcasts-these"><strong>4.1 Server → Client Events (Backend broadcasts these)</strong></h2>
+<h3 id="event-connected"><strong>Event: CONNECTED</strong></h3>
+<p>Sent immediately when a client connects. Gives the client the current state of all vehicles.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type": "CONNECTED",   "payload": {     "connectedVehicles": ["V001", "V002"],     "serverTime": "2026-05-18T10:00:00Z"   },   "timestamp": "2026-05-18T10:00:00Z" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-all_vehicles_state"><strong>Event: ALL_VEHICLES_STATE</strong></h3>
+<p>Sent immediately after CONNECTED. Full current state of every registered vehicle. Frontend uses this to populate the fleet overview before live updates start.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type": "ALL_VEHICLES_STATE",   "payload": {     "vehicles": [       {         "vehicleId":       "V001",         "label":           "Truck Alpha",         "plateNumber":     "ET-4321",         "assignedDriver":  { "driverId": "DRV-001", "fullName": "Bekele Tadesse" },         "lastSeenAt":      "2026-05-18T09:58:00Z",         "fuelLiters":      2.93,         "fuelPercent":     4,         "engineOn":        true,         "doorOpen":        true,         "speedKmh":        5.9,         "accelG":          -2.71,         "tempCelsius":     22.0,         "fuelRateLhr":     0.00,         "latitude":        9.0320,         "longitude":       38.7469,         "locationName":    "Home",         "geofenceOk":      true,         "parkingMode":     false,         "overspeedFlag":   false,         "deviceStatus":    "online",         "currentAlertLevel": "critical",         "activeTripId":    "TRP-0021"       }     ]   },   "timestamp": "2026-05-18T10:00:00Z" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-vehicle_update"><strong>Event: VEHICLE_UPDATE</strong></h3>
+<p>Broadcast to ALL connected clients every time a new telemetry packet is processed for any vehicle. This is the primary real-time event that drives live dashboard updates.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type": "VEHICLE_UPDATE",   "payload": {     "vehicleId":       "V001",     "label":           "Truck Alpha",     "plateNumber":     "ET-4321",     "lastSeenAt":      "2026-05-18T10:00:07Z",     "fuelLiters":      2.93,     "fuelPercent":     4,     "engineOn":        true,     "doorOpen":        true,     "speedKmh":        5.9,     "accelG":          -2.71,     "tempCelsius":     22.0,     "fuelRateLhr":     0.00,     "latitude":        9.0320,     "longitude":       38.7469,     "locationName":    "Home",     "geofenceOk":      true,     "parkingMode":     false,     "overspeedFlag":   false,     "deviceStatus":    "online",     "currentAlertLevel": "critical",     "activeTripId":    "TRP-0021"   },   "timestamp": "2026-05-18T10:00:07Z" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-alert_fired"><strong>Event: ALERT_FIRED</strong></h3>
+<p>Broadcast to ALL connected clients when the rule engine generates a new alert. Frontend should display this as a real-time notification regardless of which screen the user is on.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type": "ALERT_FIRED",   "payload": {     "alertId":    "ALT-0043",     "vehicleId":  "V001",     "vehicleLabel": "Truck Alpha",     "driverId":   "DRV-001",     "driverName": "Bekele Tadesse",     "type":       "LOW_FUEL",     "severity":   "warning",     "status":     "open",     "message":    "Fuel level at 4% (2.93 liters). Immediate refuel required.",     "evidence": {       "fuelLiters":  2.93,       "fuelPercent": 4,       "deviceFlag":  true     },     "createdAt":  "2026-05-18T10:00:07Z"   },   "timestamp": "2026-05-18T10:00:07Z" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="event-device_status_change"><strong>Event: DEVICE_STATUS_CHANGE</strong></h3>
+<p>Broadcast when a device transitions between online / stale / offline. Triggered by the background stale-check job.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "type": "DEVICE_STATUS_CHANGE",   "payload": {     "vehicleId":   "V001",     "deviceId":    "ESP32-001",     "prevStatus":  "online",     "newStatus":   "stale",     "lastSeenAt":  "2026-05-18T09:54:10Z"   },   "timestamp": "2026-05-18T10:00:00Z" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-rest-api-endpoints"><strong>5. REST API Endpoints</strong></h1>
+<p>Base URL: http://localhost:3000/api (development)</p>
+<p>Authentication: All endpoints except POST /api/auth/login require Authorization: Bearer \&lt;JWT&gt; header.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Endpoint</th>
+<th style="text-align: left;">Auth Required</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">POST</td>
+<td style="text-align: left;">/api/auth/login</td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Admin login, returns JWT</td>
+</tr>
+<tr>
+<td style="text-align: left;">POST</td>
+<td style="text-align: left;">/api/telemetry</td>
+<td style="text-align: left;">Device token</td>
+<td style="text-align: left;">Hardware telemetry ingestion</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/vehicles</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List all vehicles with current state</td>
+</tr>
+<tr>
+<td style="text-align: left;">POST</td>
+<td style="text-align: left;">/api/vehicles</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Register a new vehicle</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/vehicles/:vehicleId</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Get single vehicle current state</td>
+</tr>
+<tr>
+<td style="text-align: left;">PATCH</td>
+<td style="text-align: left;">/api/vehicles/:vehicleId</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Update vehicle metadata</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/vehicles/:vehicleId/history</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Historical telemetry (paginated)</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/vehicles/:vehicleId/trips</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List trips for vehicle</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/vehicles/:vehicleId/alerts</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List alerts for vehicle</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/devices</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List all registered devices</td>
+</tr>
+<tr>
+<td style="text-align: left;">POST</td>
+<td style="text-align: left;">/api/devices</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Register a new device</td>
+</tr>
+<tr>
+<td style="text-align: left;">PATCH</td>
+<td style="text-align: left;">/api/devices/:deviceId</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Update device (assign/unassign vehicle)</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/drivers</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List all drivers</td>
+</tr>
+<tr>
+<td style="text-align: left;">POST</td>
+<td style="text-align: left;">/api/drivers</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Register a new driver</td>
+</tr>
+<tr>
+<td style="text-align: left;">PATCH</td>
+<td style="text-align: left;">/api/drivers/:driverId</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Update driver info</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/drivers/:driverId/violations</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Get violation history for a driver</td>
+</tr>
+<tr>
+<td style="text-align: left;">GET</td>
+<td style="text-align: left;">/api/alerts</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">List all alerts across all vehicles</td>
+</tr>
+<tr>
+<td style="text-align: left;">PATCH</td>
+<td style="text-align: left;">/api/alerts/:alertId</td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">Acknowledge or resolve an alert</td>
+</tr>
+</tbody>
+</table>
+<h2 id="51-post-apiauthlogin"><strong>5.1  POST /api/auth/login</strong></h2>
+<p><strong>Purpose: Admin login. No registration — admin is hardcoded and seeded at deploy time.</strong></p>
+<p><strong>Request Body:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "username": "admin",      // string, required   "password": "yourpass"    // string, required }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": true,   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",  // JWT, expires in 24h   "admin": {     "adminId":   "admin-001",     "username":  "admin"   } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Error Response — 401 Unauthorized:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": false,   "error": {     "code":    "INVALID_CREDENTIALS",     "message": "Username or password is incorrect"   } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="52-post-apitelemetry"><strong>5.2  POST /api/telemetry</strong></h2>
+<p><strong>Purpose: Receive telemetry from ESP32 hardware. This is the only endpoint called by hardware.</strong></p>
+<p>Auth: Device token in header → X-Device-Token: \&lt;hardcoded shared secret&gt;</p>
+<p><strong>Request Body (exact hardware JSON):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "t":           4632,   "fuel_l":      2.93,   "fuel_pct":    4,   "engine":      true,   "door":        true,   "temp_c":      22.0,   "accel_g":     -2.71,   "speed_kmh":   5.9,   "rate_lhr":    0.00,   "trip_sec":    0,   "fuel_used":   0.00,   "lat":         9.0320,   "lon":         38.7469,   "location":    "Home",   "geofence_ok": true,   "low_fuel":    true,   "parking":     false,   "overspeed":   false,   "alert":       "Low fuel warning" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The Device ID is read from the X-Device-Id request header. The vehicleId is derived by looking up the device in the devices table.</p>
+<p><strong>Processing Pipeline (in order):</strong></p>
+<ul>
+<li>1. Authenticate device token from header  </li>
+<li>2. Read X-Device-Id header, look up device in DB → get vehicleId  </li>
+<li>3. Validate all required fields present and correct types  </li>
+<li>4. Generate UUID for telemetryId  </li>
+<li>5. INSERT into telemetry_raw (rawPayload \= full body JSON)  </li>
+<li>6. INSERT into telemetry_normalized (mapped fields)  </li>
+<li>7. UPSERT vehicle_latest_state with new values  </li>
+<li>8. UPDATE devices.lastSeenAt and devices.status \= 'online'  </li>
+<li>9. Run trip detection logic (see Section 6)  </li>
+<li>10. Run alert rule engine (see Section 7)  </li>
+<li>11. Broadcast VEHICLE_UPDATE via WebSocket to all clients  </li>
+<li>12. If new alerts generated, broadcast ALERT_FIRED via WebSocket  </li>
+<li>13. Return 200 response</li>
+</ul>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "accepted":    true,   "telemetryId": "a1b2c3d4-...",   "vehicleId":   "V001",   "message":     "telemetry stored" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Validation Error — 400 Bad Request:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "accepted": false,   "error": {     "code":    "INVALID_PAYLOAD",     "message": "fuel_l is required and must be a number"   } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Unknown Device — 401:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "accepted": false,   "error": { "code": "UNKNOWN_DEVICE", "message": "Device not registered" } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="53-get-apivehicles"><strong>5.3  GET /api/vehicles</strong></h2>
+<p><strong>Purpose: List all vehicles with their current real-time state. Used for fleet overview page.</strong></p>
+<p><strong>Query Parameters (all optional):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">Filter by vehicle status: active</td>
+</tr>
+<tr>
+<td style="text-align: left;">deviceStatus</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">Filter by device status: online</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": true,   "count": 2,   "vehicles": [     {       "vehicleId":     "V001",       "label":         "Truck Alpha",       "plateNumber":   "ET-4321",       "make":          "Toyota",       "model":         "Land Cruiser",       "status":        "active",       "assignedDriver": {         "driverId":  "DRV-001",         "fullName":  "Bekele Tadesse"       },       "assignedDevice": {         "deviceId": "ESP32-001",         "status":   "online"       },       "currentState": {         "lastSeenAt":        "2026-05-18T10:00:07Z",         "fuelLiters":        2.93,         "fuelPercent":       4,         "engineOn":          true,         "speedKmh":          5.9,         "latitude":          9.0320,         "longitude":         38.7469,         "locationName":      "Home",         "deviceStatus":      "online",         "currentAlertLevel": "critical"       }     }   ] }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="54-post-apivehicles"><strong>5.4  POST /api/vehicles</strong></h2>
+<p><strong>Purpose: Register a new vehicle. Admin only.</strong></p>
+<p><strong>Request Body:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "vehicleId":          "V002",           // string, required, must be unique   "plateNumber":        "ET-9876-BB",     // string, required   "label":              "Van Beta",       // string, required   "tankCapacityLiters": 60,               // float, required   "make":               "Nissan",         // string, optional   "model":              "Patrol",         // string, optional   "year":               2020,             // integer, optional   "color":              "White",          // string, optional   "assignedDriverId":   "DRV-002",        // string, optional (can assign later)   "assignedDeviceId":   "ESP32-002"       // string, optional (can assign later) }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 201 Created:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":   true,   "vehicleId": "V002",   "message":   "Vehicle registered successfully" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conflict — 409:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": false,   "error": { "code": "DUPLICATE_VEHICLE_ID", "message": "Vehicle V002 already exists" } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="55-get-apivehiclesvehicleid"><strong>5.5  GET /api/vehicles/:vehicleId</strong></h2>
+<p><strong>Purpose: Full detail for a single vehicle — metadata + current state + open alerts count. Used for the vehicle detail page. Live data from vehicle_latest_state.</strong></p>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": true,   "vehicle": {     "vehicleId":          "V001",     "label":              "Truck Alpha",     "plateNumber":        "ET-4321",     "make":               "Toyota",     "model":              "Land Cruiser",     "year":               2019,     "color":              "White",     "tankCapacityLiters": 60,     "status":             "active",     "createdAt":          "2026-05-01T08:00:00Z",     "assignedDriver": {       "driverId":    "DRV-001",       "fullName":    "Bekele Tadesse",       "licenseNumber": "ETH-2021-4532"     },     "assignedDevice": {       "deviceId":        "ESP32-001",       "firmwareVersion": "v3.3",       "status":          "online",       "lastSeenAt":      "2026-05-18T10:00:07Z"     },     "currentState": {       "lastSeenAt":      "2026-05-18T10:00:07Z",       "fuelLiters":      2.93,       "fuelPercent":     4,       "engineOn":        true,       "doorOpen":        true,       "speedKmh":        5.9,       "accelG":          -2.71,       "tempCelsius":     22.0,       "fuelRateLhr":     0.00,       "latitude":        9.0320,       "longitude":       38.7469,       "locationName":    "Home",       "geofenceOk":      true,       "parkingMode":     false,       "overspeedFlag":   false,       "deviceStatus":    "online",       "currentAlertLevel": "critical",       "activeTripId":    "TRP-0021"     },     "openAlertsCount": 2   } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="56-get-apivehiclesvehicleidhistory"><strong>5.6  GET /api/vehicles/:vehicleId/history</strong></h2>
+<p><strong>Purpose: Paginated historical telemetry for charts and timeline. Reads from telemetry_normalized.</strong></p>
+<p><strong>Query Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">from</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">24 hours ago</td>
+<td style="text-align: left;">Start of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">to</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">now</td>
+<td style="text-align: left;">End of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">limit</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">200</td>
+<td style="text-align: left;">Max records returned</td>
+</tr>
+<tr>
+<td style="text-align: left;">offset</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Pagination offset</td>
+</tr>
+<tr>
+<td style="text-align: left;">fields</td>
+<td style="text-align: left;">comma-separated string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">Limit fields: e.g. timestamp,fuelLiters,speedKmh,latitude,longitude</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":   true,   "vehicleId": "V001",   "from":      "2026-05-17T10:00:00Z",   "to":        "2026-05-18T10:00:00Z",   "total":     1440,   "count":     200,   "offset":    0,   "records": [     {       "telemetryId":  "uuid-...",       "receivedAt":   "2026-05-18T10:00:07Z",       "fuelLiters":   2.93,       "fuelPercent":  4,       "engineOn":     true,       "doorOpen":     true,       "speedKmh":     5.9,       "accelG":       -2.71,       "tempCelsius":  22.0,       "fuelRateLhr":  0.00,       "latitude":     9.0320,       "longitude":    38.7469,       "locationName": "Home",       "parkingMode":  false,       "overspeedFlag":false     }   ] }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="57-get-apivehiclesvehicleidtrips"><strong>5.7  GET /api/vehicles/:vehicleId/trips</strong></h2>
+<p><strong>Purpose: List computed trips for a vehicle. Derived from telemetry, never sent from hardware.</strong></p>
+<p><strong>Query Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">from</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">7 days ago</td>
+<td style="text-align: left;">Start of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">to</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">now</td>
+<td style="text-align: left;">End of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">active</td>
+</tr>
+<tr>
+<td style="text-align: left;">limit</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">Max trips</td>
+</tr>
+<tr>
+<td style="text-align: left;">offset</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Pagination</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":   true,   "vehicleId": "V001",   "count":     5,   "trips": [     {       "tripId":          "TRP-0021",       "vehicleId":       "V001",       "driver": {         "driverId":  "DRV-001",         "fullName":  "Bekele Tadesse"       },       "startTime":       "2026-05-18T07:00:00Z",       "endTime":         null,       "status":          "active",       "startFuelLiters": 55.0,       "endFuelLiters":   null,       "fuelUsedLiters":  null,       "distanceKm":      12.3,       "avgSpeedKmh":     38.5,       "maxSpeedKmh":     67.2,       "startLat":        9.0100,       "startLon":        38.7200,       "endLat":          null,       "endLon":          null     }   ] }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="58-get-apivehiclesvehicleidalerts"><strong>5.8  GET /api/vehicles/:vehicleId/alerts</strong></h2>
+<p><strong>Purpose: List alerts for a specific vehicle.</strong></p>
+<p><strong>Query Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">status</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">open</td>
+<td style="text-align: left;">open</td>
+</tr>
+<tr>
+<td style="text-align: left;">severity</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">info</td>
+</tr>
+<tr>
+<td style="text-align: left;">limit</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">Max alerts</td>
+</tr>
+<tr>
+<td style="text-align: left;">offset</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">Pagination</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":   true,   "vehicleId": "V001",   "count":     2,   "alerts": [     {       "alertId":   "ALT-0043",       "vehicleId": "V001",       "driver": { "driverId": "DRV-001", "fullName": "Bekele Tadesse" },       "type":      "LOW_FUEL",       "severity":  "warning",       "status":    "open",       "message":   "Fuel at 4% (2.93L). Immediate refuel required.",       "evidence":  { "fuelLiters": 2.93, "fuelPercent": 4, "deviceFlag": true },       "createdAt": "2026-05-18T10:00:07Z",       "resolvedAt": null     }   ] }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="59-post-apidevices-register-device"><strong>5.9  POST /api/devices — Register Device</strong></h2>
+<p><strong>Purpose: Admin registers a new ESP32 device. Can optionally link to a vehicle immediately.</strong></p>
+<p><strong>Request Body:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "deviceId":        "ESP32-002",    // string, required, must be unique   "vehicleId":       "V002",         // string, optional — assign to vehicle now   "firmwareVersion": "v3.3"          // string, optional }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 201 Created:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":  true,   "deviceId": "ESP32-002",   "message":  "Device registered successfully" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="510-patch-apidevicesdeviceid-update-reassign-device"><strong>5.10  PATCH /api/devices/:deviceId — Update / Reassign Device</strong></h2>
+<p><strong>Purpose: Reassign a device to a different vehicle, or unassign it. When reassigned, old vehicle loses the device link and new vehicle gains it.</strong></p>
+<p><strong>Request Body (all fields optional, send only what changes):</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "vehicleId":       "V003",    // reassign to new vehicle, or null to unassign   "firmwareVersion": "v3.4"     // update firmware version record }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":  true,   "deviceId": "ESP32-002",   "message":  "Device updated. Assigned to V003." }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="511-post-apidrivers-register-driver"><strong>5.11  POST /api/drivers — Register Driver</strong></h2>
+<p><strong>Request Body:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "fullName":      "Chaltu Gemechu",     // string, required   "licenseNumber": "ETH-2022-9871",      // string, required, must be unique   "phoneNumber":   "+251912345678"        // string, optional }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 201 Created:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":  true,   "driverId": "DRV-003",   "message":  "Driver registered" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="512-get-apidriversdriveridviolations-driver-violation-history"><strong>5.12  GET /api/drivers/:driverId/violations — Driver Violation History</strong></h2>
+<p><strong>Purpose: Full violation history for a driver. Each overspeed, fuel drop, door-open-parked, or geofence violation is stored here.</strong></p>
+<p><strong>Query Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">from</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">30 days ago</td>
+<td style="text-align: left;">Start of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">to</td>
+<td style="text-align: left;">ISO 8601 string</td>
+<td style="text-align: left;">now</td>
+<td style="text-align: left;">End of time range</td>
+</tr>
+<tr>
+<td style="text-align: left;">type</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">all</td>
+<td style="text-align: left;">OVERSPEED</td>
+</tr>
+<tr>
+<td style="text-align: left;">limit</td>
+<td style="text-align: left;">integer</td>
+<td style="text-align: left;">50</td>
+<td style="text-align: left;">Max violations</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success":  true,   "driverId": "DRV-001",   "driver": {     "fullName":      "Bekele Tadesse",     "licenseNumber": "ETH-2021-4532",     "status":        "active"   },   "totalViolations": 3,   "violations": [     {       "violationId":  "VIO-0012",       "type":         "OVERSPEED",       "severity":     "warning",       "description":  "Vehicle V001 recorded speed of 95 km/h during trip TRP-0019",       "vehicleId":    "V001",       "vehicleLabel": "Truck Alpha",       "tripId":       "TRP-0019",       "occurredAt":   "2026-05-15T14:23:00Z",       "alertId":      "ALT-0039"     }   ] }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="513-patch-apialertsalertid-acknowledge-or-resolve-alert"><strong>5.13  PATCH /api/alerts/:alertId — Acknowledge or Resolve Alert</strong></h2>
+<p><strong>Request Body:</strong></p>
+<p>| {   "status": "acknowledged"   // acknowledged | resolved } |
+| :---- |</p>
+<p><strong>Success Response — 200 OK:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": true,   "alertId": "ALT-0043",   "status":  "acknowledged",   "message": "Alert acknowledged" }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="6-trip-detection-logic"><strong>6. Trip Detection Logic</strong></h1>
+<p>Trips are computed entirely by the backend by watching engine state changes across telemetry records. The hardware sends trip_sec and fuel_used as running counters within what it considers a trip, but the backend derives its own authoritative trip records.</p>
+<h2 id="61-trip-start"><strong>6.1 Trip Start</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Condition: incoming telemetry has engineOn \= true           AND vehicle_latest_state.engineOn was false (or no previous state) Action:   1. INSERT into trips:        tripId \= new UUID        vehicleId \= from telemetry        driverId  \= vehicle.assignedDriverId at this moment        startTime \= receivedAt        startFuelLiters \= telemetry.fuelLiters        startLat/Lon \= telemetry.lat/lon        status \= 'active'   2. UPDATE vehicle_latest_state.activeTripId \= new tripId</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="62-trip-in-progress"><strong>6.2 Trip In Progress</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Condition: engineOn \= true and active trip exists Action (on each telemetry packet during trip):   1. Compute incremental distance from last GPS point:        Haversine(prev lat/lon, current lat/lon) → add to running distanceKm   2. Track maxSpeedKmh if current speed &gt; stored max   3. UPDATE trips SET distanceKm, maxSpeedKmh WHERE tripId \= activeTripId</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="63-trip-end"><strong>6.3 Trip End</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Condition: incoming telemetry has engineOn \= false           AND vehicle_latest_state.engineOn was true Action:   1. UPDATE trips SET:        endTime \= receivedAt        endFuelLiters \= telemetry.fuelLiters        fuelUsedLiters \= startFuelLiters - endFuelLiters        avgSpeedKmh \= average of all speed readings during trip        endLat/Lon \= telemetry.lat/lon        status \= 'completed'   2. UPDATE vehicle_latest_state.activeTripId \= null</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="7-alert-rule-engine"><strong>7. Alert Rule Engine</strong></h1>
+<p>Runs synchronously after every telemetry insert. All thresholds are in a config file (not hardcoded). Before inserting any alert, check for existing open alert of the same type + vehicleId to avoid duplicates.</p>
+<h2 id="71-rule-low_fuel"><strong>7.1 Rule: LOW_FUEL</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">telemetry.fuelPercent \&lt; 15 OR telemetry.lowFuelFlag \== true</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">warning</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dedup</td>
+<td style="text-align: left;">Skip if open LOW_FUEL alert exists for this vehicleId</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">violations table: yes, type \= FUEL_DROP if also dropping</td>
+</tr>
+<tr>
+<td style="text-align: left;">// Alert evidence object: {   "fuelLiters":  2.93,   "fuelPercent": 4,   "deviceFlag":  true    // whether device itself flagged low_fuel }</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="72-rule-suspected_fuel_drop-theft-detection"><strong>7.2 Rule: SUSPECTED_FUEL_DROP (Theft Detection)</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">engine OFF AND parking mode ON AND fuel drops &gt; THEFT_DROP_LITERS within THEFT_WINDOW_MINUTES</td>
+</tr>
+<tr>
+<td style="text-align: left;">Thresholds</td>
+<td style="text-align: left;">THEFT_DROP_LITERS \= 4.0 L, THEFT_WINDOW_MINUTES \= 5</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">critical</td>
+</tr>
+<tr>
+<td style="text-align: left;">Detection method</td>
+<td style="text-align: left;">Query last N normalized records within window, compare fuelLiters</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">violations table: yes, type \= FUEL_DROP</td>
+</tr>
+<tr>
+<td style="text-align: left;">// Evidence object: {   "fuelBefore":    40.5,   "fuelAfter":     32.1,   "dropLiters":    8.4,   "windowMinutes": 3,   "engineOn":      false,   "parkingMode":   true }</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="73-rule-overspeed"><strong>7.3 Rule: OVERSPEED</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">telemetry.speedKmh &gt; 80 OR telemetry.overspeedFlag \== true</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">warning</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dedup</td>
+<td style="text-align: left;">Allow new alert only if previous OVERSPEED resolved, or 10 min cooldown</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">violations table: yes, type \= OVERSPEED</td>
+</tr>
+<tr>
+<td style="text-align: left;">// Evidence object: {   "speedKmh":    95.2,   "threshold":   80,   "deviceFlag":  true,   "tripId":      "TRP-0021" }</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="74-rule-door_open_parked"><strong>7.4 Rule: DOOR_OPEN_PARKED</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">doorOpen \== true AND engineOn \== false AND parkingMode \== true</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">warning</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dedup</td>
+<td style="text-align: left;">Skip if open DOOR_OPEN_PARKED alert exists</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">violations table: yes, type \= DOOR_OPEN_PARKED</td>
+</tr>
+</tbody>
+</table>
+<h2 id="75-rule-geofence_violation"><strong>7.5 Rule: GEOFENCE_VIOLATION</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">telemetry.geofenceOk \== false</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">warning</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dedup</td>
+<td style="text-align: left;">Skip if open GEOFENCE_VIOLATION exists for this vehicle</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">violations table: yes, type \= GEOFENCE_VIOLATION</td>
+</tr>
+</tbody>
+</table>
+<h2 id="76-rule-refill_detected"><strong>7.6 Rule: REFILL_DETECTED</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Trigger</td>
+<td style="text-align: left;">fuelLiters increased by &gt; REFILL_MIN_LITERS vs previous telemetry</td>
+</tr>
+<tr>
+<td style="text-align: left;">Threshold</td>
+<td style="text-align: left;">REFILL_MIN_LITERS \= 5.0 L</td>
+</tr>
+<tr>
+<td style="text-align: left;">Severity</td>
+<td style="text-align: left;">info</td>
+</tr>
+<tr>
+<td style="text-align: left;">Dedup</td>
+<td style="text-align: left;">Always create (refills are distinct events, not conditions)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Driver link</td>
+<td style="text-align: left;">No violation created</td>
+</tr>
+</tbody>
+</table>
+<h2 id="77-rule-device_stale-device_offline"><strong>7.7 Rule: DEVICE_STALE / DEVICE_OFFLINE</strong></h2>
+<p>Run by a background job every 60 seconds (setInterval or cron), not on telemetry receipt.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Condition</th>
+<th style="text-align: left;">Status</th>
+<th style="text-align: left;">Alert Type</th>
+<th style="text-align: left;">Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">now - lastSeenAt &gt; 5 min</td>
+<td style="text-align: left;">stale</td>
+<td style="text-align: left;">DEVICE_STALE</td>
+<td style="text-align: left;">info</td>
+</tr>
+<tr>
+<td style="text-align: left;">now - lastSeenAt &gt; 15 min</td>
+<td style="text-align: left;">offline</td>
+<td style="text-align: left;">DEVICE_OFFLINE</td>
+<td style="text-align: left;">critical</td>
+</tr>
+</tbody>
+</table>
+<p>On status change: UPDATE devices.status, broadcast DEVICE_STATUS_CHANGE via WebSocket, create alert if not already open.</p>
+<h1 id="8-standard-error-response-format"><strong>8. Standard Error Response Format</strong></h1>
+<p>All error responses follow this structure:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">{   "success": false,   "error": {     "code":    "ERROR_CODE_CONSTANT",   // machine-readable     "message": "Human readable text"    // for logging/display   } }</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">HTTP Status</th>
+<th style="text-align: left;">Error Code</th>
+<th style="text-align: left;">When Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">400</td>
+<td style="text-align: left;">INVALID_PAYLOAD</td>
+<td style="text-align: left;">Missing or wrong-type fields in request body</td>
+</tr>
+<tr>
+<td style="text-align: left;">400</td>
+<td style="text-align: left;">VALIDATION_ERROR</td>
+<td style="text-align: left;">Business rule violation (e.g. tankCapacity must be &gt; 0)</td>
+</tr>
+<tr>
+<td style="text-align: left;">401</td>
+<td style="text-align: left;">INVALID_CREDENTIALS</td>
+<td style="text-align: left;">Wrong username/password on login</td>
+</tr>
+<tr>
+<td style="text-align: left;">401</td>
+<td style="text-align: left;">MISSING_TOKEN</td>
+<td style="text-align: left;">No Authorization header on protected route</td>
+</tr>
+<tr>
+<td style="text-align: left;">401</td>
+<td style="text-align: left;">INVALID_TOKEN</td>
+<td style="text-align: left;">JWT expired or tampered</td>
+</tr>
+<tr>
+<td style="text-align: left;">401</td>
+<td style="text-align: left;">UNKNOWN_DEVICE</td>
+<td style="text-align: left;">X-Device-Id not found in devices table</td>
+</tr>
+<tr>
+<td style="text-align: left;">403</td>
+<td style="text-align: left;">FORBIDDEN</td>
+<td style="text-align: left;">Valid token but insufficient permission</td>
+</tr>
+<tr>
+<td style="text-align: left;">404</td>
+<td style="text-align: left;">NOT_FOUND</td>
+<td style="text-align: left;">vehicleId, deviceId, driverId, alertId not found</td>
+</tr>
+<tr>
+<td style="text-align: left;">409</td>
+<td style="text-align: left;">DUPLICATE_VEHICLE_ID</td>
+<td style="text-align: left;">Registering vehicle with existing ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">409</td>
+<td style="text-align: left;">DUPLICATE_DEVICE_ID</td>
+<td style="text-align: left;">Registering device with existing ID</td>
+</tr>
+<tr>
+<td style="text-align: left;">409</td>
+<td style="text-align: left;">DUPLICATE_LICENSE</td>
+<td style="text-align: left;">Registering driver with existing license number</td>
+</tr>
+<tr>
+<td style="text-align: left;">500</td>
+<td style="text-align: left;">INTERNAL_ERROR</td>
+<td style="text-align: left;">Unexpected server error</td>
+</tr>
+</tbody>
+</table>
+<h1 id="9-implementation-summary"><strong>9. Implementation Summary</strong></h1>
+<h2 id="91-tech-stack"><strong>9.1 Tech Stack</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Technology</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Runtime</td>
+<td style="text-align: left;">TypeScript + Express</td>
+<td style="text-align: left;">REST API server</td>
+</tr>
+<tr>
+<td style="text-align: left;">WebSocket</td>
+<td style="text-align: left;">ws npm package</td>
+<td style="text-align: left;">WebSocket server on same port or separate port</td>
+</tr>
+<tr>
+<td style="text-align: left;">Database</td>
+<td style="text-align: left;">Supabase (Postgres)</td>
+<td style="text-align: left;">ORM: Prisma</td>
+</tr>
+<tr>
+<td style="text-align: left;">Auth</td>
+<td style="text-align: left;">jsonwebtoken (JWT)</td>
+<td style="text-align: left;">bcrypt for password hashing</td>
+</tr>
+<tr>
+<td style="text-align: left;">Validation</td>
+<td style="text-align: left;">zod</td>
+<td style="text-align: left;">Schema validation for all incoming payloads</td>
+</tr>
+<tr>
+<td style="text-align: left;">Background jobs</td>
+<td style="text-align: left;">node-cron</td>
+<td style="text-align: left;">Device stale/offline detection job every 60s</td>
+</tr>
+<tr>
+<td style="text-align: left;">Environment</td>
+<td style="text-align: left;">.env via dotenv</td>
+<td style="text-align: left;">Never commit credentials</td>
+</tr>
+</tbody>
+</table>
+<h2 id="92-environment-variables-required"><strong>9.2 Environment Variables Required</strong></h2>
+<pre><code class="language-env">APP_NAME=Fuel-Aware Backend
+APP_ENV=development
+APP_HOST=0.0.0.0
+APP_PORT=8000
+SUPABASE_DB_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
+SUPABASE_PRISMA_URL=
+SUPABASE_DIRECT_URL=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_JWT_SECRET=
+JWT_SECRET=change-me-in-production
+JWT_EXPIRES_IN=24h
+AUTH_DEVICE_TOKEN_PEPPER=
+TELEMETRY_TABLE=telemetry_normalized
+OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.5
+AI_RUNTIME=python
+</code></pre>
+<h2 id="93-recommended-folder-structure"><strong>9.3 Recommended Folder Structure</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">backend/   src/     routes/       auth.ts       telemetry.ts       vehicles.ts       devices.ts       drivers.ts       alerts.ts     services/       telemetryService.ts    // ingestion pipeline       alertRuleEngine.ts     // all 7 alert rules       tripService.ts         // trip open/update/close       websocketService.ts    // broadcast helpers       staleCheckJob.ts       // background cron     middleware/       authMiddleware.ts      // JWT check       deviceAuthMiddleware.ts // device token check     db/       supabaseClient.ts       schema.sql             // table definitions     websocket/       wsServer.ts            // WebSocket server setup     config/       thresholds.ts          // reads from .env     app.ts     server.ts   tests/   .env.example   package.json</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="94-p0-build-order-what-to-build-first"><strong>9.4 P0 Build Order (What to build first)</strong></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">#</th>
+<th style="text-align: left;">Task</th>
+<th style="text-align: left;">Owner</th>
+<th style="text-align: left;">Unlocks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">DB schema SQL — all 9 tables</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Everything</td>
+</tr>
+<tr>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">POST /api/telemetry (no rules yet)</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Hardware can start posting</td>
+</tr>
+<tr>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">WebSocket server + VEHICLE_UPDATE broadcast</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">SE can connect and receive live data</td>
+</tr>
+<tr>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">GET /api/vehicles + GET /api/vehicles/:id</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">SE fleet overview page</td>
+</tr>
+<tr>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">Alert rule engine — LOW_FUEL + SUSPECTED_FUEL_DROP</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">ALERT_FIRED events broadcast</td>
+</tr>
+<tr>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">Trip detection logic</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Trips page, driver violations</td>
+</tr>
+<tr>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;">POST /api/auth/login</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Admin login page</td>
+</tr>
+<tr>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">POST /api/vehicles + POST /api/devices + POST /api/drivers</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Admin management screens</td>
+</tr>
+<tr>
+<td style="text-align: left;">9</td>
+<td style="text-align: left;">GET /api/vehicles/:id/history + /trips + /alerts</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">SE historical pages</td>
+</tr>
+<tr>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">PATCH /api/devices/:id (reassign)</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Device management</td>
+</tr>
+<tr>
+<td style="text-align: left;">11</td>
+<td style="text-align: left;">GET /api/drivers/:id/violations</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Driver violation history screen</td>
+</tr>
+<tr>
+<td style="text-align: left;">12</td>
+<td style="text-align: left;">Remaining alert rules + DEVICE_STALE job</td>
+<td style="text-align: left;">CSE</td>
+<td style="text-align: left;">Complete alert coverage</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

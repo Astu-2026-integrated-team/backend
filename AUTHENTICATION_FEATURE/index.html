@@ -1,0 +1,2274 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../AI_DEVELOPMENT/">
+      
+      
+        <link rel="next" href="../BRANCHING_STRATEGIES/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Authentication - FuelGuard AI — Backend Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#authentication-feature" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-header__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            FuelGuard AI — Backend Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Authentication
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="FuelGuard AI — Backend Docs" class="md-nav__button md-logo" aria-label="FuelGuard AI — Backend Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    FuelGuard AI — Backend Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/local-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../AI_DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-model-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth Model Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Principles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-user-access-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-User Access Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mvp-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MVP Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-identity-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Identity Data Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Identity Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-not-store-everything-only-in-jwt-claims" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Not Store Everything Only in JWT Claims
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-should-be-protected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Should Be Protected
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Should Be Protected">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#public-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-with-device-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected with Device Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-with-user-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected with User Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-only-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development-Only Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supabase-authentication-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supabase Authentication Flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supabase Authentication Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#human-user-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human User Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-service-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal Service Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supabase-verification-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supabase Verification Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supabase Verification Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#node-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-ai-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python AI Runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#easy-wrapper-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Easy Wrapper Pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Easy Wrapper Pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#node-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#middleware-layers-to-implement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Middleware Layers To Implement
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Middleware Layers To Implement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-enforcement-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Enforcement Order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-level-security-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row-Level Security Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-error-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Error Contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-for-render-and-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for Render and Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-when-protected-user-auth-is-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required When Protected User Auth Is Implemented
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server-Side Only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-current-user-jwt-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required For Current User JWT Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-and-render-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker and Render Considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-implementation-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Implementation Order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-github-issue-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested GitHub Issue Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisions-to-keep-explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisions To Keep Explicit
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BRANCHING_STRATEGIES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DEVELOPMENT/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../FuelGuard_Backend_Spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend Spec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../REPO_SETUP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Repo Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../WORKFLOW/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auth-model-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth Model Summary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Principles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-user-access-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-User Access Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mvp-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MVP Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-identity-data-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Identity Data Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommended Identity Data Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-not-store-everything-only-in-jwt-claims" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Not Store Everything Only in JWT Claims
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-should-be-protected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Should Be Protected
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What Should Be Protected">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#public-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-with-device-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected with Device Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protected-with-user-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protected with User Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-only-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development-Only Endpoints
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authorization-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authorization Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supabase-authentication-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supabase Authentication Flow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supabase Authentication Flow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#human-user-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Human User Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Device Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-service-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Internal Service Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supabase-verification-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supabase Verification Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supabase Verification Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#node-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-ai-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python AI Runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#easy-wrapper-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Easy Wrapper Pattern
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Easy Wrapper Pattern">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#node-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#middleware-layers-to-implement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Middleware Layers To Implement
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Middleware Layers To Implement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-enforcement-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Enforcement Order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#row-level-security-guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row-Level Security Guidance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-error-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Error Contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Variables
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment Variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-for-render-and-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required for Render and Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-when-protected-user-auth-is-implemented" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required When Protected User Auth Is Implemented
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-side-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server-Side Only
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#required-for-current-user-jwt-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required For Current User JWT Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-and-render-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker and Render Considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-implementation-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Implementation Order
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suggested-github-issue-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suggested GitHub Issue Scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisions-to-keep-explicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisions To Keep Explicit
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="authentication-feature">Authentication Feature</h1>
+<h2 id="purpose">Purpose</h2>
+<p>This document defines how authentication and authorization should work for the Fuel-Aware backend as the project grows beyond the current public prototype.</p>
+<p>It is designed to support:</p>
+<ul>
+<li>Supabase as the identity provider and shared database</li>
+<li>TypeScript as the main backend runtime</li>
+<li>Python as the AI runtime without duplicating auth rules</li>
+<li>Docker and Render deployment</li>
+<li>easy-to-apply middleware or wrapper patterns for new endpoints</li>
+</ul>
+<p>This document aligns with the broader project direction in <code>fuel-Aware-smart-inventory-system</code>, where:</p>
+<ul>
+<li><code>Admin</code>, <code>Driver</code>, and <code>Viewer</code> are the planned user roles</li>
+<li>admin-only access is acceptable for MVP</li>
+<li>telemetry ingestion, alerts, history, and dashboards are the main protected feature areas</li>
+</ul>
+<h2 id="auth-model-summary">Auth Model Summary</h2>
+<p>Use three separate trust paths:</p>
+<ol>
+<li>Human users
+   Authenticate with Supabase Auth and send a Bearer JWT.</li>
+<li>Devices
+   Authenticate with a device-specific token for telemetry ingestion.</li>
+<li>Internal services
+   Use server-side credentials only for trusted backend jobs, never from browsers or mobile clients.</li>
+</ol>
+<p>Do not use one token type for all three. Human sessions, device writes, and backend service access have different failure modes and should stay separate.</p>
+<h2 id="core-principles">Core Principles</h2>
+<ul>
+<li>Default new business endpoints to authenticated.</li>
+<li>Keep <code>/health</code> public.</li>
+<li>Keep authentication and role checks in reusable wrappers, not inline in handlers.</li>
+<li>Verify Supabase JWTs on the server for every protected request.</li>
+<li>Keep Supabase service-role credentials server-side only.</li>
+<li>Use application roles for authorization decisions, not only the raw Supabase user id.</li>
+<li>Treat device ingestion as machine auth, not user auth.</li>
+<li>Keep Node and Python auth behavior aligned through the same claims and role names.</li>
+</ul>
+<h2 id="roles">Roles</h2>
+<h3 id="application-roles">Application Roles</h3>
+<p>These are the roles the product documentation already points to:</p>
+<ul>
+<li><code>admin</code>
+  Full access to vehicles, devices, alerts, history, dashboard data, configuration, and user-role management.</li>
+<li><code>driver</code>
+  Access to their assigned vehicle, recent history, active alerts relevant to that vehicle, and trip summaries.</li>
+<li><code>viewer</code>
+  Read-only access to dashboard, alerts, and history for allowed vehicles.</li>
+</ul>
+<h3 id="non-user-access-types">Non-User Access Types</h3>
+<ul>
+<li><code>device</code>
+  A hardware or simulator identity allowed to post telemetry only.</li>
+<li><code>service</code>
+  Internal backend or analytics process with elevated server-side privileges. This is not a human-facing role.</li>
+</ul>
+<h3 id="mvp-recommendation">MVP Recommendation</h3>
+<p>For MVP, keep it simple:</p>
+<ul>
+<li>enable <code>admin</code> first</li>
+<li>optionally add <code>viewer</code> for demo read-only access</li>
+<li>postpone fine-grained <code>driver</code> scoping until vehicle assignment is stable</li>
+</ul>
+<p>This matches the upstream project note that admin-only mode is acceptable early.</p>
+<h2 id="recommended-identity-data-model">Recommended Identity Data Model</h2>
+<p>Use Supabase Auth for authentication and store application role data in your own tables.</p>
+<h3 id="required-tables">Required Tables</h3>
+<ul>
+<li><code>user_profiles</code></li>
+<li><code>id</code> UUID primary key, same as <code>auth.users.id</code></li>
+<li><code>email</code></li>
+<li><code>full_name</code></li>
+<li><code>role</code> enum or constrained text: <code>admin</code>, <code>driver</code>, <code>viewer</code></li>
+<li><code>status</code> such as <code>active</code>, <code>disabled</code></li>
+<li><code>created_at</code></li>
+<li><code>user_vehicle_access</code></li>
+<li><code>user_id</code></li>
+<li><code>vehicle_id</code></li>
+<li><code>access_level</code> such as <code>owner</code>, <code>assigned_driver</code>, <code>viewer</code></li>
+<li><code>device_credentials</code></li>
+<li><code>device_id</code></li>
+<li><code>token_hash</code></li>
+<li><code>status</code></li>
+<li><code>last_rotated_at</code></li>
+</ul>
+<h3 id="why-not-store-everything-only-in-jwt-claims">Why Not Store Everything Only in JWT Claims</h3>
+<p>JWT claims are useful for fast checks, but database-backed authorization is still needed for:</p>
+<ul>
+<li>disabling a user immediately</li>
+<li>assigning a driver to one vehicle only</li>
+<li>granting a viewer access to a subset of vehicles</li>
+<li>rotating device credentials safely</li>
+</ul>
+<h2 id="what-should-be-protected">What Should Be Protected</h2>
+<h3 id="public-endpoints">Public Endpoints</h3>
+<ul>
+<li><code>GET /health</code></li>
+</ul>
+<p>Reason:</p>
+<ul>
+<li>Render health checks need a simple unauthenticated endpoint.</li>
+</ul>
+<h3 id="protected-with-device-authentication">Protected with Device Authentication</h3>
+<ul>
+<li><code>POST /api/telemetry</code></li>
+</ul>
+<p>Reason:</p>
+<ul>
+<li>hardware and simulator clients must be able to write telemetry</li>
+<li>this should not require a human login</li>
+<li>this endpoint should accept only a valid device token</li>
+</ul>
+<h3 id="protected-with-user-authentication">Protected with User Authentication</h3>
+<p>These routes should require a valid Supabase user JWT:</p>
+<ul>
+<li><code>GET /api/vehicles</code></li>
+<li><code>POST /api/vehicles</code></li>
+<li><code>GET /api/vehicles/:vehicleId/latest</code></li>
+<li><code>GET /api/vehicles/:vehicleId/history</code></li>
+<li><code>GET /api/vehicles/:vehicleId/alerts</code></li>
+<li><code>GET /api/vehicles/:vehicleId/trips</code></li>
+<li>any future dashboard aggregation endpoints</li>
+<li>any future alert acknowledgement endpoints</li>
+<li>any future device registration endpoints</li>
+<li>any future user/role management endpoints</li>
+</ul>
+<h3 id="development-only-endpoints">Development-Only Endpoints</h3>
+<p>The current backend has:</p>
+<ul>
+<li><code>GET /telemetry/sample</code></li>
+</ul>
+<p>This route should remain one of these:</p>
+<ul>
+<li>development-only and not mounted in production</li>
+<li>or <code>admin</code>-only if it must exist outside development</li>
+</ul>
+<p>Do not leave direct sample query routes public in production.</p>
+<h2 id="authorization-matrix">Authorization Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Endpoint Area</th>
+<th>Public</th>
+<th>Device</th>
+<th>Viewer</th>
+<th>Driver</th>
+<th>Admin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Health check</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Telemetry ingestion</td>
+<td>no</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Dashboard summary</td>
+<td>no</td>
+<td>no</td>
+<td>read</td>
+<td>read scoped</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Vehicle latest state</td>
+<td>no</td>
+<td>no</td>
+<td>read scoped</td>
+<td>read scoped</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Vehicle history</td>
+<td>no</td>
+<td>no</td>
+<td>read scoped</td>
+<td>read scoped</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Alerts list</td>
+<td>no</td>
+<td>no</td>
+<td>read scoped</td>
+<td>read scoped</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Alert acknowledge/resolve</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>limited if needed</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Trip history</td>
+<td>no</td>
+<td>no</td>
+<td>read scoped</td>
+<td>read scoped</td>
+<td>read/write</td>
+</tr>
+<tr>
+<td>Vehicles create/update</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Devices create/rotate/revoke</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>User role management</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p><code>scoped</code> means access is limited by <code>user_vehicle_access</code> or equivalent ownership rules.</p>
+<h2 id="supabase-authentication-flow">Supabase Authentication Flow</h2>
+<h3 id="human-user-flow">Human User Flow</h3>
+<ol>
+<li>Frontend or mobile app signs in with Supabase Auth.</li>
+<li>Supabase returns an access token JWT.</li>
+<li>Client sends <code>Authorization: Bearer &lt;token&gt;</code> to the backend.</li>
+<li>Backend verifies the JWT.</li>
+<li>Backend loads the application role and any vehicle scoping.</li>
+<li>Handler executes only if both authentication and authorization pass.</li>
+</ol>
+<h3 id="device-flow">Device Flow</h3>
+<ol>
+<li>Device or simulator sends <code>Authorization: Bearer &lt;device-token&gt;</code>.</li>
+<li>Backend hashes the presented token and looks it up in <code>device_credentials</code>.</li>
+<li>Backend verifies the device is active and mapped to the claimed <code>deviceId</code>.</li>
+<li>Only telemetry ingestion logic is allowed.</li>
+</ol>
+<h3 id="internal-service-flow">Internal Service Flow</h3>
+<p>Examples:</p>
+<ul>
+<li>analytics batch jobs</li>
+<li>alert backfill jobs</li>
+<li>migrations or admin scripts</li>
+</ul>
+<p>Use one of these:</p>
+<ul>
+<li>direct database access through server-side secrets</li>
+<li>a dedicated internal token checked by the backend</li>
+</ul>
+<p>Do not use the Supabase service-role key in client code, mobile apps, or browser TypeScript.</p>
+<h2 id="supabase-verification-strategy">Supabase Verification Strategy</h2>
+<h3 id="node-backend">Node Backend</h3>
+<p>Recommended pattern:</p>
+<ul>
+<li>read the bearer token from the request</li>
+<li>verify the JWT against Supabase</li>
+<li>build a request auth context</li>
+<li>enforce roles through middleware</li>
+</ul>
+<p>Suggested modules:</p>
+<ul>
+<li><code>src/auth/verify-user-token.ts</code></li>
+<li><code>src/auth/context.ts</code></li>
+<li><code>src/auth/middleware.ts</code></li>
+<li><code>src/auth/device.ts</code></li>
+</ul>
+<p>Suggested request context shape:</p>
+<pre><code class="language-ts">type AuthContext = {
+  subject: string;
+  role: string;
+  email: string | null;
+  vehicleIds: string[];
+  tokenType: &quot;user&quot; | &quot;device&quot; | &quot;service&quot;;
+};
+</code></pre>
+<h3 id="python-ai-runtime">Python AI Runtime</h3>
+<p>Python should follow the same auth model when AI-facing endpoints or internal AI jobs need protected access.</p>
+<p>Use the same:</p>
+<ul>
+<li>bearer header format</li>
+<li>role names</li>
+<li>device token scheme</li>
+<li>app-level authorization rules</li>
+</ul>
+<p>Suggested modules:</p>
+<ul>
+<li><code>analytics/auth/jwt.py</code></li>
+<li><code>analytics/auth/context.py</code></li>
+<li><code>analytics/auth/dependencies.py</code></li>
+<li><code>analytics/auth/device.py</code></li>
+</ul>
+<p>Python services should either:</p>
+<ul>
+<li>verify Supabase JWTs directly if the Python process exposes protected endpoints for AI features</li>
+<li>or receive requests only from the main Node backend using server-side credentials</li>
+</ul>
+<h2 id="easy-wrapper-pattern">Easy Wrapper Pattern</h2>
+<p>New features should be protected by wrappers instead of repeating auth logic.</p>
+<h3 id="node-pattern">Node Pattern</h3>
+<p>Use higher-order middleware.</p>
+<pre><code class="language-ts">type AppRole = &quot;admin&quot; | &quot;driver&quot; | &quot;viewer&quot;;
+
+export function requireRole(...allowed: AppRole[]) {
+  return async function (req, res, next) {
+    const ctx = await requireUser(req);
+    if (!allowed.includes(ctx.role)) {
+      return res.status(403).json({ error: &quot;Forbidden&quot; });
+    }
+    req.auth = ctx;
+    next();
+  };
+}
+</code></pre>
+<p>For vehicle-scoped routes:</p>
+<pre><code class="language-ts">export function requireVehicleAccess(paramName: string) {
+  return async function (req, res, next) {
+    const ctx = await requireUser(req);
+    const vehicleId = req.params[paramName];
+    if (ctx.role !== &quot;admin&quot; &amp;&amp; !ctx.vehicleIds.includes(vehicleId)) {
+      return res.status(403).json({ error: &quot;Forbidden&quot; });
+    }
+    req.auth = ctx;
+    next();
+  };
+}
+</code></pre>
+<h2 id="middleware-layers-to-implement">Middleware Layers To Implement</h2>
+<ul>
+<li><code>requireUser</code></li>
+<li><code>requireRole</code></li>
+<li><code>requireVehicleAccess</code></li>
+<li><code>requireDevice</code></li>
+<li><code>optionalUser</code> for mixed public/personalized endpoints if ever needed</li>
+</ul>
+<h3 id="python">Python</h3>
+<ul>
+<li><code>require_user</code></li>
+<li><code>require_role</code></li>
+<li><code>require_vehicle_access</code></li>
+<li><code>require_device</code></li>
+<li><code>optional_user</code></li>
+</ul>
+<p>These names should stay parallel across runtimes.</p>
+<h2 id="recommended-enforcement-order">Recommended Enforcement Order</h2>
+<p>For a user route:</p>
+<ol>
+<li>parse bearer token</li>
+<li>verify token signature and expiry</li>
+<li>load profile and role</li>
+<li>reject disabled users</li>
+<li>apply role guard</li>
+<li>apply vehicle-scoping guard if needed</li>
+<li>execute handler</li>
+</ol>
+<p>For a device route:</p>
+<ol>
+<li>parse bearer token</li>
+<li>resolve device credential</li>
+<li>confirm active device</li>
+<li>confirm device is allowed for the submitted <code>deviceId</code></li>
+<li>execute telemetry handler</li>
+</ol>
+<h2 id="row-level-security-guidance">Row-Level Security Guidance</h2>
+<p>Use Supabase RLS if clients ever read directly from Supabase.</p>
+<p>Recommended position:</p>
+<ul>
+<li>If the frontend reads only through the backend API, backend auth is the primary control.</li>
+<li>If the frontend reads any tables directly from Supabase, RLS becomes mandatory.</li>
+</ul>
+<p>Suggested RLS posture:</p>
+<ul>
+<li><code>user_profiles</code>
+  users can read their own record, admins can read all</li>
+<li><code>vehicles</code>
+  viewers and drivers can read only assigned vehicles, admins can read all</li>
+<li><code>vehicle_latest_state</code>
+  same scoping as <code>vehicles</code></li>
+<li><code>alerts</code>
+  same scoping as <code>vehicles</code></li>
+<li><code>trips</code>
+  same scoping as <code>vehicles</code></li>
+<li><code>telemetry_raw</code>
+  admin only</li>
+<li><code>telemetry_normalized</code>
+  admin or scoped read only if there is a direct product need</li>
+<li><code>device_credentials</code>
+  admin only</li>
+</ul>
+<p>Do not expose raw telemetry or device credential tables directly to normal clients.</p>
+<h2 id="api-error-contract">API Error Contract</h2>
+<p>Use consistent auth error responses:</p>
+<ul>
+<li><code>401 Unauthorized</code>
+  missing token, invalid token, expired token</li>
+<li><code>403 Forbidden</code>
+  valid identity but insufficient role or vehicle scope</li>
+</ul>
+<p>Suggested response:</p>
+<pre><code class="language-json">{
+  &quot;error&quot;: {
+    &quot;code&quot;: &quot;FORBIDDEN&quot;,
+    &quot;message&quot;: &quot;You do not have access to this resource.&quot;
+  }
+}
+</code></pre>
+<p>Do not leak internal verification details in error messages.</p>
+<h2 id="environment-variables">Environment Variables</h2>
+<h3 id="required-for-render-and-docker">Required for Render and Docker</h3>
+<ul>
+<li><code>SUPABASE_DB_URL</code></li>
+</ul>
+<h3 id="required-when-protected-user-auth-is-implemented">Required When Protected User Auth Is Implemented</h3>
+<ul>
+<li><code>SUPABASE_URL</code></li>
+<li><code>SUPABASE_ANON_KEY</code></li>
+</ul>
+<h3 id="server-side-only">Server-Side Only</h3>
+<ul>
+<li><code>SUPABASE_SERVICE_ROLE_KEY</code></li>
+</ul>
+<h3 id="optional">Optional</h3>
+<ul>
+<li><code>AUTH_DEVICE_TOKEN_PEPPER</code>
+  Extra server-side secret used when hashing device tokens.</li>
+<li><code>OPENAI_API_KEY</code></li>
+<li><code>OPENAI_MODEL</code></li>
+<li><code>AI_RUNTIME</code></li>
+</ul>
+<h3 id="required-for-current-user-jwt-verification">Required For Current User JWT Verification</h3>
+<ul>
+<li><code>SUPABASE_JWT_SECRET</code>
+  Current backend implementation verifies Supabase user JWTs locally with HS256, so this secret is required until JWKS-based verification is implemented.</li>
+</ul>
+<h3 id="environment-rules">Environment Rules</h3>
+<ul>
+<li>Never bake secrets into the Docker image.</li>
+<li>Pass all secrets at runtime through Render environment variables.</li>
+<li>Keep <code>.env</code> for local development only.</li>
+<li>Do not expose <code>SUPABASE_SERVICE_ROLE_KEY</code> to browser or mobile builds.</li>
+</ul>
+<h2 id="docker-and-render-considerations">Docker and Render Considerations</h2>
+<ul>
+<li>Keep <code>/health</code> public so Render health checks succeed.</li>
+<li>Avoid protecting health checks with Supabase middleware.</li>
+<li>Startup should not depend on user authentication services being available.</li>
+<li>If database connectivity is required during startup, Render must have a valid <code>SUPABASE_DB_URL</code>.</li>
+<li>Auth libraries must read configuration from environment variables, not static files embedded in the image.</li>
+</ul>
+<p>If the backend later depends on Supabase JWKS retrieval at runtime, verify Render outbound network access and timeout behavior. Token verification failures should fail closed for protected routes, but they should not break the public health endpoint.</p>
+<h2 id="recommended-implementation-order">Recommended Implementation Order</h2>
+<ol>
+<li>add <code>user_profiles</code>, <code>user_vehicle_access</code>, and <code>device_credentials</code></li>
+<li>implement Node auth context and middleware</li>
+<li>protect <code>POST /api/telemetry</code> with <code>require_device</code></li>
+<li>add user-protected API routes under <code>/api/*</code></li>
+<li>add <code>admin</code> role enforcement for management routes</li>
+<li>add <code>viewer</code> read access</li>
+<li>add <code>driver</code> vehicle scoping</li>
+<li>add equivalent Python helpers for AI services that need protected access</li>
+<li>add tests for <code>401</code>, <code>403</code>, and allowed cases</li>
+</ol>
+<h2 id="testing-checklist">Testing Checklist</h2>
+<ul>
+<li>request without token returns <code>401</code></li>
+<li>expired token returns <code>401</code></li>
+<li>disabled user returns <code>403</code></li>
+<li>viewer cannot create vehicles</li>
+<li>viewer cannot read unassigned vehicle data</li>
+<li>driver can read assigned vehicle data</li>
+<li>admin can read and write all managed resources</li>
+<li>device token can post telemetry</li>
+<li>device token cannot access user endpoints</li>
+<li>user token cannot access device-only ingestion route</li>
+<li><code>/health</code> stays public in Docker and Render deployments</li>
+</ul>
+<h2 id="suggested-github-issue-scope">Suggested GitHub Issue Scope</h2>
+<p>Title:</p>
+<p><code>Design and implement Supabase-based authentication and authorization</code></p>
+<p>Suggested acceptance criteria:</p>
+<ul>
+<li>add reusable auth middleware for TypeScript</li>
+<li>define <code>admin</code>, <code>driver</code>, and <code>viewer</code> roles</li>
+<li>add device-token auth for telemetry ingestion</li>
+<li>document Render environment variables for auth</li>
+<li>keep <code>/health</code> public</li>
+<li>add tests for <code>401</code>, <code>403</code>, and successful access cases</li>
+<li>document how Python AI services use the same auth model</li>
+</ul>
+<h2 id="decisions-to-keep-explicit">Decisions To Keep Explicit</h2>
+<ul>
+<li>whether MVP ships as <code>admin</code> only or <code>admin + viewer</code></li>
+<li>whether frontend reads directly from Supabase or only through backend APIs</li>
+<li>whether JWT verification uses Supabase JWKS or local secret verification</li>
+<li>whether drivers are scoped by one vehicle or a fleet subset</li>
+<li>whether alert acknowledgement is admin-only or allowed for drivers</li>
+</ul>
+<p>Until those decisions are made, implement the wrappers first. They are the stable foundation and keep new features easy to secure.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
