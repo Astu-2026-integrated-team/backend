@@ -8,22 +8,13 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
       - Local Setup: getting-started/local-setup.md
-      - Environment Variables: getting-started/environment-variables.md
-  - API Reference:
-      - Overview: api/overview.md
-      - Auth: api/auth.md
-      - Telemetry: api/telemetry.md
-      - Vehicles: api/vehicles.md
-      - Devices: api/devices.md
-      - Drivers: api/drivers.md
-      - Alerts: api/alerts.md
-  - WebSocket Events: websocket/events.md
-  - Database Schema: database/schema.md
-  - Alert Rules: alerts/rules.md
-  - Deployment:
-      - Docker: deployment/docker.md
-      - Supabase Setup: deployment/supabase.md
-      - GitHub Pages: deployment/github-pages.md
-  - Contributing: contributing.md
+  - Documentation:
+      - AI Development: AI_DEVELOPMENT.md
+      - Authentication: AUTHENTICATION_FEATURE.md
+      - Branching Strategies: BRANCHING_STRATEGIES.md
+      - Development Guide: DEVELOPMENT.md
+      - Backend Spec: FuelGuard_Backend_Spec.md
+      - Repo Setup: REPO_SETUP.md
+      - Workflow: WORKFLOW.md
 plugins:
   - search
