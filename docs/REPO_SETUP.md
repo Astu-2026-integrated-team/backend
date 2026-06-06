@@ -19,8 +19,13 @@ Protect `main` with these rules:
 
 Require these checks from GitHub Actions:
 
-- `python`
-- `node`
+- `repo_sanity`
+- `python_quality`
+- `node_quality`
+- `openapi_contract`
+- `endpoint_smoke`
+- `endpoint_integration_db`
+- `deployment_readiness`
 
 If job names change in `.github/workflows/ci.yml`, update the branch protection rules to match.
 
@@ -50,12 +55,16 @@ Do not commit runtime secrets.
 When deployment starts, store secrets in the deployment platform or GitHub repository secrets:
 
 - `SUPABASE_DB_URL`
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_JWT_SECRET`
+- `AUTH_DEVICE_TOKEN_PEPPER`
 - `OPENAI_API_KEY`
 
 ## First Admin Checklist
 
 1. Confirm `main` is the default branch.
 2. Enable the branch protection rules above.
-3. Verify the `python` and `node` checks are required.
+3. Verify the CI job names above are required checks on `main`.
 4. Add the suggested labels.
 5. Confirm Actions are enabled for the repository.
